@@ -28,16 +28,9 @@ first = True
 
 #extracts the temperature and date from the file path
 def get_temp_date():
-    #separate each directory in the path
-    path_list = path.split("/")
-    print(path)
-    print(path_list)
-    for p in path_list:
-        #if the directory contains the temp and date
-        if re.search("\d\dC_\d\d\d\d\d\d",p):
-            temp_date = p.split("_")
-            data_list[0] += 'temp' + ',' + 'date' + ','
-            return temp_date
+    temp_date = [path.split("/")[9].split("_")[0], path.split("/")[9].split("_")[1]]
+    data_list[0] += "temp" + ',' + "date" + ','
+    return temp_date
 
 #extracts the Lot_Bin_Wafer from the file path
 def get_lbw():

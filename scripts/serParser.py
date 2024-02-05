@@ -49,11 +49,10 @@ def main():
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
         for file in raw_data_files:
 
-            if("ser" in file and "dat_0" in file):
+            if("ser" in file and "dat" in file):
                 fail_count = 0
-                # print(file)
+                print(file)
                 instance = file.split("_")[-2][1]
-                print("Instance: " + instance)
             
                 with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
@@ -72,7 +71,6 @@ def main():
 
                         if "#>> Fail Count" in line:
                             fail_count = int(line.split()[3], 16)
-                            print(fail_count)
 
                         # This section adds a new line in the csv
                         if "#D> " in line: 

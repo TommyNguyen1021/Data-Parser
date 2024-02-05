@@ -28,34 +28,19 @@ first = True
 
 #extracts the temperature and date from the file path
 def get_temp_date():
-    #separate each directory in the path
-    path_list = path.split("/")
-    for p in path_list:
-        #if the directory contains the temp and date
-        if re.search("\d\dC_\d\d\d\d\d\d",p):
-            temp_date = p.split("_")
-            data_list[0] += 'temp' + ',' + 'date' + ','
-            return temp_date
+    temp_date = [path.split("/")[9].split("_")[0], path.split("/")[9].split("_")[1]]
+    data_list[0] += "temp" + ',' + "date" + ','
+    return temp_date
 
 #extracts the Lot_Bin_Wafer from the file path
 def get_lbw():
-    #separate each directory in the path
-    path_list = path.split("/")
-    for lbw in path_list:
-        #if the directory contains the temp and date
-        if re.search("\w\d\w\w\d\d_\d\w_\d",lbw) or re.search("\w\d\w\w\d\d_\d\w_\w",lbw):
-            data_list.append("Lot_Bin_Wafer,")
-            return lbw
+    data_list.append("Lot_Bin_Wafer,")
+    return path.split("/")[7]
 
 #extracts the part number from the file path
 def get_part():
-    #separate each directory in the path
-    path_list = path.split("/")
-    for part in path_list:
-        #if the directory contains the temp and date
-        if re.search("P\d\d\d\d",part):
-            data_list[0]+=("part,")
-            return part
+    data_list[0]+=("part,")
+    return path.split("/")[8]
 
 
 #the Data column is normally written as 0x00 or 0xff
