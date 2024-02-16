@@ -39,13 +39,8 @@ def get_temp_date():
 
 #extracts the Lot_Bin_Wafer from the file path
 def get_lbw():
-    #separate each directory in the path
-    path_list = path.split("/")
-    for lbw in path_list:
-        #if the directory contains the temp and date
-        if re.search("\w\d\w\w\d\d_\d\w_\d",lbw):
-            data_list.append("Lot_Bin_Wafer,")
-            return lbw
+    data_list.append("Lot_Bin_Wafer,")
+    return path.split("/")[7]
 
 #extracts the part number from the file path
 def get_part():
