@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "VddIO", "Idd_leak[mA]", "Idd18_leak[mA]", "IddIO_leak[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd_leak[mA]", "Idd18_leak[mA]", "IddIO_leak[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -47,7 +47,7 @@ def main():
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
         for file in raw_data_files:
             if("meas-power-leak-current" in file and "dat_0" in file):
-                print(file)
+                # print(file)
             
                 with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
@@ -66,9 +66,9 @@ def main():
 
                         # This section adds a new line in the csv
                         if "#DD>" in line: 
-                            dictionary["Vdd"] = line.split(",")[1]
-                            dictionary["Vdd18"] = line.split(",")[2]
-                            dictionary["VddIO"] = line.split(",")[3]
+                            dictionary["Vdd[V]"] = line.split(",")[1]
+                            dictionary["Vdd18[V]"] = line.split(",")[2]
+                            dictionary["VddIO[V]"] = line.split(",")[3]
                             dictionary["Idd_leak[mA]"] = line.split(",")[4]
                             dictionary["Idd18_leak[mA]"] = line.split(",")[5]
                             dictionary["IddIO_leak[mA]"] = line.split(",")[6][:-1]

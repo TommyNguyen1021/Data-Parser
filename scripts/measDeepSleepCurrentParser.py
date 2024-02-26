@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "VddIO", "Idd_dsleep[mA]", "Idd18_dsleep[mA]", "IddIO_1.5V_dsleep[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd Offset[mA]", "Idd18 Offset[mA]", "IddIO Offset[mA]", "Idd D-Sleep[mA]", "Idd18 D-Sleep[mA]", "IddIO D-Sleep[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -47,7 +47,7 @@ def main():
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
         for file in raw_data_files:
             if("meas-deep-sleep-current" in file and "dat_0" in file):
-                print(file)
+                # print(file)
             
                 with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
@@ -66,12 +66,15 @@ def main():
 
                         # This section adds a new line in the csv
                         if "#DD>" in line: 
-                            dictionary["Vdd"] = line.split(",")[1]
-                            dictionary["Vdd18"] = line.split(",")[2]
-                            dictionary["VddIO"] = line.split(",")[3]
-                            dictionary["Idd_dsleep[mA]"] = line.split(",")[4]
-                            dictionary["Idd18_dsleep[mA]"] = line.split(",")[5]
-                            dictionary["IddIO_1.5V_dsleep[mA]"] = line.split(",")[6][:-1]
+                            dictionary["Vdd[V]"] = line.split(",")[1]
+                            dictionary["Vdd18[V]"] = line.split(",")[2]
+                            dictionary["VddIO[V]"] = line.split(",")[3]
+                            dictionary["Idd Offset[mA]"] = line.split(",")[4]
+                            dictionary["Idd18 Offset[mA]"] = line.split(",")[5]
+                            dictionary["IddIO Offset[mA]"] = line.split(",")[6]
+                            dictionary["Idd D-Sleep[mA]"] = line.split(",")[7]
+                            dictionary["Idd18 D-Sleep[mA]"] = line.split(",")[8]
+                            dictionary["IddIO D-Sleep[mA]"] = line.split(",")[9][:-1]
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part

@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "VddIO", "Vdd Meas", "Idd D-Sleep", "Vdd18 Meas", "Idd18 D-Sleep", "VddIO Meas", "IddIO D-Sleep", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Offset[A]", "Idd18 Offset[A]", "IddIO Offset[A]", "Idd D-Sleep[A]", "Idd18 D-Sleep[A]", "IddIO D-Sleep[A]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -54,6 +54,9 @@ def main():
                 meas_vdd_voltage = 0
                 meas_vdd18_voltage = 0
                 meas_vddio_voltage = 0
+                offset_vdd_current = 0
+                offset_vdd18_current = 0
+                offset_vddio_current = 0
                 meas_vdd_current = 0
                 meas_vdd18_current = 0
                 meas_vddio_current = 0
@@ -62,7 +65,7 @@ def main():
 
 
 
-                print(file)
+                # print(file)
             
                 with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
@@ -98,20 +101,29 @@ def main():
                                 meas_vdd18_voltage = line.split()[-1]
                             elif "Vdd18" in voltage_being_checked and measurement_type == "current":
                                 meas_vdd18_current = line.split()[-1]
+                                offset_vdd18_current = line.split()[-2][:-1]
+                                #offset_vdd18_current = line.split(",")[-2]
+                                #offset_vdd18_current = offset_vdd18_current.split()[-1]
                             elif "VddIO" in voltage_being_checked and measurement_type == "voltage":
                                 meas_vddio_voltage = line.split()[-1]
                             elif "VddIO" in voltage_being_checked and measurement_type == "current":
                                 meas_vddio_current = line.split()[-1]
+                                offset_vddio_current = line.split()[-2][:-1]
+                                #offset_vddio_current = line.split(",")[-2]
+                                #offset_vddio_current = offset_vddio_current.split()[-1]
 
-                                dictionary["Vdd"] = expected_vdd
-                                dictionary["Vdd18"] = expected_vdd18
-                                dictionary["VddIO"] = expected_vddio
-                                dictionary["Vdd Meas"] = meas_vdd_voltage
-                                dictionary["Vdd18 Meas"] = meas_vdd18_voltage
-                                dictionary["VddIO Meas"] = meas_vddio_voltage
-                                dictionary["Idd D-Sleep"] = meas_vdd_current
-                                dictionary["Idd18 D-Sleep"] = meas_vdd18_current
-                                dictionary["IddIO D-Sleep"] = meas_vddio_current
+                                dictionary["Vdd[V]"] = expected_vdd
+                                dictionary["Vdd18[V]"] = expected_vdd18
+                                dictionary["VddIO[V]"] = expected_vddio
+                                dictionary["Vdd Meas[V]"] = meas_vdd_voltage
+                                dictionary["Vdd18 Meas[V]"] = meas_vdd18_voltage
+                                dictionary["VddIO Meas[V]"] = meas_vddio_voltage
+                                dictionary["Idd Offset[A]"] = offset_vdd_current
+                                dictionary["Idd18 Offset[A]"] = offset_vdd18_current
+                                dictionary["IddIO Offset[A]"] = offset_vddio_current
+                                dictionary["Idd D-Sleep[A]"] = meas_vdd_current
+                                dictionary["Idd18 D-Sleep[A]"] = meas_vdd18_current
+                                dictionary["IddIO D-Sleep[A]"] = meas_vddio_current
 
 
                                 dictionary["Temp"] = temp
@@ -129,6 +141,9 @@ def main():
                                 meas_vdd_voltage = line.split()[-1]
                             elif "Vdd" in voltage_being_checked and measurement_type == "current":
                                 meas_vdd_current = line.split()[-1]
+                                offset_vdd_current = line.split()[-2][:-1]
+                                #offset_vdd_current = line.split(",")[-2]
+                                #offset_vdd_current = offset_vdd_current.split()[-1]
 
 
                     #writer.writeheader()

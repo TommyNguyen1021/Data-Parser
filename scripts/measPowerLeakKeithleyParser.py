@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "VddIO", "Vdd Meas", "Idd Leak", "Vdd18 Meas", "Idd18 Leak", "VddIO Meas", "IddIO Leak", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Leak[A]", "Idd18 Leak[A]", "IddIO Leak[A]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -63,7 +63,7 @@ def main():
 
 
 
-                print(file)
+                # print(file)
             
                 with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
@@ -104,15 +104,15 @@ def main():
                             elif "VddIO" in voltage_being_checked and measurement_type == "current":
                                 meas_vddio_current = line.split()[-1]
 
-                                dictionary["Vdd"] = expected_vdd
-                                dictionary["Vdd18"] = expected_vdd18
-                                dictionary["VddIO"] = expected_vddio
-                                dictionary["Vdd Meas"] = meas_vdd_voltage
-                                dictionary["Vdd18 Meas"] = meas_vdd18_voltage
-                                dictionary["VddIO Meas"] = meas_vddio_voltage
-                                dictionary["Idd Leak"] = meas_vdd_current
-                                dictionary["Idd18 Leak"] = meas_vdd18_current
-                                dictionary["IddIO Leak"] = meas_vddio_current
+                                dictionary["Vdd[V]"] = expected_vdd
+                                dictionary["Vdd18[V]"] = expected_vdd18
+                                dictionary["VddIO[V]"] = expected_vddio
+                                dictionary["Vdd Meas[V]"] = meas_vdd_voltage
+                                dictionary["Vdd18 Meas[V]"] = meas_vdd18_voltage
+                                dictionary["VddIO Meas[V]"] = meas_vddio_voltage
+                                dictionary["Idd Leak[A]"] = meas_vdd_current
+                                dictionary["Idd18 Leak[A]"] = meas_vdd18_current
+                                dictionary["IddIO Leak[A]"] = meas_vddio_current
 
 
                                 dictionary["Temp"] = temp

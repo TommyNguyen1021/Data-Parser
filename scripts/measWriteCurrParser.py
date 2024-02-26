@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "sys_osc_trim", "sys_osc_target_freq[MHz]", "sys_clk_period[ns]", "sys_clk_freq[MHz]", "pre-bck_grd_iddw[mA]", "pre-bck_grd_idd18w[mA]", "Vwl", "Vbl", "write speed[ns]", "write-data", "iddw[mA]", "idd18w[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "sys_osc_trim", "sys_osc_target_freq[MHz]", "sys_clk_period[ns]", "sys_clk_freq[MHz]", "idd_offset[mA]", "idd18_offset[mA]", "iddIO_offset[mA]", "pre-bck_grd_iddw[mA]", "pre-bck_grd_idd18w[mA]", "Vwl", "Vbl", "write speed[ns]", "write-data", "Iddw[mA]", "Idd18w[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -66,20 +66,26 @@ def main():
 
                         # This section adds a new line in the csv
                         if "#DD>" in line: 
-                            dictionary["Vdd"] = line.split(",")[1]
-                            dictionary["Vdd18"] = line.split(",")[2]
-                            dictionary["sys_osc_trim"] = line.split(",")[3]
-                            dictionary["sys_osc_target_freq[MHz]"] = line.split(",")[4]
-                            dictionary["sys_clk_period[ns]"] = line.split(",")[5]
-                            dictionary["sys_clk_freq[MHz]"] = line.split(",")[6]
-                            dictionary["pre-bck_grd_iddw[mA]"] = line.split(",")[7]
-                            dictionary["pre-bck_grd_idd18w[mA]"] = line.split(",")[8]
-                            dictionary["Vwl"] = line.split(",")[9]
-                            dictionary["Vbl"] = line.split(",")[10]
-                            dictionary["write speed[ns]"] = line.split(",")[11]
-                            dictionary["write-data"] = line.split(",")[12]
-                            dictionary["iddw[mA]"] = line.split(",")[13]
-                            dictionary["idd18w[mA]"] = line.split(",")[14][:-1]
+                            dictionary["Vdd[V]"] = line.split(",")[1]
+                            dictionary["Vdd18[V]"] = line.split(",")[2]
+                            dictionary["VddIO[V]"] = line.split(",")[3]
+                            dictionary["sys_osc_trim"] = line.split(",")[4]
+                            dictionary["sys_osc_target_freq[MHz]"] = line.split(",")[5]
+                            dictionary["sys_clk_period[ns]"] = line.split(",")[6]
+                            dictionary["sys_clk_freq[MHz]"] = line.split(",")[7]
+
+                            dictionary["idd_offset[mA]"] = line.split(",")[8]
+                            dictionary["idd18_offset[mA]"] = line.split(",")[9]
+                            dictionary["iddIO_offset[mA]"] = line.split(",")[10]
+
+                            dictionary["pre-bck_grd_iddw[mA]"] = line.split(",")[11]
+                            dictionary["pre-bck_grd_idd18w[mA]"] = line.split(",")[12]
+                            dictionary["Vwl"] = line.split(",")[13]
+                            dictionary["Vbl"] = line.split(",")[14]
+                            dictionary["write speed[ns]"] = line.split(",")[15]
+                            dictionary["write-data"] = line.split(",")[16]
+                            dictionary["Iddw[mA]"] = line.split(",")[17]
+                            dictionary["Idd18w[mA]"] = line.split(",")[18][:-1]
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part

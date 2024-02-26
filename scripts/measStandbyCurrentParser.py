@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "VddIO", "Idd_stby[mA]", "Idd18_stby[mA]", "IddIO_1.5V_stby[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd Offset[mA]", "Idd18 Offset[mA]", "IddIO Offset[mA]", "Idd Standby[mA]", "Idd18 Standby[mA]", "IddIO Standby[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
     
     writer = ""
 
@@ -66,12 +66,15 @@ def main():
 
                         # This section adds a new line in the csv
                         if "#DD>" in line: 
-                            dictionary["Vdd"] = line.split(",")[1]
-                            dictionary["Vdd18"] = line.split(",")[2]
-                            dictionary["VddIO"] = line.split(",")[3]
-                            dictionary["Idd_stby[mA]"] = line.split(",")[4]
-                            dictionary["Idd18_stby[mA]"] = line.split(",")[5]
-                            dictionary["IddIO_1.5V_stby[mA]"] = line.split(",")[6][:-1]
+                            dictionary["Vdd[V]"] = line.split(",")[1]
+                            dictionary["Vdd18[V]"] = line.split(",")[2]
+                            dictionary["VddIO[V]"] = line.split(",")[3]
+                            dictionary["Idd Offset[mA]"] = line.split(",")[4]
+                            dictionary["Idd18 Offset[mA]"] = line.split(",")[5]
+                            dictionary["IddIO Offset[mA]"] = line.split(",")[6]
+                            dictionary["Idd Standby[mA]"] = line.split(",")[7]
+                            dictionary["Idd18 Standby[mA]"] = line.split(",")[8]
+                            dictionary["IddIO Standby[mA]"] = line.split(",")[9][:-1]
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part
