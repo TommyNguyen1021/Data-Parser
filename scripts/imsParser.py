@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["VDD", "VDD18", "vbl", "ims_errors", "read_disturb", "instance", "Lot_Bin_Wafer", "part", "Temp", "Date"]
+    headers = ["VDD", "VDD18", "vbl", "ims_errors", "read_disturb", "instance", "Lot_Bin_Wafer", "part", "Temp", "Date", "ppm", "Data"]
     
     writer = ""
 
@@ -77,11 +77,13 @@ def main():
                             dictionary["vbl"] = line.split()[3]
                             dictionary["ims_errors"] = line.split()[4]
                             dictionary["read_disturb"] = line.split()[5]
+                            dictionary["Data"] = line.split()[6]
                             dictionary["instance"] = instance
                             dictionary["Temp"] = temp
                             dictionary["Lot_Bin_Wafer"] = part
                             dictionary["part"] = part_num
                             dictionary["Date"] = date
+                            dictionary["ppm"] = round((int(line.split()[4]) * 1000000)/((2048*16*78) - int(line.split()[5])), 2)
                             
                             new_data = {}
                             new_data.update(dictionary)

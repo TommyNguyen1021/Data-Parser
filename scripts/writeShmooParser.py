@@ -102,6 +102,7 @@ def line_breaker(line:string):
 #adds instance and temp/date to each line, then converts line to replace spaces with commas
 def check_data_output(line:string, instance:int, temp_date:list, lbw:string, part:string):
     global vdd
+    global vdd18
     if line[0:5] == "0x00:" or line[0:5] == "0xff:":
         line = line_breaker(line)
 
@@ -117,10 +118,13 @@ def check_data_output(line:string, instance:int, temp_date:list, lbw:string, par
         #add temp/dates
         data_list[len(data_list)-1] += temp_date[0] + ',' + temp_date[1] + ','
         #convert from space separated values to comma separated values
-        data_list[len(data_list)-1] += (data.replace(" ", ","))[:-1] + "," + vdd + ",\n"
+        data_list[len(data_list)-1] += (data.replace(" ", ","))[:-1] + "," + vdd + "," + vdd18 + ",\n"
 
     if "#< set_vdd " in line:
         vdd= line.split()[-1]
+
+    if "#< set_vddbl " in line:
+        vdd18= line.split()[-1]
         
 #save to an output
 def write_output():
@@ -154,11 +158,13 @@ def main():
             file = open(path +current_dat)
             #for each line
             global vdd
+            global vdd18
             vdd = ""
+            vdd18 = ""
             for line in file:
                 #check header
                 if re.search("^Data ivdd18/bit", line) and first:
-                    categories = line[:-1] + " vdd\n"
+                    categories = line[:-1] + " vdd vdd18\n"
                     data_list[0] += (categories.replace(" ",","))
                 check_data_output(line, inst, temp_date, lbw, part)
             file.close()

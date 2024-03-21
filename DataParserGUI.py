@@ -169,10 +169,18 @@ def pressed_add_part(chip = "", test = "", lbw = "", part = "", temp_date = ""):
     btn_remove_part["state"] = "normal"
     btn_reset_select["state"] = "normal"
 
-    dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
+    dp = ""
+    if test_sel == "otp":
+        dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/')
+    else:
+        dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
+    
     selection_window.full_part_list.append(dp)
 
-    dp = (lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
+    if test_sel == "otp":
+        dp = (lbw_sel + '/' + part_sel + '/')
+    else:
+        dp = (lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
     selection_window.part_list.append(dp)
     update_selection_window()
     btn_select_part["state"] = "disabled"
@@ -589,23 +597,27 @@ def pressed_part_no(event):
             print(name)
             window.temp_dates.append(name)
     
-    #if tere are no temp/dates
-    if not window.temp_dates:
-        remove_options(window, 4)
-        temp_dates_label = tk.Label(window,text="select temp/dates")
-        temp_dates_label.grid(row=5,column=0)
-        temp_dates_label = tk.Label(window,text="main has no temp/dates")
-        temp_dates_label.grid(row=5,column=1)
-        write_console("There are no parts that were ran under a specific temperature/date")
-        return
+    if not test_selected.get() == "otp":
+        #if tere are no temp/dates
+        if not window.temp_dates:
+            remove_options(window, 4)
+            temp_dates_label = tk.Label(window,text="select temp/dates")
+            temp_dates_label.grid(row=5,column=0)
+            temp_dates_label = tk.Label(window,text="main has no temp/dates")
+            temp_dates_label.grid(row=5,column=1)
+            write_console("There are no parts that were ran under a specific temperature/date")
+            return
 
-    #populate temp date option select
-    temp_dates_select = tk.OptionMenu(window, temp_date_selected, command=pressed_temp_date, *window.temp_dates)
-    temp_dates_select.grid(row=5,column=1, sticky='ew')
-    temp_dates_label = tk.Label(window,text="select temp/date")
-    temp_dates_label.grid(row=5,column=0)
-    change_option_size(temp_dates_label, temp_dates_select)
-    remove_options(window, 5)
+        #populate temp date option select
+        temp_dates_select = tk.OptionMenu(window, temp_date_selected, command=pressed_temp_date, *window.temp_dates)
+        temp_dates_select.grid(row=5,column=1, sticky='ew')
+        temp_dates_label = tk.Label(window,text="select temp/date")
+        temp_dates_label.grid(row=5,column=0)
+        change_option_size(temp_dates_label, temp_dates_select)
+        remove_options(window, 5)
+    else:
+        btn_select_part["state"] = "normal"
+    
 
 
 #enables the parse data button when temp/date is selected

@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Data", "rd_cnt", "prg_vbl", "cycles", "err_cnt", "ppb", "Fail Count", "Instance", "Lot Bin Wafer", "Part Number", "Temp", "Date", "Run #"]
+    headers = ["Vdd", "Vdd18", "Data", "rd_cnt", "prg_vbl", "cycles", "err_cnt", "ppb", "Fail Count", "Instance", "Lot Bin Wafer", "Part Number", "Temp", "Date", "Run #", "Sporatic Errors", "Sporatic ppb", "Hard Errors", "Hard ppb"]
     
     writer = ""
 
@@ -65,6 +65,7 @@ def main():
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
                     writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
                     data_set = []
+                    vdd18 = 1.8
                     
                     dictionary = {}
 
@@ -79,14 +80,22 @@ def main():
                         if "#>> Fail Count" in line:
                             fail_count = int(line.split()[3], 16)
 
+                        if "#< set_vddbl " in line:
+                            vdd18 = line.split()[-1]
+
                         # This section adds a new line in the csv
                         if "#D> " in line: 
                             dictionary["Vdd"] = line.split()[1]
+                            dictionary["Vdd18"] = vdd18
                             dictionary["Data"] = line.split()[2]
                             dictionary["rd_cnt"] = line.split()[3]
                             dictionary["cycles"] = line.split()[4]
                             dictionary["err_cnt"] = int(line.split()[5], 16)
                             dictionary["ppb"] = line.split()[6]
+                            dictionary["Sporatic Errors"] = int(line.split()[7], 16)
+                            dictionary["Sporatic ppb"] = line.split()[8]
+                            dictionary["Hard Errors"] = int(line.split()[9], 16)
+                            dictionary["Hard ppb"] = line.split()[10]
                             dictionary["Instance"] = instance
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part
