@@ -343,20 +343,19 @@ btn_select_all["state"] = "disabled"
     #btn_remove_part["state"] = "normal"
 
 def pressed_remove():
-    
-    for part in range(len(selection_window.part_list)):
-        print(part)
-        print(selection_screen.curselection())
-        tuple = selection_screen.curselection()
-        try:
-            if selection_window.part_list[part] == selection_screen.get(tuple):
-                del selection_window.part_list[part]
-                del selection_window.full_part_list[part]
-                write_console("Part Removed")
-                break
-        except:
-            write_console("No part selected")
-            write_console("You must click on a part that is listed on the righthand side")
+    print(selection_screen.curselection())
+    tuple = selection_screen.curselection()
+    for selected_part in range(len(tuple)):   
+        for part in range(len(selection_window.part_list)):
+            try:
+                if selection_window.part_list[part] == selection_screen.get(tuple[selected_part]):
+                    del selection_window.part_list[part]
+                    del selection_window.full_part_list[part]
+                    write_console("Part Removed")
+                    break
+            except:
+                write_console("No part selected")
+                write_console("You must click on a part that is listed on the righthand side")
     update_selection_window()
     check_enable_selection()
     if (selection_window.part_list == []):
@@ -370,7 +369,7 @@ def delete_remove_part():
     btn_remove_part["state"] = "disabled"
 
 #text area for selectionn screen
-selection_screen = tk.Listbox(selection_window,font=("helvetica",12))
+selection_screen = tk.Listbox(selection_window,font=("helvetica",12),selectmode=tk.MULTIPLE)
 selection_screen.grid(row=0,column=0, sticky="nswe")
 
             
