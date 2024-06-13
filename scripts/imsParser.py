@@ -71,9 +71,27 @@ def main():
 
 
                         # This section adds a new line in the csv
-                        if "#D> " in line: 
-                            dictionary["VDD"] = round(float(line.split()[1]), 2)
-                            dictionary["VDD18"] = round(float(line.split()[2]), 2)
+                        if "#D> " in line:
+                            
+                            rounded_VDD = round(float(line.split()[1]), 2)
+                            rounded_VDD18 = round(float(line.split()[2]), 2)
+                            
+                            if rounded_VDD <= 0.74:
+                                rounded_VDD = 0.72
+                            elif rounded_VDD > 0.74 and rounded_VDD <=0.84:
+                                rounded_VDD = 0.8
+                            elif rounded_VDD >= 0.84:
+                                rounded_VDD=0.88
+
+                            if rounded_VDD18 <= 1.7:
+                                rounded_VDD18 = 1.62
+                            elif rounded_VDD18 > 1.7 and rounded_VDD18 <= 1.88:
+                                rounded_VDD18 = 1.8
+                            elif rounded_VDD18 > 1.88:
+                                rounded_VDD18=1.98
+                                
+                            dictionary["VDD"] = rounded_VDD
+                            dictionary["VDD18"] = rounded_VDD18
                             dictionary["vbl"] = line.split()[3]
                             dictionary["ims_errors"] = line.split()[4]
                             dictionary["read_disturb"] = line.split()[5]
