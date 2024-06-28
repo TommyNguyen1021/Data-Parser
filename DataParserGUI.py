@@ -2,10 +2,13 @@
 
 import string
 from tkinter import *
+from ttkwidgets.autocomplete import AutocompleteCombobox
 import tkinter as tk
+from tkinter import ttk
 import scripts.DataParser as parser
 import os
 import subprocess
+from collections import OrderedDict
 
 
         
@@ -34,9 +37,10 @@ sw.columnconfigure(1, minsize="300", weight=1)
 #top Window frame
 window = tk.Frame(sw, relief=tk.RAISED, bd=2)
 window.grid(row=0,column=0, sticky= 'nsew')
-
 window.columnconfigure(1, minsize=420, weight=1)
 window.columnconfigure(0, minsize=90, weight=1)
+
+
 
 #TODO: check if these are used
 window.datapath = "//DS220P/ds220_vol1/si_data/"
@@ -112,7 +116,10 @@ part_no_selected = tk.StringVar()
 temp_date_selected = tk.StringVar()
 file_name_entry = tk.StringVar()
 remove_part_selected = tk.StringVar()
+date_selected =tk.StringVar()
+temp_selected =tk.StringVar()
 
+window_inner_frame = tk.Frame(window)
 
 
 
@@ -190,8 +197,9 @@ def pressed_add_part(chip = "", test = "", lbw = "", part = "", temp_date = ""):
 
 def pressed_select_all():
     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/')
-
-    if(lbw_selected.get() == ""):
+    #selected only test
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("test")
         lbw_list = os.listdir(dp)
         for lbw in lbw_list:
             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
@@ -202,8 +210,429 @@ def pressed_select_all():
                 for temp_date in temp_date_list:
                     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                     if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                        pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
+                        pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+                        
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected only lbw
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("lbw")
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("lbw and date")
+        path_exists = False
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                        if date_selected.get() in temp_date:
+                            path_exists = True    
+                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
+        if not path_exists:
+            write_console("Path does not exist")
 
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and temp
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("lbw and temp")
+        path_exists = False
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                        if temp_selected.get() in temp_date:
+                            path_exists = True
+                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
+        if not path_exists:
+            write_console("Path does not exist")  
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and temp and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("lbw and temp and date")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                            if temp_selected.get() in temp_date and date_selected.get() in temp_date:
+                                path_exists = True
+                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+        if not path_exists:
+             write_console("Path does not exist")  
+ 
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected temp and date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("temp and date")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                temp_date_list = os.listdir(dp)
+                for temp_date in temp_date_list:
+                    if temp_selected.get() in temp_date and date_selected.get() in temp_date:
+                        path_exists = True
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
+        if not path_exists:
+             write_console("Path does not exist") 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected only date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("date")
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                temp_date_list = os.listdir(dp)
+                for temp_date in temp_date_list:
+                        if date_selected.get() in temp_date:
+                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected only temp
+    if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        print("temp")
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                temp_date_list = os.listdir(dp)
+                for temp_date in temp_date_list:
+                    if temp_selected.get() in temp_selected:
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("lbw and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        path_exists = True
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+        if not path_exists:
+            write_console("Path does not exist") 
+                        
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+     #selected date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("date and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                if part == part_no_selected.get():
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                        if date_selected.get() in temp_date:
+                            path_exists = True
+                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+        if not path_exists:
+            write_console("Path does not exist")             
+                        
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected temp and part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("temp and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                            if temp_selected.get() in temp_date:
+                                path_exists = True
+                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
+        if not path_exists:
+            write_console("Path does not exist")     
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("lbw and temp and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                            if temp_selected.get() in temp_date:
+                                path_exists = True
+                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+        if not path_exists:
+            write_console("Path does not exist")   
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("lbw and date and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                            if date_selected.get() in temp_date:
+                                path_exists = True
+                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+        if not path_exists:
+            write_console("Path does not exist")   
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected temp and date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("temp and date and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                                if temp_selected.get() in temp_date and date_selected.get() in temp_date:
+                                    path_exists = True
+                                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                    if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                        pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
+        if not path_exists:
+            write_console("Path does not exist")    
+ 
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("lbw and date and temp and part no.")
+        lbw_list = os.listdir(dp)
+        path_exists = False
+        for lbw in lbw_list:
+            if lbw == lbw_selected.get() :
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+                part_list = os.listdir(dp)
+                for part in part_list:
+                    if part == part_no_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                        temp_date_list = os.listdir(dp)
+                        for temp_date in temp_date_list:
+                            if temp_selected.get() in temp_date and date_selected.get() in temp_date:
+                                path_exists = True
+                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+        if not path_exists:
+            write_console("Path does not exist")    
+                            
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -216,7 +645,34 @@ def pressed_select_all():
 
     dp += lbw_selected.get() + '/'
 
+    #selected only part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        print("only part no.")
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                if part == part_no_selected.get():
+                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                    temp_date_list = os.listdir(dp)
+                    for temp_date in temp_date_list:
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+                        
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
     if(part_no_selected.get() == ""):
+        print("E")
         part_list = os.listdir(dp)
         for part in part_list:
             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/')
@@ -235,9 +691,35 @@ def pressed_select_all():
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + " have been selected.")
         return
     
-    dp += part_no_selected.get() + '/'
+    if(temp_date_selected.get() != "" and part_no_selected.get() == ""):
+        print("F")
+        lbw_list = os.listdir(dp)
+        for lbw in lbw_list:
+            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+            part_list = os.listdir(dp)
+            for part in part_list:
+                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+                temp_date_list = os.listdir(dp)
+                for temp_date in temp_date_list:
+                    if temp_date == temp_date_selected.get():
+                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=6,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=6,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
+        return
+
+
 
     if(temp_date_selected.get() == ""):
+        print("G")
         temp_date_list = os.listdir(dp)
         for temp_date in temp_date_list:
             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + '/' + temp_date + '/')
@@ -252,11 +734,6 @@ def pressed_select_all():
         file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
         return
-    
-    
-    
-
-
 
 def update_selection_window():
     clear_selection()
@@ -371,6 +848,16 @@ def delete_remove_part():
 #text area for selectionn screen
 selection_screen = tk.Listbox(selection_window,font=("helvetica",12),selectmode=tk.MULTIPLE)
 selection_screen.grid(row=0,column=0, sticky="nswe")
+# Create a Scrollbar widget
+scrollbar = tk.Scrollbar(selection_window, orient=tk.VERTICAL)
+scrollbar.config(command=selection_screen.yview)
+scrollbar.grid(row=0, column=1, sticky="ns")
+
+
+
+# Configure resizing behavior
+selection_window.grid_rowconfigure(0, weight=1)
+selection_window.grid_columnconfigure(0, weight=1)
 
             
 
@@ -414,7 +901,6 @@ def clear_console():
 # ####################################################################################
 #                                   EVENT FUNCTIONS
 # ####################################################################################
-
 #used to remove items in rows greater than the given row
 def remove_options(window, row):
     for label in window.grid_slaves():
@@ -427,12 +913,14 @@ def chip_supported():
         return True
     return False
 
-def change_option_size(label, select):
-    menu = window.nametowidget(select.menuname)
-    menu.config(font=('helvetica', 12))
+def change_option_size(label, combobox):
+    # Adjust font for the dropdown menu of the combobox
+    style = ttk.Style()
+    style.configure('TCombobox', font=('helvetica', 12))
+    combobox.config(font=('helvetica', 12))
+    label.config(font=('helvetica', 12))
 
-    select["font"]=('helvetica', 10)
-    label["font"]=('helvetica', 10)
+
 
 #Event function for when a chip option is selected
 def pressed(event):
@@ -441,6 +929,7 @@ def pressed(event):
     lbw_selected.set("")
     part_no_selected.set("")
     temp_date_selected.set("")
+    date_selected.set("")
 
     clear_console()
 
@@ -461,6 +950,7 @@ def pressed(event):
     new_dp = window.datapath + window.chip_path
     #empty tests and add test directorys to test option select
     window.tests = []
+    window.tests.append("")
     for name in os.listdir(new_dp):
         if os.path.isdir(new_dp + name):
             window.tests.append(name)
@@ -474,23 +964,37 @@ def pressed(event):
         test_label.grid(row=2,column=1)
         write_console("No test data can be found for that chip")
         return
-    #populate test option select
-    test_select = tk.OptionMenu(window, test_selected, command=pressed_test, *window.tests)
-    test_select.grid(row=2,column=1, sticky='ew')
+    #label for test select
     test_label = tk.Label(window,text="select test")
     test_label.grid(row=2,column=0)
-    change_option_size(test_label, test_select)
+
+    test_combobox = AutocompleteCombobox(window, completevalues=window.tests, textvariable=test_selected)
+    test_combobox.grid(row=2, column=1, sticky='ew')
+
+    # Define a function to handle the Enter key press event
+    def handle_enter(event):
+        if event.keysym == "Return":
+            pressed_test(test_combobox.get())
+   
+    # Bind events
+    test_combobox.bind("<Return>", handle_enter)
+    test_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_test(test_combobox.get()))
+    change_option_size(test_label, test_combobox)
     remove_options(window, 2)
     write_console("Supported Tests:\n write_shmoo\n read_shmoo\n read_shmoo_pat\n htol\n ims\n upump_char\n internal_bias\n ser\n read_disturb")
     
 #Event function for when a test option is selected
 def pressed_test(event):
+    global window_inner_frame
     #reset all values that were previously selected for rows below test 
     lbw_selected.set("")
     part_no_selected.set("")
     temp_date_selected.set("")
+    temp_selected.set("")
+    date_selected.set("")
 
     clear_console()
+    btn_reset_select["state"] = "normal"
 
     #disable parse data button
     btn_select_part["state"] = "disabled"
@@ -502,6 +1006,7 @@ def pressed_test(event):
 
     #empty lbw (Lot/Bin/Wafer) and add lbw directorys to lbw option select
     window.lbw = []
+    window.lbw.append("")
     for name in os.listdir(new_dp):
         if os.path.isdir(new_dp + name):
             print(name)
@@ -509,26 +1014,119 @@ def pressed_test(event):
     
     #if there are no LBWs available in directory
     if not window.lbw:
-        remove_options(window, 2)
-        lbw_label = tk.Label(window,text="select LBW")
-        lbw_label.grid(row=3,column=0)
-        lbw_label = tk.Label(window,text="main has no LBW")
-        lbw_label.grid(row=3,column=1)
+        remove_options(window_inner_frame, 2)
+        lbw_label = tk.Label(window_inner_frame,text="select LBW")
+        lbw_label.grid(row=3,column=5)
+        lbw_label = tk.Label(window_inner_frame,text="main has no LBW")
+        lbw_label.grid(row=3,column=4)
         write_console("No Lots/Wafer/Bins that had that ran that test can be found")
         return
 
-    #populate LBW option select
-    lbw_select = tk.OptionMenu(window, lbw_selected, command=pressed_lbw, *window.lbw)
-    lbw_select.grid(row=3,column=1, sticky='ew')
-    lbw_label = tk.Label(window,text="select LBW")
-    lbw_label.grid(row=3,column=0)
-    change_option_size(lbw_label, lbw_select)
+    # Creating a frame inside the 'window' frame
+    window_inner_frame = tk.Frame(window)
+    window_inner_frame.grid(row=3, column=0, columnspan=2, sticky='nsew')
+    window_inner_frame.columnconfigure(1, minsize=50, weight=1)
+    window_inner_frame.columnconfigure(3, minsize=50, weight=1)
+    
+    # LBW option select
+    lbw_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.lbw, textvariable=lbw_selected)
+    lbw_combobox.grid(row=0, column=1, sticky='we')
+    # Bind events
+    lbw_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_temp_date(lbw_combobox.get()))
+
+
+
+    # Label for LBW selection
+    lbw_label = tk.Label(window_inner_frame,text="select LBW")
+    lbw_label.grid(row=0,column=0)
     remove_options(window, 3)
+
+    # Gather all temp/dates for the selected test
+    window.dates = []
+    window.dates.append("")
+    for lbw_name in os.listdir(new_dp):
+        lbw_path = os.path.join(new_dp, lbw_name)
+        if os.path.isdir(lbw_path):
+            for part_name in os.listdir(lbw_path):
+                part_path = os.path.join(lbw_path, part_name)
+                if os.path.isdir(part_path):
+                    for temp_date_name in os.listdir(part_path):
+                        temp_date_path = os.path.join(part_path, temp_date_name)
+                        if os.path.isdir(temp_date_path):
+                            try:
+                                date_part = temp_date_name.split('_')[1]
+                                window.temp_dates.append(temp_date_name)
+                                window.dates.append(date_part)
+                            except IndexError:
+                                print(temp_date_name + "doesn't follow naming convention of temp_date")
+
+    # If there are no dates
+    if not window.dates:
+        remove_options(window_inner_frame, 2)
+        dates_label = tk.Label(window_inner_frame, text="select dates")
+        dates_label.grid(row=0, column=0)
+        dates_label = tk.Label(window_inner_frame, text="main has no dates")
+        dates_label.grid(row=0, column=1)
+        write_console("There are no parts that were ran under a specific date")
+        return
+
+    dates_options = list(OrderedDict.fromkeys(window.dates))
+
+    # date option select
+    dates_combobox = AutocompleteCombobox(window_inner_frame, completevalues=dates_options, textvariable=date_selected)
+    dates_combobox.grid(row=0, column=5, sticky='we')
+
+    # Bind events
+    dates_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_temp_date(dates_combobox.get()))
+
+    dates_label = tk.Label(window_inner_frame, text="select date")
+    dates_label.grid(row=0, column=4)
+    remove_options(window_inner_frame, 3)
+
+    window.temp = []
+    window.temp.append("")
+    for lbw_name in os.listdir(new_dp):
+        lbw_path = os.path.join(new_dp, lbw_name)
+        if os.path.isdir(lbw_path):
+            for part_name in os.listdir(lbw_path):
+                part_path = os.path.join(lbw_path, part_name)
+                if os.path.isdir(part_path):
+                    for temp_date_name in os.listdir(part_path):
+                        temp_date_path = os.path.join(part_path, temp_date_name)
+                        if os.path.isdir(temp_date_path):
+                            try:
+                                temp_part = temp_date_name.split('_')[0]
+                                window.temp.append(temp_part)
+                                if temp_part[-1] != 'C' or not any(char.isdigit() for char in temp_part):
+                                    raise ValueError(temp_part + "must contain numbers and end with 'C")
+                            except (IndexError, ValueError) as e:
+                                print(f"Warning: {e}")
+
+
+    # If there are no temp
+    if not window.temp:
+        remove_options(window_inner_frame, 2)
+        temp_label = tk.Label(window_inner_frame, text="select temp")
+        temp.grid(row=0, column=2)
+        temp = tk.Label(window_inner_frame, text="main has no temp")
+        temp.grid(row=0, column=3)
+        write_console("There are no parts that were ran under a specific temperature")
+        return
+
+    # Remove duplicates from temp list
+    temp_options = list(OrderedDict.fromkeys(window.temp))
+
+    # temp option select
+    temp_combobox = AutocompleteCombobox(window_inner_frame, completevalues=temp_options,textvariable=temp_selected)
+    temp_combobox.grid(row=0, column=3, sticky='we')
+    # Bind events
+    temp_combobox.bind("<<ComboboxSelected>>", pressed_temp_date)
+    temp_label = tk.Label(window_inner_frame, text="select temp")
+    temp_label.grid(row=0, column=2)
+    remove_options(window_inner_frame, 3)
 
     btn_select_all["state"] = "normal"
 
-#Event function for when a LBW option is selected
-def pressed_lbw(event):
     #reset all values that were previously selected for rows below LBW 
     part_no_selected.set("")
     temp_date_selected.set("")
@@ -541,17 +1139,16 @@ def pressed_lbw(event):
     #enable select all button
     btn_select_all["state"] = "normal"
 
-    #enter LBW directory
-    item = lbw_selected.get()
-    new_dp = window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + item + '/'
-    print(new_dp)
-
     #empty Part list and add part number directorys to part number option select
     window.parts = []
-    for name in os.listdir(new_dp):
-        if os.path.isdir(new_dp + name):
-            print(name)
-            window.parts.append(name)
+    window.parts.append("")
+    for lbw_name in os.listdir(new_dp):
+        lbw_path = os.path.join(new_dp, lbw_name)
+        if os.path.isdir(lbw_path):
+            for part_name in os.listdir(lbw_path):
+                part_path = os.path.join(lbw_path, part_name)
+                if os.path.isdir(part_path):
+                    window.parts.append(part_name)
     
     #if no part numbers were found
     if not window.parts:
@@ -562,17 +1159,21 @@ def pressed_lbw(event):
         parts_label.grid(row=4,column=1)
         write_console("There is no data on parts from that Lot/Wafer/Bin")
         return
+    
+    part_options = list(OrderedDict.fromkeys(window.parts))
 
-    #populate part Option select
-    parts_select = tk.OptionMenu(window, part_no_selected, command=pressed_part_no, *window.parts)
-    parts_select.grid(row=4,column=1, sticky='ew')
+    #part option select
     parts_label = tk.Label(window,text="select part no.")
     parts_label.grid(row=4,column=0)
-    change_option_size(parts_label, parts_select)
-    remove_options(window, 4)
+    parts_combobox = AutocompleteCombobox(window, completevalues=part_options ,textvariable=part_no_selected)
+    parts_combobox.grid(row=4, column=1, sticky='ew')
 
-#Event function for when a Part number option is selected
-def pressed_part_no(event):
+    # Bind events
+    parts_combobox.bind("<<ComboboxSelected>>", pressed_temp_date)
+
+    change_option_size(parts_label, parts_combobox)
+    remove_options(window_inner_frame, 4)
+
     #reset all values that were previously selected for rows below Part number 
     temp_date_selected.set("")
 
@@ -584,67 +1185,16 @@ def pressed_part_no(event):
     #enable select all button
     btn_select_all["state"] = "normal"
 
-    #create path to temp/dates
-    item = part_no_selected.get()
-    new_dp = window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + item + '/'
-    print(new_dp)
-
-    #empty temp/date list and add temp/date directorys to part number option select
-    window.temp_dates = []
-    for name in os.listdir(new_dp):
-        if os.path.isdir(new_dp + name):
-            print(name)
-            window.temp_dates.append(name)
-    
-    if not test_selected.get() == "otp":
-        #if tere are no temp/dates
-        if not window.temp_dates:
-            remove_options(window, 4)
-            temp_dates_label = tk.Label(window,text="select temp/dates")
-            temp_dates_label.grid(row=5,column=0)
-            temp_dates_label = tk.Label(window,text="main has no temp/dates")
-            temp_dates_label.grid(row=5,column=1)
-            write_console("There are no parts that were ran under a specific temperature/date")
-            return
-
-        #populate temp date option select
-        temp_dates_select = tk.OptionMenu(window, temp_date_selected, command=pressed_temp_date, *window.temp_dates)
-        temp_dates_select.grid(row=5,column=1, sticky='ew')
-        temp_dates_label = tk.Label(window,text="select temp/date")
-        temp_dates_label.grid(row=5,column=0)
-        change_option_size(temp_dates_label, temp_dates_select)
-        remove_options(window, 5)
-    else:
-        btn_select_part["state"] = "normal"
-    
-
 
 #enables the parse data button when temp/date is selected
 def pressed_temp_date(event):
-
     clear_console()
     if check_enable_selection():
         write_console("All of the necessary information has been gathered")
         write_console("")
         write_console("You can rename the file containing the parsed data")
         write_console("Press \"Select Part\" to add your part to the list of data to be parsed")
-
-
-    file_select = tk.Entry(window, textvariable=file_name_entry)
-    file_select.grid(row=6,column=1, sticky='ew')
-    file_select["font"]=("helvetica",10)
-    file_label = tk.Label(window,text="save file name")
-    file_label.grid(row=6,column=0)
-    file_label["font"]=("helvetica",10)
-
-    file_name_entry.set(chip_selected.get() + "_" + lbw_selected.get() + "_" + part_no_selected.get() + 
-        "_" + temp_date_selected.get() + "_" + test_selected.get())
     
-    btn_select_all["state"] = "disabled"
-
-
-
-
 #function that actually runs the parser.
 #called in pressed_parse_data
 def parse_data():
@@ -694,6 +1244,7 @@ def pressed_parse_data():
 
 print(window.datapath)
 
+window.chips.append("")
 #populate chip option select
 for name in os.listdir(window.datapath):
     if os.path.isdir(window.datapath + name):
@@ -705,10 +1256,20 @@ write_console("Data Parser Initiated")
 write_console("start by selecting the chip")
 
 #chip option select
-chip_select = tk.OptionMenu(window, chip_selected, command=pressed, *window.chips)
-chip_select.grid(row=0, column=1, sticky="ew")
+chip_combobox = AutocompleteCombobox(window,completevalues=window.chips ,textvariable=chip_selected)
+chip_combobox.grid(row=0, column=1, sticky='we')
 
+def handle_enter(event):
+    if event.keysym == "Return":
+        pressed(chip_combobox.get())
 
+# Bind events
+chip_combobox.bind("<Return>", handle_enter)
+chip_combobox.bind("<<ComboboxSelected>>", lambda event: pressed(chip_combobox.get()))        
+
+chip_label = tk.Label(window,text="select chip")
+chip_label.grid(row=0,column=0)
+change_option_size(chip_label, chip_combobox)
 
 
 #Parse data button
@@ -718,12 +1279,5 @@ btn_parse_data.grid(row=0,column=0, sticky='nsew')
 btn_parse_data.config(width="20")
 btn_parse_data["font"]= ("Arial", 13)
 parse_button_off()
-
-
-#label for chip select
-chip_label = tk.Label(window,text="select chip")
-chip_label.grid(row=0,column=0)
-
-change_option_size(chip_label, chip_select)
 #LOOP
 main_window.mainloop()
