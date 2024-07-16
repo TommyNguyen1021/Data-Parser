@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Offset[A]", "Idd18 Offset[A]", "IddIO Offset[A]", "Idd D-Sleep[A]", "Idd18 D-Sleep[A]", "IddIO D-Sleep[A]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Offset[A]", "Idd18 Offset[A]", "IddIO Offset[A]", "Idd D-Sleep[A]", "Idd D-Sleep[µA/Mb]", "Idd18 D-Sleep[A]", "Idd18 D-Sleep[µA/Mb]", "IddIO D-Sleep[A]", "Lot Bin Wafer", "Process Corner", "Part Number", "Part ID","Temp", "Date"]
     
     writer = ""
 
@@ -122,13 +122,17 @@ def main():
                                 dictionary["Idd18 Offset[A]"] = offset_vdd18_current
                                 dictionary["IddIO Offset[A]"] = offset_vddio_current
                                 dictionary["Idd D-Sleep[A]"] = meas_vdd_current
+                                dictionary["Idd D-Sleep[µA/Mb]"] = f"{float(meas_vdd_current) / 16 * 1000000:.2f}"
                                 dictionary["Idd18 D-Sleep[A]"] = meas_vdd18_current
+                                dictionary["Idd18 D-Sleep[µA/Mb]"] = f"{float(meas_vdd18_current) / 16 * 1000000:.2f}"
                                 dictionary["IddIO D-Sleep[A]"] = meas_vddio_current
 
 
                                 dictionary["Temp"] = temp
                                 dictionary["Lot Bin Wafer"] = part
+                                dictionary["Process Corner"] = part.split("_")[-1]
                                 dictionary["Part Number"] = part_num
+                                dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
                                 dictionary["Date"] = date
 
                                 # This section adds a new line in the csv

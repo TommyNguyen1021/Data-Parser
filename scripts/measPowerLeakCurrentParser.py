@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd_leak[mA]", "Idd18_leak[mA]", "IddIO_leak[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd_leak[mA]", "Idd18_leak[mA]", "IddIO_leak[mA]", "Lot Bin Wafer", "Process Corner", "Part Number", "Part ID", "Temp", "Date"]
     
     writer = ""
 
@@ -75,7 +75,9 @@ def main():
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part
+                            dictionary["Process Corner"] = part.split("_")[-1]
                             dictionary["Part Number"] = part_num
+                            dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
                             dictionary["Date"] = date
 
                             new_data = {}

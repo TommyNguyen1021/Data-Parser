@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Leak[A]", "Idd18 Leak[A]", "IddIO Leak[A]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Vdd Meas[V]", "Vdd18 Meas[V]", "VddIO Meas[V]", "Idd Leak[A]", "Idd18 Leak[A]", "IddIO Leak[A]", "Lot Bin Wafer", "Process Corner", "Part Number", "Part ID", "Temp", "Date"]
     
     writer = ""
 
@@ -117,7 +117,9 @@ def main():
 
                                 dictionary["Temp"] = temp
                                 dictionary["Lot Bin Wafer"] = part
+                                dictionary["Process Corner"] = part.split("_")[-1]
                                 dictionary["Part Number"] = part_num
+                                dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
                                 dictionary["Date"] = date
 
                                 # This section adds a new line in the csv

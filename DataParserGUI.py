@@ -77,19 +77,19 @@ split_btn_frame.columnconfigure(0, weight=2, minsize=100)
 split_btn_frame.rowconfigure(0, minsize=25, weight=1)
 split_btn_frame.rowconfigure(1, minsize=25, weight=1)
 
-split_frame = tk.Frame(split_btn_frame)
-split_frame.grid(row=0, column=0, sticky='nsew')
-split_frame.columnconfigure(0, weight=2, minsize=100)
-split_frame.columnconfigure(1, weight=2, minsize=100)
-split_frame.rowconfigure(0, minsize=25, weight=1)
+# split_frame = tk.Frame(split_btn_frame)
+# split_frame.grid(row=0, column=0, sticky='nsew')
+# split_frame.columnconfigure(0, weight=2, minsize=100)
+# split_frame.columnconfigure(1, weight=2, minsize=100)
+# split_frame.rowconfigure(0, minsize=25, weight=1)
 
-select_btn_frame = tk.Frame(split_frame)
-select_btn_frame.grid(row=0, column=0, sticky='nsew')
-select_btn_frame.columnconfigure(0, weight=2, minsize=100)
-select_btn_frame.rowconfigure(0, minsize=25, weight=1)
+# select_btn_frame = tk.Frame(split_frame)
+# select_btn_frame.grid(row=0, column=0, sticky='nsew')
+# select_btn_frame.columnconfigure(0, weight=2, minsize=100)
+# select_btn_frame.rowconfigure(0, minsize=25, weight=1)
 
-reset_btn_frame = tk.Frame(split_frame)
-reset_btn_frame.grid(row=0, column=1, sticky='nsew')
+reset_btn_frame = tk.Frame(split_btn_frame)
+reset_btn_frame.grid(row=0, column=0, sticky='nsew')
 reset_btn_frame.columnconfigure(0, weight=2, minsize=100)
 reset_btn_frame.rowconfigure(0, minsize=25, weight=1)
 
@@ -121,6 +121,7 @@ temp_selected =tk.StringVar()
 
 window_inner_frame = tk.Frame(window)
 
+total_file_count = 0
 
 
 # ####################################################################################
@@ -190,13 +191,17 @@ def pressed_add_part(chip = "", test = "", lbw = "", part = "", temp_date = ""):
         dp = (lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
     selection_window.part_list.append(dp)
     update_selection_window()
-    btn_select_part["state"] = "disabled"
     clear_console()
+    write_console(str(file_count) + " Files collected")
+    write_console(str(total_file_count + file_count) + " Total files collected")
     write_console("You can now parse your listed parts by pressing \"Parse Data\" or you can add more.")
 
 
 def pressed_select_all():
     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/')
+    global file_count, total_file_count
+    file_count = 0
+
     #selected only test
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("test")
@@ -210,8 +215,10 @@ def pressed_select_all():
                 for temp_date in temp_date_list:
                     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                     if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                        file_count = file_count + 1
                         pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
-                        
+
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -236,8 +243,10 @@ def pressed_select_all():
                     for temp_date in temp_date_list:
                         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            file_count = file_count + 1
                             pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
-                            
+
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -265,10 +274,12 @@ def pressed_select_all():
                             path_exists = True    
                             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                file_count = file_count + 1
                                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
         if not path_exists:
             write_console("Path does not exist")
 
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -296,10 +307,12 @@ def pressed_select_all():
                             path_exists = True
                             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                file_count = file_count + 1
                                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
         if not path_exists:
             write_console("Path does not exist")  
 
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -327,10 +340,12 @@ def pressed_select_all():
                                 path_exists = True
                                 dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                 if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    file_count = file_count + 1
                                     pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
         if not path_exists:
              write_console("Path does not exist")  
  
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -357,10 +372,12 @@ def pressed_select_all():
                         path_exists = True
                         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            file_count = file_count + 1
                             pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
         if not path_exists:
              write_console("Path does not exist") 
 
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -385,8 +402,10 @@ def pressed_select_all():
                         if date_selected.get() in temp_date:
                             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                file_count = file_count + 1
                                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
 
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -411,8 +430,10 @@ def pressed_select_all():
                     if temp_selected.get() in temp_selected:
                         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            file_count = file_count + 1
                             pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
 
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -440,10 +461,12 @@ def pressed_select_all():
                         for temp_date in temp_date_list:
                             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                file_count = file_count + 1
                                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
         if not path_exists:
             write_console("Path does not exist") 
                         
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -471,10 +494,12 @@ def pressed_select_all():
                             path_exists = True
                             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                file_count = file_count + 1
                                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
         if not path_exists:
             write_console("Path does not exist")             
                         
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -502,10 +527,12 @@ def pressed_select_all():
                                 path_exists = True
                                 dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                 if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    file_count = file_count + 1
                                     pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
         if not path_exists:
             write_console("Path does not exist")     
                             
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -534,10 +561,12 @@ def pressed_select_all():
                                 path_exists = True
                                 dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                 if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    file_count = file_count + 1
                                     pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
         if not path_exists:
             write_console("Path does not exist")   
                             
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -566,10 +595,12 @@ def pressed_select_all():
                                 path_exists = True
                                 dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                 if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    file_count = file_count + 1
                                     pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
         if not path_exists:
             write_console("Path does not exist")   
                             
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -597,10 +628,12 @@ def pressed_select_all():
                                     path_exists = True
                                     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                     if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                        file_count = file_count + 1
                                         pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
         if not path_exists:
             write_console("Path does not exist")    
- 
+
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -629,10 +662,12 @@ def pressed_select_all():
                                 path_exists = True
                                 dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                                 if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                                    file_count = file_count + 1
                                     pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
         if not path_exists:
             write_console("Path does not exist")    
                             
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -659,8 +694,10 @@ def pressed_select_all():
                     for temp_date in temp_date_list:
                         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
                         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+                            file_count = file_count + 1
                             pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
                         
+        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -671,69 +708,69 @@ def pressed_select_all():
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
         return
 
-    if(part_no_selected.get() == ""):
-        print("E")
-        part_list = os.listdir(dp)
-        for part in part_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/')
-            temp_date_list = os.listdir(dp)
-            for temp_date in temp_date_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/' + temp_date + '/')
-                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date):
-                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date)
-        file_select = tk.Entry(window, textvariable=file_name_entry)
-        file_select.grid(row=6,column=1, sticky='ew')
-        file_select["font"]=("helvetica",10)
-        file_label = tk.Label(window,text="save file name")
-        file_label.grid(row=6,column=0)
-        file_label["font"]=("helvetica",10)
-        file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + test_selected.get())
-        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + " have been selected.")
-        return
+    # if(part_no_selected.get() == ""):
+    #     print("E")
+    #     part_list = os.listdir(dp)
+    #     for part in part_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/')
+    #         temp_date_list = os.listdir(dp)
+    #         for temp_date in temp_date_list:
+    #             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/' + temp_date + '/')
+    #             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date):
+    #                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date)
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + " have been selected.")
+    #     return
     
-    if(temp_date_selected.get() != "" and part_no_selected.get() == ""):
-        print("F")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                temp_date_list = os.listdir(dp)
-                for temp_date in temp_date_list:
-                    if temp_date == temp_date_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+    # if(temp_date_selected.get() != "" and part_no_selected.get() == ""):
+    #     print("F")
+    #     lbw_list = os.listdir(dp)
+    #     for lbw in lbw_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+    #         part_list = os.listdir(dp)
+    #         for part in part_list:
+    #             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+    #             temp_date_list = os.listdir(dp)
+    #             for temp_date in temp_date_list:
+    #                 if temp_date == temp_date_selected.get():
+    #                     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+    #                     if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+    #                         pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
 
-        file_select = tk.Entry(window, textvariable=file_name_entry)
-        file_select.grid(row=6,column=1, sticky='ew')
-        file_select["font"]=("helvetica",10)
-        file_label = tk.Label(window,text="save file name")
-        file_label.grid(row=6,column=0)
-        file_label["font"]=("helvetica",10)
-        file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
-        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
-        return
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
+    #     return
 
 
 
-    if(temp_date_selected.get() == ""):
-        print("G")
-        temp_date_list = os.listdir(dp)
-        for temp_date in temp_date_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + '/' + temp_date + '/')
-            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date):
-                pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date)
-        file_select = tk.Entry(window, textvariable=file_name_entry)
-        file_select.grid(row=6,column=1, sticky='ew')
-        file_select["font"]=("helvetica",10)
-        file_label = tk.Label(window,text="save file name")
-        file_label.grid(row=6,column=0)
-        file_label["font"]=("helvetica",10)
-        file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
-        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
-        return
+    # if(temp_date_selected.get() == ""):
+    #     print("G")
+    #     temp_date_list = os.listdir(dp)
+    #     for temp_date in temp_date_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + '/' + temp_date + '/')
+    #         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date):
+    #             pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date)
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
+    #     return
 
 def update_selection_window():
     clear_selection()
@@ -773,13 +810,14 @@ def check_enable_selection(chip = "", test = "", lbw = "", part = "", temp_date 
             write_console(chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + " already selected")
             return False
     
-    if(temp_date_selected.get() != ""):
-        btn_select_part["state"] = "normal"    
+    if(temp_date_selected.get() != ""): 
         btn_select_all["state"] = "disabled"
     
     return True
 
 def reset_selection():
+    global total_file_count
+    total_file_count = 0
     btn_reset_select["state"] = "disabled"
     selection_window.part_list = []
     selection_window.full_part_list = []
@@ -799,18 +837,13 @@ def parse_button_off():
     btn_parse_data["bg"] = "#E97F7F"
     btn_parse_data["state"] = "disabled"
 
-#part selection button
-btn_select_part = tk.Button(select_btn_frame, text="Select Part", command=pressed_add_part)
-btn_select_part.grid(row=0,column=0, sticky='nsew')
-btn_select_part["state"] = "disabled"
-
 #part selection reset button
 btn_reset_select = tk.Button(reset_btn_frame, text="Reset Selection", command=reset_selection)
 btn_reset_select.grid(row=0,column=0, sticky='nsew')
 btn_reset_select["state"] = "disabled"
 
 #part select all button
-btn_select_all = tk.Button(bottom_right_btn_frame, text="Select All", command=pressed_select_all)
+btn_select_all = tk.Button(bottom_right_btn_frame, text="Select Parts", command=pressed_select_all)
 btn_select_all.grid(sticky='nsew')
 btn_select_all["state"] = "disabled"
 
@@ -933,8 +966,7 @@ def pressed(event):
 
     clear_console()
 
-    #disable the parse data button
-    btn_select_part["state"] = "disabled"
+
 
     #disable the select all button
     btn_select_all["state"] = "disabled"
@@ -996,8 +1028,6 @@ def pressed_test(event):
     clear_console()
     btn_reset_select["state"] = "normal"
 
-    #disable parse data button
-    btn_select_part["state"] = "disabled"
 
     #enter test directory
     item = test_selected.get()
@@ -1133,8 +1163,6 @@ def pressed_test(event):
 
     clear_console()
 
-    #disable parse data button
-    btn_select_part["state"] = "disabled"
 
     #enable select all button
     btn_select_all["state"] = "normal"
@@ -1179,8 +1207,6 @@ def pressed_test(event):
 
     clear_console()
 
-    #disable Parse data button
-    btn_select_part["state"] = "disabled"
 
     #enable select all button
     btn_select_all["state"] = "normal"
@@ -1226,8 +1252,6 @@ def parse_data():
 #the parse data button was pressed
 def pressed_parse_data():
     btn_parse_data["state"] = "disabled"
-    btn_select_part["state"] = "disabled"
-    btn_select_all["state"] = "disabled"
 
     write_console("Running...")
 
@@ -1256,7 +1280,7 @@ write_console("Data Parser Initiated")
 write_console("start by selecting the chip")
 
 #chip option select
-chip_combobox = AutocompleteCombobox(window,completevalues=window.chips ,textvariable=chip_selected)
+chip_combobox = AutocompleteCombobox(window, completevalues=window.chips ,textvariable=chip_selected)
 chip_combobox.grid(row=0, column=1, sticky='we')
 
 def handle_enter(event):

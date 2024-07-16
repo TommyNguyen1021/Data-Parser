@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "sys_osc_trim", "sys_osc_target_freq[MHz]", "sys_clk_period[ns]", "sys_clk_freq[MHz]", "idd_offset[mA]", "idd18_offset[mA]", "iddIO_offset[mA]", "pre-bck_grd_iddw[mA]", "pre-bck_grd_idd18w[mA]", "Vwl", "Vbl", "write speed[ns]", "write-data", "Iddw[mA]", "Idd18w[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "sys_osc_trim", "sys_osc_target_freq[MHz]", "sys_clk_period[ns]", "sys_clk_freq[MHz]", "idd_offset[mA]", "idd18_offset[mA]", "iddIO_offset[mA]", "pre-bck_grd_iddw[mA]", "pre-bck_grd_idd18w[mA]", "Vwl", "Vbl", "write speed[ns]", "write-data", "Iddw[mA]", "Iddw[µA/MHz/bit]","Idd18w[mA]", "Idd18w[µA/MHz/bit]", "Lot Bin Wafer", "Process Corner", "Part Number", "Part ID", "Temp", "Date"]
     
     writer = ""
 
@@ -85,11 +85,15 @@ def main():
                             dictionary["write speed[ns]"] = line.split(",")[15]
                             dictionary["write-data"] = line.split(",")[16]
                             dictionary["Iddw[mA]"] = line.split(",")[17]
+                            dictionary["Iddw[µA/MHz/bit]"] = float(line.split(",")[17]) * 1000 / float(line.split(",")[5]) / 78
                             dictionary["Idd18w[mA]"] = line.split(",")[18][:-1]
+                            dictionary["Idd18w[µA/MHz/bit]"] = float(line.split(",")[18][:-1]) * 1000 / float(line.split(",")[5]) / 78
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part
+                            dictionary["Process Corner"] = part.split("_")[-1]
                             dictionary["Part Number"] = part_num
+                            dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
                             dictionary["Date"] = date
 
                             new_data = {}

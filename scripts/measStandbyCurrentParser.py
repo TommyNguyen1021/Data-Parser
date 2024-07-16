@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd Offset[mA]", "Idd18 Offset[mA]", "IddIO Offset[mA]", "Idd Standby[mA]", "Idd18 Standby[mA]", "IddIO Standby[mA]", "Lot Bin Wafer", "Part Number", "Temp", "Date"]
+    headers = ["Vdd[V]", "Vdd18[V]", "VddIO[V]", "Idd Offset[mA]", "Idd18 Offset[mA]", "IddIO Offset[mA]", "Idd Standby[mA]", "Idd Standby[µA/Mb]","Idd18 Standby[mA]", "Idd18 Standby[µA/Mb]", "IddIO Standby[mA]", "Lot Bin Wafer", "Process Corner","Part Number", "Part ID","Temp", "Date"]
     
     writer = ""
 
@@ -73,12 +73,16 @@ def main():
                             dictionary["Idd18 Offset[mA]"] = line.split(",")[5]
                             dictionary["IddIO Offset[mA]"] = line.split(",")[6]
                             dictionary["Idd Standby[mA]"] = line.split(",")[7]
+                            dictionary["Idd Standby[µA/Mb]"] = f"{float(line.split(",")[7]) / 16 * 1000:.2f}"
                             dictionary["Idd18 Standby[mA]"] = line.split(",")[8]
+                            dictionary["Idd18 Standby[µA/Mb]"] = f"{float(line.split(",")[8]) / 16 * 1000:.2f}"
                             dictionary["IddIO Standby[mA]"] = line.split(",")[9][:-1]
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part
+                            dictionary["Process Corner"] = part.split("_")[-1]
                             dictionary["Part Number"] = part_num
+                            dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
                             dictionary["Date"] = date
 
                             new_data = {}
