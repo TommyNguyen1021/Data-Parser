@@ -8,10 +8,12 @@ from tkinter import ttk
 import scripts.DataParser as parser
 import os
 import subprocess
-from collections import OrderedDict
+import psycopg2
 
+conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
 
-        
+# Create cursor object
+cur = conn.cursor()        
 
 # ####################################################################################
 #                             INITIALIZING WINDOWS AND WIDGETS
@@ -148,77 +150,180 @@ def write_selection(text:string):
 def clear_selection():
     selection_screen.delete(0, selection_screen.size())
 
+def add_newline_to_list(strings_list):
+    return [s + '\n' for s in strings_list]
 
-def pressed_add_part(chip = "", test = "", lbw = "", part = "", temp_date = ""):
+def trim_part_list(part_list, test_selected_value):
+    trimmed_list = []
+    for part in part_list:
+        index = part.find(test_selected_value)
+        if index != -1:
+            trimmed_str = part[index + len(test_selected_value):].lstrip('/')
+            trimmed_list.append(trimmed_str)
+        else:
+            trimmed_list.append(part)
+    return trimmed_list
+
+
+def pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no
+):
+    # Disable buttons for the duration of processing
     for btn in window.grid_slaves():
         if int(btn.grid_info()["row"]) < 3 and int(btn.grid_info()["column"]) == 1:
             btn["state"] = "disabled"
 
     parse_button_on()
 
+    # Collect the current selections
     chip_sel = chip_selected.get()
     test_sel = test_selected.get()
     lbw_sel = lbw_selected.get()
     part_sel = part_no_selected.get()
     temp_date_sel = temp_date_selected.get()
 
-    if(chip != ""):
-        chip_sel = chip
-    if(test != ""):
-        test_sel = test
-    if(lbw != ""):
-        lbw_sel = lbw
-    if(part != ""):
-        part_sel = part
-    if(temp_date != ""):
-        temp_date_sel = temp_date
-
-    
     btn_remove_part["state"] = "normal"
     btn_reset_select["state"] = "normal"
 
-    dp = ""
-    if test_sel == "otp":
-        dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/')
-    else:
-        dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
-    
-    selection_window.full_part_list.append(dp)
+    # Create a new list for paths
+    new_paths = []
 
-    if test_sel == "otp":
-        dp = (lbw_sel + '/' + part_sel + '/')
+    # Determine which paths to add based on the current selections
+    if lbw_sel == "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
+        new_paths = test
+    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
+        new_paths = lbw
+    elif date_selected.get() != "" and lbw_sel == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
+        new_paths = date
+    elif temp_selected.get() != "" and date_selected.get() == "" and lbw_sel == "" and part_sel == "" and temp_date_sel == "":
+        new_paths = temp
+    elif lbw_sel == "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
+        new_paths = part_num
+    elif date_selected.get() != "" and lbw_sel == "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
+        new_paths = date_temp
+    elif lbw_sel == "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
+        new_paths = date_part_no
+    elif lbw_sel == "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
+        new_paths = temp_part_no
+    elif lbw_sel == "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
+        new_paths = temp_date_part_no
+    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
+        new_paths = lbw_date
+    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
+        new_paths = lbw_temp
+    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
+        new_paths = lbw_temp_date
+    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
+        new_paths = lbw_part_no
+    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
+        new_paths = lbw_temp_part_no
+    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
+        new_paths = lbw_date_part_no
+    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
+        new_paths = lbw_temp_date_part_no
+    
+    for path in new_paths:
+        selection_window.full_part_list.append(path)
+
+    # Append new paths to the part list
+    for path in new_paths:
+        selection_window.part_list.append(path)
+
+    # Trim all paths in selection_window.part_list
+    trimmed_paths = trim_part_list(selection_window.part_list, test_sel)
+
+    # Update selection_window.part_list to the trimmed paths
+    selection_window.part_list = trimmed_paths
+
+    # Check if any files were added
+    if not new_paths:
+        write_console("Path does not exist")
     else:
-        dp = (lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
-    selection_window.part_list.append(dp)
-    update_selection_window()
-    clear_console()
-    write_console(str(file_count) + " Files collected")
-    write_console(str(total_file_count + file_count) + " Total files collected")
-    write_console("You can now parse your listed parts by pressing \"Parse Data\" or you can add more.")
+        update_selection_window()
+        clear_console()
+        write_console(f"{len(new_paths)} Files collected")
+        write_console(f"{len(selection_window.full_part_list)} Total files collected")
+        write_console("You can now parse your listed parts by pressing \"Parse Data\" or you can add more.")
+
 
 
 def pressed_select_all():
-    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/')
-    global file_count, total_file_count
-    file_count = 0
+    test = []
+    lbw= []
+    date = []
+    temp = []
+    part_num =[]
+    date_temp = []
+    date_part_no =[]
+    temp_part_no = []
+    temp_date_part_no=[]
+    lbw_date = []
+    lbw_temp = []
+    lbw_temp_date = []
+    lbw_part_no =[]
+    lbw_temp_part_no =[]
+    lbw_date_part_no= []
+    lbw_temp_date_part_no= []
 
     #selected only test
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("test")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                temp_date_list = os.listdir(dp)
-                for temp_date in temp_date_list:
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                    if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                        file_count = file_count + 1
-                        pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
-
-        total_file_count = file_count + total_file_count
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        
+        test_path = cur.fetchall()
+        test = [all_test[0] for all_test in test_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+           
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -232,21 +337,68 @@ def pressed_select_all():
     #selected only lbw
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                            file_count = file_count + 1
-                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s;
+            """, (test_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
 
-        total_file_count = file_count + total_file_count
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw.append(full_path)
+        print(lbw)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -260,26 +412,69 @@ def pressed_select_all():
     #selected lbw and date
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and date")
-        path_exists = False
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                        if date_selected.get() in temp_date:
-                            path_exists = True    
-                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                file_count = file_count + 1
-                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
-        if not path_exists:
-            write_console("Path does not exist")
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+                SELECT DISTINCT
+                    '//DS220P/ds220_vol1/si_data/' ||
+                    COALESCE(chip."Chip Type", '') ||
+                    '/' ||
+                    COALESCE(test."Test", '') ||
+                    '/' ||
+                        chip."Lot" || 
+                        CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                        CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                        CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                        '/' || 
+                        COALESCE(chip."Part Number", '') ||
+                        '/' || 
+                        COALESCE(test."Temp", '') || 
+                        '_' || 
+                        COALESCE(test."Date", ''),
+                        -- Remove underscore before the first slash
+                        '_/',  -- Match an underscore followed by a slash
+                        '/'  -- Replace it with a single slash
+                    || '/' AS unique_id  -- Append a slash at the end
+                FROM 
+                    chip
+                JOIN 
+                    test ON chip."Chip Id" = test."Chip Id"
+                WHERE test."Test" = %s
+                    AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+                WHERE test."Test" = %s
+                    AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
 
-        total_file_count = file_count + total_file_count
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_date.append(full_path)
+        print(lbw)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -293,26 +488,70 @@ def pressed_select_all():
     #selected lbw and temp
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and temp")
-        path_exists = False
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                        if temp_selected.get() in temp_date:
-                            path_exists = True
-                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                file_count = file_count + 1
-                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date) 
-        if not path_exists:
-            write_console("Path does not exist")  
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s;
+            """, (test_selected.get(),temp_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+                WHERE test."Test" = %s
+                    AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
 
-        total_file_count = file_count + total_file_count
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_temp.append(full_path)
+        print(lbw)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -326,26 +565,70 @@ def pressed_select_all():
     #selected lbw and temp and date
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and temp and date")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                            if temp_selected.get() in temp_date and date_selected.get() in temp_date:
-                                path_exists = True
-                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                    file_count = file_count + 1
-                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
-        if not path_exists:
-             write_console("Path does not exist")  
- 
-        total_file_count = file_count + total_file_count
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get()))
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_temp_date.append(full_path)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -358,26 +641,67 @@ def pressed_select_all():
     
     #selected temp and date
     if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
-        print("temp and date")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                temp_date_list = os.listdir(dp)
-                for temp_date in temp_date_list:
-                    if temp_selected.get() in temp_date and date_selected.get() in temp_date:
-                        path_exists = True
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                            file_count = file_count + 1
-                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
-        if not path_exists:
-             write_console("Path does not exist") 
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND test."Temp" = %s
+        """, (test_selected.get(), date_selected.get(), temp_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND test."Temp" = %s
+        """, (test_selected.get(), date_selected.get(), temp_selected.get()))
+       
+        date_temp_path = cur.fetchall()
+        date_temp = [all_temp_date[0] for all_temp_date in date_temp_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
 
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -391,21 +715,65 @@ def pressed_select_all():
     #selected only date
     if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("date")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                temp_date_list = os.listdir(dp)
-                for temp_date in temp_date_list:
-                        if date_selected.get() in temp_date:
-                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                file_count = file_count + 1
-                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s;
+        """, (test_selected.get(), date_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s;
+        """, (test_selected.get(), date_selected.get()))
+       
+        date_path = cur.fetchall()
+        date = [all_date[0] for all_date in date_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
 
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -414,26 +782,70 @@ def pressed_select_all():
         file_label["font"]=("helvetica",10)
         file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+    
         return
 
     #selected only temp
     if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("temp")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                temp_date_list = os.listdir(dp)
-                for temp_date in temp_date_list:
-                    if temp_selected.get() in temp_selected:
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                            file_count = file_count + 1
-                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s;
+        """, (test_selected.get(), temp_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s;
+        """, (test_selected.get(), temp_selected.get()))
+        temp_path = cur.fetchall()
+        temp = [all_temp[0] for all_temp in temp_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
 
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -443,30 +855,72 @@ def pressed_select_all():
         file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
         return
-    
+
     #selected lbw and part no.
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        path_exists = True
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                file_count = file_count + 1
-                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
-        if not path_exists:
-            write_console("Path does not exist") 
-                        
-        total_file_count = file_count + total_file_count
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),part_no_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_part_no.append(full_path)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -477,29 +931,71 @@ def pressed_select_all():
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
         return
     
-     #selected date and part no.
+    #selected date and part no.
     if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("date and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                if part == part_no_selected.get():
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                        if date_selected.get() in temp_date:
-                            path_exists = True
-                            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                            if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                file_count = file_count + 1
-                                pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
-        if not path_exists:
-            write_console("Path does not exist")             
-                        
-        total_file_count = file_count + total_file_count
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+
+       
+        date_part_no_path = cur.fetchall()
+        date_part_no = [all_date_part_no[0] for all_date_part_no in date_part_no_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -513,26 +1009,67 @@ def pressed_select_all():
     #selected temp and part no.
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("temp and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                            if temp_selected.get() in temp_date:
-                                path_exists = True
-                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                    file_count = file_count + 1
-                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
-        if not path_exists:
-            write_console("Path does not exist")     
-                            
-        total_file_count = file_count + total_file_count
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+       
+        temp_part_no_path = cur.fetchall()
+        temp_part_no = [all_temp_part_no[0] for all_temp_part_no in temp_part_no_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -546,27 +1083,70 @@ def pressed_select_all():
     #selected lbw and temp and part no.
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and temp and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                            if temp_selected.get() in temp_date:
-                                path_exists = True
-                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                    file_count = file_count + 1
-                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
-        if not path_exists:
-            write_console("Path does not exist")   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_temp_part_no.append(full_path)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
                             
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -580,27 +1160,70 @@ def pressed_select_all():
     #selected lbw and date and part no.
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and date and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                            if date_selected.get() in temp_date:
-                                path_exists = True
-                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                    file_count = file_count + 1
-                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
-        if not path_exists:
-            write_console("Path does not exist")   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),date_selected.get(),part_no_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_date_part_no.append(full_path)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
                             
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -614,26 +1237,69 @@ def pressed_select_all():
     #selected temp and date and part no.
     if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("temp and date and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                                if temp_selected.get() in temp_date and date_selected.get() in temp_date:
-                                    path_exists = True
-                                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                    if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                        file_count = file_count + 1
-                                        pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)
-        if not path_exists:
-            write_console("Path does not exist")    
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
+       
+        temp_date_part_no_path = cur.fetchall()
+        temp_date_part_no = [all_temp_date_part_no[0] for all_temp_date_part_no in temp_date_part_no_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
 
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -647,27 +1313,72 @@ def pressed_select_all():
     #selected lbw and date and temp and part no.
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and date and temp and part no.")
-        lbw_list = os.listdir(dp)
-        path_exists = False
-        for lbw in lbw_list:
-            if lbw == lbw_selected.get() :
-                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-                part_list = os.listdir(dp)
-                for part in part_list:
-                    if part == part_no_selected.get():
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                        temp_date_list = os.listdir(dp)
-                        for temp_date in temp_date_list:
-                            if temp_selected.get() in temp_date and date_selected.get() in temp_date:
-                                path_exists = True
-                                dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                                if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                                    file_count = file_count + 1
-                                    pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
-        if not path_exists:
-            write_console("Path does not exist")    
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cur.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                lbw_temp_date_part_no.append(full_path)
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):        
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)  
                             
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -678,26 +1389,71 @@ def pressed_select_all():
         write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
         return
 
-    dp += lbw_selected.get() + '/'
+    # dp += lbw_selected.get() + '/'
 
-    #selected only part no.
+    # selected only part no.
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("only part no.")
-        lbw_list = os.listdir(dp)
-        for lbw in lbw_list:
-            dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
-            part_list = os.listdir(dp)
-            for part in part_list:
-                if part == part_no_selected.get():
-                    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
-                    temp_date_list = os.listdir(dp)
-                    for temp_date in temp_date_list:
-                        dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
-                        if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
-                            file_count = file_count + 1
-                            pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)   
+        if (test_selected.get() != 'otp'):
+            cur.execute("""
+                SELECT DISTINCT
+                    '//DS220P/ds220_vol1/si_data/' ||
+                    COALESCE(chip."Chip Type", '') ||
+                    '/' ||
+                    COALESCE(test."Test", '') ||
+                    '/' ||
+                        chip."Lot" || 
+                        CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                        CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                        CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                        '/' || 
+                        COALESCE(chip."Part Number", '') ||
+                        '/' || 
+                        COALESCE(test."Temp", '') || 
+                        '_' || 
+                        COALESCE(test."Date", ''),
+                        -- Remove underscore before the first slash
+                        '_/',  -- Match an underscore followed by a slash
+                        '/'  -- Replace it with a single slash
+                    || '/' AS unique_id  -- Append a slash at the end
+                FROM 
+                    chip
+                JOIN 
+                    test ON chip."Chip Id" = test."Chip Id"
+                WHERE 
+                    test."Test" = %s
+                    AND chip."Part Number" = %s;
+                ;
+            """, (test_selected.get(), part_no_selected.get()))
+        else:
+            cur.execute("""
+            SELECT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' 
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
+        part_num_path = cur.fetchall()
+        part_num = [all_part_num[0] for all_part_num in part_num_path]
+        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
                         
-        total_file_count = file_count + total_file_count
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
         file_select["font"]=("helvetica",10)
@@ -783,32 +1539,701 @@ def update_selection_window():
                     btn["state"] = "normal"
 
 
-def check_enable_selection(chip = "", test = "", lbw = "", part = "", temp_date = ""):
+def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
 
-    chip_sel = chip_selected.get()
-    test_sel = test_selected.get()
-    lbw_sel = lbw_selected.get()
-    part_sel = part_no_selected.get()
-    temp_date_sel = temp_date_selected.get()
+    # Clear existing options
+    window.temp.clear()
+    window.dates.clear()
+    window.lbw.clear()
+    window.parts.clear()
 
-    if(chip != ""):
-        chip_sel = chip
-    if(test != ""):
-        test_sel = test
-    if(lbw != ""):
-        lbw_sel = lbw
-    if(part != ""):
-        part_sel = part
-    if(temp_date != ""):
-        temp_date_sel = temp_date
+    lbw_parts = lbw_selected.get().split('_')
+    # Use list unpacking with defaults
+    lot, bin, wafer, proc_corner = (lbw_parts + [''] * 4)[:4]
 
-    # dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() +
-    # '/' + part_no_selected.get() + '/' + temp_date_selected.get() + '/')
-    dp = (window.datapath + chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + '/')
-    for part in selection_window.full_part_list:
-        if dp == part:
-            write_console(chip_sel + '/' + test_sel + '/' + lbw_sel + '/' + part_sel + '/' + temp_date_sel + " already selected")
-            return False
+    #selected only lbw
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+            SELECT DISTINCT "Date"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and temp
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM test 
+        JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, part_no_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM test 
+        JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+    #selected lbw and temp and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            And "Date" = %s
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(),temp_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected only temp
+    if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Date" 
+            FROM test 
+            JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s AND "Temp" = %s
+        """,(test_selected.get(), temp_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s
+        """, (test_selected.get(), temp_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Temp" = %s
+        """, (test_selected.get(), temp_selected.get()))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected only date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp" 
+            FROM test 
+            JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s AND "Date" = %s
+        """,(test_selected.get(), date_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s
+        """, (test_selected.get(), date_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Date" = %s
+        """, (test_selected.get(), date_selected.get()))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    # selected only part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Part Number" = %s
+        """,(test_selected.get(), part_no_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Part Number" = %s
+        """,(test_selected.get(), part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Part Number" = %s
+        """, (test_selected.get(), part_no_selected.get()))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected temp and date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get()))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected temp and part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Chip
+        JOIN Test ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected temp and date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Chip
+        JOIN Test ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get()))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected lbw and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+    #selected lbw and date and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(), part_no_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+    # all empty
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
+
+        cur.execute(""" 
+            SELECT DISTINCT 
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+            FROM Test
+            JOIN Chip ON test."Chip Id" = chip."Chip Id"
+            WHERE test."Test" = %s;
+        """, (test_selected.get(),))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        window.lbw = list(set(window.lbw))  # Remove duplicates
+        window.lbw.sort()  # Sort the list
+
+        lbw_combobox['values'] = window.lbw
+
+        cur.execute(""" 
+            SELECT DISTINCT "Date" FROM test WHERE "Test" = %s
+        """, (test_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        window.dates.sort()  # Sort the list
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+
+        cur.execute("""
+            SELECT DISTINCT "Temp" FROM test WHERE "Test" = %s
+        """, (test_selected.get(),))
+        temp = cur.fetchall()
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        window.temp.sort()  # Sort the list
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT chip."Part Number" FROM Test JOIN Chip ON test."Chip Id" = chip."Chip Id" WHERE test."Test" = %s
+        """, (test_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        window.parts.sort()  # Sort the list
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+
+
+
+
+def check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+
+    # Initialize selected paths list
+    selected_paths = []
+
+    # Construct paths based on provided parameters
+    if test:
+        selected_paths.extend(test)
+    if date:
+        selected_paths.extend(date)
+    if lbw:
+        selected_paths.extend(lbw)
+    if temp:
+        selected_paths.extend(temp)
+    if part_num:
+        selected_paths.extend(part_num)
+    if date_temp:
+        selected_paths.extend(date_temp)
+    if date_part_no:
+        selected_paths.extend(date_part_no)
+    if temp_part_no:
+        selected_paths.extend(temp_part_no)
+    if temp_date_part_no:
+        selected_paths.extend(temp_date_part_no)
+    if lbw_date:
+        selected_paths.extend(lbw_date)
+    if lbw_temp:
+        selected_paths.extend(lbw_temp)
+    if lbw_temp_date:
+        selected_paths.extend(lbw_temp_date)
+    if lbw_part_no:
+        selected_paths.extend(lbw_part_no)
+    if lbw_temp_part_no:
+        selected_paths.extend(lbw_temp_part_no)
+    if lbw_date_part_no:
+        selected_paths.extend(lbw_date_part_no)
+    if lbw_temp_date_part_no:
+        selected_paths.extend(lbw_temp_date_part_no)
+
+    # Check for already selected paths
+    existing_paths = set(selection_window.full_part_list)
+    # List to collect duplicate paths
+    duplicates = []
+    
+    for path in selected_paths:
+        if path in existing_paths:
+            duplicates.append(path)
+    
+    # Check if there are duplicates
+    if duplicates:
+        write_console("Paths already selected:\n" + "\n".join(duplicates))
+        return False
+
     
     if(temp_date_selected.get() != ""): 
         btn_select_all["state"] = "disabled"
@@ -824,7 +2249,6 @@ def reset_selection():
     parse_button_off()
     delete_remove_part()
     update_selection_window()
-    check_enable_selection()
     write_console("All parts are removed")
 
 def parse_button_on():
@@ -867,7 +2291,6 @@ def pressed_remove():
                 write_console("No part selected")
                 write_console("You must click on a part that is listed on the righthand side")
     update_selection_window()
-    check_enable_selection()
     if (selection_window.part_list == []):
         delete_remove_part()
         return
@@ -977,15 +2400,23 @@ def pressed(event):
         return
 
     #enter chip directory
-    item = chip_selected.get()
-    window.chip_path = item + '/'
-    new_dp = window.datapath + window.chip_path
-    #empty tests and add test directorys to test option select
-    window.tests = []
+    # item = chip_selected.get()
+    # window.chip_path = item + '/'
+    # new_dp = window.datapath + window.chip_path
+    # #empty tests and add test directorys to test option select
+    # window.tests = []
+    # window.tests.append("")
+    # for name in os.listdir(new_dp):
+    #     if os.path.isdir(new_dp + name):
+    #         window.tests.append(name)
+
+    cur.execute("""
+        SELECT DISTINCT "Test" FROM test JOIN chip ON test."Chip Id" = chip."Chip Id" WHERE chip."Chip Type" = %s
+    """, (chip_selected.get(),))
+
+    tests = cur.fetchall()
+    window.tests = [test_type[0] for test_type in tests]
     window.tests.append("")
-    for name in os.listdir(new_dp):
-        if os.path.isdir(new_dp + name):
-            window.tests.append(name)
     
     #if there are no tests in chip directory
     if not window.tests:
@@ -1018,7 +2449,8 @@ def pressed(event):
 #Event function for when a test option is selected
 def pressed_test(event):
     global window_inner_frame
-    #reset all values that were previously selected for rows below test 
+    
+    # Reset all values that were previously selected for rows below test 
     lbw_selected.set("")
     part_no_selected.set("")
     temp_date_selected.set("")
@@ -1028,27 +2460,42 @@ def pressed_test(event):
     clear_console()
     btn_reset_select["state"] = "normal"
 
-
-    #enter test directory
-    item = test_selected.get()
+    # Enter test directory
+    item = test_selected.get() or ""
     new_dp = window.datapath + chip_selected.get() + '/' + item + '/'
     print(new_dp)
 
-    #empty lbw (Lot/Bin/Wafer) and add lbw directorys to lbw option select
-    window.lbw = []
-    window.lbw.append("")
-    for name in os.listdir(new_dp):
-        if os.path.isdir(new_dp + name):
-            print(name)
-            window.lbw.append(name)
+    # Empty LBW (Lot/Bin/Wafer) and add LBW directories to LBW option select
+    window.lbw = [""]
     
-    #if there are no LBWs available in directory
+    # Fetch distinct LBWs from the database
+    cur.execute(""" 
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s;
+    """, (item,))
+    lbw = cur.fetchall()
+    for row in lbw:
+        combined_info = row[0] if row[0] is not None else ""
+        window.lbw.append(combined_info)
+    window.lbw.append("")
+
+    # Remove duplicates and sort the list
+    window.lbw = list(set(window.lbw))  # Remove duplicates
+    window.lbw.sort()  # Sort the list
+    
+    # If there are no LBWs available in the directory
     if not window.lbw:
         remove_options(window_inner_frame, 2)
-        lbw_label = tk.Label(window_inner_frame,text="select LBW")
-        lbw_label.grid(row=3,column=5)
-        lbw_label = tk.Label(window_inner_frame,text="main has no LBW")
-        lbw_label.grid(row=3,column=4)
+        lbw_label = tk.Label(window_inner_frame, text="select LBW")
+        lbw_label.grid(row=3, column=5)
+        lbw_label = tk.Label(window_inner_frame, text="main has no LBW")
+        lbw_label.grid(row=3, column=4)
         write_console("No Lots/Wafer/Bins that had that ran that test can be found")
         return
 
@@ -1061,34 +2508,21 @@ def pressed_test(event):
     # LBW option select
     lbw_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.lbw, textvariable=lbw_selected)
     lbw_combobox.grid(row=0, column=1, sticky='we')
+    
     # Bind events
-    lbw_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_temp_date(lbw_combobox.get()))
-
-
+    lbw_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox, lbw_combobox))
 
     # Label for LBW selection
-    lbw_label = tk.Label(window_inner_frame,text="select LBW")
-    lbw_label.grid(row=0,column=0)
-    remove_options(window, 3)
+    lbw_label = tk.Label(window_inner_frame, text="select LBW")
+    lbw_label.grid(row=0, column=0)
 
-    # Gather all temp/dates for the selected test
-    window.dates = []
+    # Gather all dates for the selected test
+    cur.execute(""" 
+        SELECT DISTINCT "Date" FROM test WHERE "Test" = %s
+    """, (test_selected.get(),))
+    date = cur.fetchall()
+    window.dates = [date_type[0] for date_type in date if date_type[0] is not None]
     window.dates.append("")
-    for lbw_name in os.listdir(new_dp):
-        lbw_path = os.path.join(new_dp, lbw_name)
-        if os.path.isdir(lbw_path):
-            for part_name in os.listdir(lbw_path):
-                part_path = os.path.join(lbw_path, part_name)
-                if os.path.isdir(part_path):
-                    for temp_date_name in os.listdir(part_path):
-                        temp_date_path = os.path.join(part_path, temp_date_name)
-                        if os.path.isdir(temp_date_path):
-                            try:
-                                date_part = temp_date_name.split('_')[1]
-                                window.temp_dates.append(temp_date_name)
-                                window.dates.append(date_part)
-                            except IndexError:
-                                print(temp_date_name + "doesn't follow naming convention of temp_date")
 
     # If there are no dates
     if not window.dates:
@@ -1100,37 +2534,41 @@ def pressed_test(event):
         write_console("There are no parts that were ran under a specific date")
         return
 
-    dates_options = list(OrderedDict.fromkeys(window.dates))
-
-    # date option select
-    dates_combobox = AutocompleteCombobox(window_inner_frame, completevalues=dates_options, textvariable=date_selected)
+    # Date option select
+    dates_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.dates, textvariable=date_selected)
     dates_combobox.grid(row=0, column=5, sticky='we')
 
     # Bind events
-    dates_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_temp_date(dates_combobox.get()))
+    dates_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox, lbw_combobox))
 
     dates_label = tk.Label(window_inner_frame, text="select date")
     dates_label.grid(row=0, column=4)
     remove_options(window_inner_frame, 3)
 
-    window.temp = []
+    # window.temp = []
+    # window.temp.append("")
+    # for lbw_name in os.listdir(new_dp):
+    #     lbw_path = os.path.join(new_dp, lbw_name)
+    #     if os.path.isdir(lbw_path):
+    #         for part_name in os.listdir(lbw_path):
+    #             part_path = os.path.join(lbw_path, part_name)
+    #             if os.path.isdir(part_path):
+    #                 for temp_date_name in os.listdir(part_path):
+    #                     temp_date_path = os.path.join(part_path, temp_date_name)
+    #                     if os.path.isdir(temp_date_path):
+    #                         try:
+    #                             temp_part = temp_date_name.split('_')[0]
+    #                             window.temp.append(temp_part)
+    #                             if temp_part[-1] != 'C' or not any(char.isdigit() for char in temp_part):
+    #                                 raise ValueError(temp_part + "must contain numbers and end with 'C")
+    #                         except (IndexError, ValueError) as e:
+    #                             print(f"Warning: {e}")
+    cur.execute("""
+        SELECT DISTINCT "Temp" FROM test WHERE "Test" = %s
+    """, (test_selected.get(),))
+    temp = cur.fetchall()
+    window.temp = [temp_type[0] for temp_type in temp if temp_type[0] is not None]
     window.temp.append("")
-    for lbw_name in os.listdir(new_dp):
-        lbw_path = os.path.join(new_dp, lbw_name)
-        if os.path.isdir(lbw_path):
-            for part_name in os.listdir(lbw_path):
-                part_path = os.path.join(lbw_path, part_name)
-                if os.path.isdir(part_path):
-                    for temp_date_name in os.listdir(part_path):
-                        temp_date_path = os.path.join(part_path, temp_date_name)
-                        if os.path.isdir(temp_date_path):
-                            try:
-                                temp_part = temp_date_name.split('_')[0]
-                                window.temp.append(temp_part)
-                                if temp_part[-1] != 'C' or not any(char.isdigit() for char in temp_part):
-                                    raise ValueError(temp_part + "must contain numbers and end with 'C")
-                            except (IndexError, ValueError) as e:
-                                print(f"Warning: {e}")
 
 
     # If there are no temp
@@ -1144,13 +2582,14 @@ def pressed_test(event):
         return
 
     # Remove duplicates from temp list
-    temp_options = list(OrderedDict.fromkeys(window.temp))
+    # temp_options = list(OrderedDict.fromkeys(window.temp))
 
     # temp option select
-    temp_combobox = AutocompleteCombobox(window_inner_frame, completevalues=temp_options,textvariable=temp_selected)
+    temp_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.temp,textvariable=temp_selected)
     temp_combobox.grid(row=0, column=3, sticky='we')
     # Bind events
-    temp_combobox.bind("<<ComboboxSelected>>", pressed_temp_date)
+    temp_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox))
+
     temp_label = tk.Label(window_inner_frame, text="select temp")
     temp_label.grid(row=0, column=2)
     remove_options(window_inner_frame, 3)
@@ -1168,15 +2607,22 @@ def pressed_test(event):
     btn_select_all["state"] = "normal"
 
     #empty Part list and add part number directorys to part number option select
-    window.parts = []
+    # window.parts = []
+    # window.parts.append("")
+    # for lbw_name in os.listdir(new_dp):
+    #     lbw_path = os.path.join(new_dp, lbw_name)
+    #     if os.path.isdir(lbw_path):
+    #         for part_name in os.listdir(lbw_path):
+    #             part_path = os.path.join(lbw_path, part_name)
+    #             if os.path.isdir(part_path):
+    #                 window.parts.append(part_name)
+
+    cur.execute("""
+    SELECT DISTINCT chip."Part Number" FROM Test JOIN Chip ON test."Chip Id" = chip."Chip Id" WHERE test."Test" = %s
+    """, (test_selected.get(),))
+    parts = cur.fetchall()
+    window.parts = [part[0] for part in parts if part[0] is not None]
     window.parts.append("")
-    for lbw_name in os.listdir(new_dp):
-        lbw_path = os.path.join(new_dp, lbw_name)
-        if os.path.isdir(lbw_path):
-            for part_name in os.listdir(lbw_path):
-                part_path = os.path.join(lbw_path, part_name)
-                if os.path.isdir(part_path):
-                    window.parts.append(part_name)
     
     #if no part numbers were found
     if not window.parts:
@@ -1188,16 +2634,16 @@ def pressed_test(event):
         write_console("There is no data on parts from that Lot/Wafer/Bin")
         return
     
-    part_options = list(OrderedDict.fromkeys(window.parts))
+    # part_options = list(OrderedDict.fromkeys(window.parts))
 
     #part option select
     parts_label = tk.Label(window,text="select part no.")
     parts_label.grid(row=4,column=0)
-    parts_combobox = AutocompleteCombobox(window, completevalues=part_options ,textvariable=part_no_selected)
+    parts_combobox = AutocompleteCombobox(window, completevalues=window.parts ,textvariable=part_no_selected)
     parts_combobox.grid(row=4, column=1, sticky='ew')
 
     # Bind events
-    parts_combobox.bind("<<ComboboxSelected>>", pressed_temp_date)
+    parts_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox))
 
     change_option_size(parts_label, parts_combobox)
     remove_options(window_inner_frame, 4)
@@ -1266,21 +2712,26 @@ def pressed_parse_data():
 #                            BUILDING WINDOWS AND WIDGETS
 # ####################################################################################
 
-print(window.datapath)
+# print(window.datapath)
 
-window.chips.append("")
 #populate chip option select
-for name in os.listdir(window.datapath):
-    if os.path.isdir(window.datapath + name):
-        window.chips.append(name)
+# for name in os.listdir(window.datapath):
+#     if os.path.isdir(window.datapath + name):
+#         window.chips.append(name)
+cur.execute("""
+    SELECT DISTINCT "Chip Type" FROM chip
+""", )
 
+chips = cur.fetchall()
+window.chips = [chip_type[0] for chip_type in chips]
+window.chips.append("")
 print(window.chips)
 
 write_console("Data Parser Initiated")
 write_console("start by selecting the chip")
 
 #chip option select
-chip_combobox = AutocompleteCombobox(window, completevalues=window.chips ,textvariable=chip_selected)
+chip_combobox = AutocompleteCombobox(window, completevalues = window.chips ,textvariable=chip_selected)
 chip_combobox.grid(row=0, column=1, sticky='we')
 
 def handle_enter(event):
@@ -1304,4 +2755,9 @@ btn_parse_data.config(width="20")
 btn_parse_data["font"]= ("Arial", 13)
 parse_button_off()
 #LOOP
+# Commit changes to database
+conn.commit()
+
+# Close cursor and connection
+
 main_window.mainloop()
