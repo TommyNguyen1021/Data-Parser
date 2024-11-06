@@ -73,9 +73,9 @@ def main():
                             dictionary["Idd18 Offset[mA]"] = line.split(",")[5]
                             dictionary["IddIO Offset[mA]"] = line.split(",")[6]
                             dictionary["Idd D-Sleep[mA]"] = line.split(",")[7]
-                            dictionary["Idd D-Sleep[µA/Mb]"] = f"{float(line.split(",")[7]) / 16 * 1000:.2f}"
+                            dictionary["Idd D-Sleep[µA/Mb]"] = f"{float(line.split(',')[7]) / 16 * 1000:.2f}"
                             dictionary["Idd18 D-Sleep[mA]"] = line.split(",")[8]
-                            dictionary["Idd18 D-Sleep[µA/Mb]"] = f"{float(line.split(",")[8]) / 16 * 1000:.2f}"
+                            dictionary["Idd18 D-Sleep[µA/Mb]"] = f"{float(line.split(',')[8]) / 16 * 1000:.2f}"
                             dictionary["IddIO D-Sleep[mA]"] = line.split(",")[9][:-1]
 
                             dictionary["Temp"] = temp

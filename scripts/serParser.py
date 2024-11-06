@@ -11,7 +11,7 @@ def contains_digits(input_string):
     return bool(re.search(r'\d', input_string))
 
 def main():
-    headers = ["Vdd", "Vdd18", "Data", "rd_cnt", "prg_vbl", "cycles", "err_cnt", "ppb", "Fail Count", "Instance", "Lot Bin Wafer", "Part Number", "Temp", "Date", "Run #", "Sporatic Errors", "Sporatic ppb", "Hard Errors", "Hard ppb"]
+    headers = ["Vdd", "Vdd18", "Data", "rd_cnt", "prg_vbl", "cycles", "err_cnt", "ppb", "Fail Count", "Instance", "Lot Bin Wafer", "Part Number", "Temp", "Date", "Run #", "Sporatic Errors", "Sporatic ppb", "Hard Errors", "Hard ppb", "ppb (EXCLUDING INITIAL FAILS)"]
     
     writer = ""
 
@@ -103,6 +103,11 @@ def main():
                             dictionary["Date"] = date
                             dictionary["Fail Count"] = fail_count
                             dictionary["Run #"] = ((int(str(file).split("_")[-1]) + (num_runs - 1)) % num_runs) + 1
+                            ppb_no_init_fails = float(line.split()[10]) - ((fail_count * 1000000000)/ (78 * 32768))
+                            if ppb_no_init_fails < 0:
+                                dictionary["ppb (EXCLUDING INITIAL FAILS)"] = 0
+                            else:
+                                dictionary["ppb (EXCLUDING INITIAL FAILS)"] = ppb_no_init_fails
 
                             new_data = {}
                             new_data.update(dictionary)

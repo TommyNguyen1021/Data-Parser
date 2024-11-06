@@ -84,9 +84,10 @@ def main():
                             dictionary["read speed[ns]"] = line.split(",")[14]
                             dictionary["read-data"] = line.split(",")[15]
                             dictionary["Iddr[mA]"] = line.split(",")[16]
-                            dictionary["Iddr[µA/MHz/bit]"] = f"{float(line.split(",")[16]) * 1000 / float(line.split(",")[5]) / 78:.2f}"
+                            dictionary["Iddr[µA/MHz/bit]"] = f"{(float(line.split(',')[16]) * 1000 / float(line.split(',')[5]) / 78):.2f}"
                             dictionary["Idd18r[mA]"] = line.split(",")[17][:-1]
-                            dictionary["Idd18r[µA/MHz/bit]"] = f"{float(line.split(",")[17][:-1]) * 1000 / float(line.split(",")[5]) / 78:.2f}"
+                            dictionary["Idd18r[µA/MHz/bit]"] = f"{(float(line.split(',')[17][:-1]) * 1000 / float(line.split(',')[5]) / 78):.2f}"
+
 
                             dictionary["Temp"] = temp
                             dictionary["Lot Bin Wafer"] = part

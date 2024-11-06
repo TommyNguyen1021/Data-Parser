@@ -1,188 +1,167 @@
-import string
+import csv
 import sys
 import os
 import re
+import tkinter as tk
+from tkinter import filedialog
+from natsort import natsorted
 from numpy import double
 
-from pyparsing import col
+def contains_digits(input_string):
+    # Use regular expression to check for any digits in the input string
+    return bool(re.search(r'\d', input_string))
 
-arg_length = len(sys.argv)
-
-#Line starters
-HEADER_INPUT = "#<"
-OUTPUT = '#>>'
-DATA_OUTPUT = ""
-
-#input information
-NUMBER_OF_INSTANCES = 8
-CHIP = "vili"
-TEST = "prog_shmoo"
-PATH_TO_DATA = "si_data/"
-path  = PATH_TO_DATA + '/' +  CHIP + '/write_shmoo' + "/P9HK27_0j_07/P0021/085C_210908/" + TEST + '_i'
-save_name = "parsed_data.csv"
-save_directory = "parsed_data/CHIP/TEST/LBW/PART_NUM/TEMP_DATE"
-
-#An array of lines that will be saved
-data_list = []
-first = True
-
-#extracts the temperature and date from the file path
-def get_temp_date():
-    temp_date = [path.split("/")[9].split("_")[0], path.split("/")[9].split("_")[1]]
-    data_list[0] += "temp" + ',' + "date" + ','
-    return temp_date
-
-#extracts the Lot_Bin_Wafer from the file path
-def get_lbw():
-    data_list.append("Lot_Bin_Wafer,")
-    return path.split("/")[7]
-
-#extracts the part number from the file path
-def get_part():
-    data_list[0]+=("part,")
-    return path.split("/")[8]
-
-
-#the Data column is normally written as 0x00 or 0xff
-#this function converts it so that it is saved as 0 or 1 instead
-def convert_data(list, col_list):
-    #This contains instance, Temp, and Date currently, so the line and column list are misaligned
-    # EX:
-    # 0: #D>        1: block   2: lfo_ovr    3: vdd     4: rd_vbl    5: Data
-    # 0: instance   1: temp    2: date       3: block   4: lfo_ovr   5: vdd     6: rd_vbl  7:  Data
-    
-    for i in range(len(col_list)):
-        if (re.search('Data', col_list[i])):
-
-            #i-3 realigns the 2 lists
-
-            #Replace 0x00 with 0
-            if re.search('0x00:', list[i-5]):
-                list[i-5] = "0"
-            #replace with 1
-            else:
-                list[i-5] = "1"
-
-
-
-#this function breaks apart a line and edits each line to make sure it has the proper values
-def line_breaker(line:string):
-    global first
-    #separate each value in the line. This line still contains the Line Starter
-    list = line.split(' ')
-
-    #separate the column names.
-    #This contains instance, Temp, and Date currently, so the line and column list
-    #are misaligned
-    # #D>        block   lfo_ovr    vdd     rd_vbl  Data
-    # instance   temp    date       block   lfo_ovr vdd     rd_vbl   Data
-    col_list = data_list[0].split(',')
-
-    convert_data(list, col_list)
-    #merge list into a new string
-    new_line = ""
-    for i in range(len(list)):
-        new_line += list[i]
-        if (i < len(list)-1):
-            new_line += ' '
-
-    #merge list into a new string
-    if (first):
-        new_col = ""
-        for i in range(len(col_list)):
-            new_col += col_list[i]
-            if (i < len(col_list)-1):
-                new_col += ','
-        data_list[0] = new_col
-        first = False
-    return new_line
-
-
-            
-#adds instance and temp/date to each line, then converts line to replace spaces with commas
-def check_data_output(line:string, instance:int, temp_date:list, lbw:string, part:string):
-    global vdd
-    global vdd18
-    if line[0:5] == "0x00:" or line[0:5] == "0xff:":
-        line = line_breaker(line)
-
-        #remove header
-        data = line
-
-        #add lot_bin_wafer
-        data_list.append(lbw + ',')
-        #add part number
-        data_list.append(part + ',')
-        #add instance
-        data_list.append(str(instance) + ',')
-        #add temp/dates
-        data_list[len(data_list)-1] += temp_date[0] + ',' + temp_date[1] + ','
-        #convert from space separated values to comma separated values
-        data_list[len(data_list)-1] += (data.replace(" ", ","))[:-1] + "," + vdd + "," + vdd18 + ",\n"
-
-    if "#< set_vdd " in line:
-        vdd= line.split()[-1]
-
-    if "#< set_vddbl " in line:
-        vdd18= line.split()[-1]
-        
-#save to an output
-def write_output():
-    if partNumber == 0:
-        file = open(save_directory + save_name, "w")
-    else:
-        file = open(save_directory + save_name, "a")
-    for i in range(len(data_list)):
-        if (i == 0 and os.stat(save_directory + save_name).st_size == 0) or i > 0:
-            file.write(data_list[i])
-    file.close()
-
-
-#TODO: implement check to see if the instance file actually exists
 def main():
-    global first, data_list
-    first = True
-    data_list=[]
-            
-    lbw = get_lbw()
-    part = get_part()
-    data_list[0] += ("instance,")
-    temp_date = get_temp_date()
+    headers = ["Lot_Bin_Wafer", "part", "instance", "temp", "date", "Data", "ivdd18/bit", "ivdd/bit", "VWL", "Vwl(meas)", "VBL", "Vbl(meas)", "PRG_CNT", "PRG_Time", 
+               "Pulse1", "Pulse1(ECC)", "Pulse2", "Pulse2(ECC)", "Pulse3", "Pulse3(ECC)", "Pulse4", "Pulse4(ECC)", 
+               "Pulse5", "Pulse5(ECC)", "Pulse6", "Pulse6(ECC)", "vdd", "vdd18"]
     
-    #loop for each instance
-    for inst in range(NUMBER_OF_INSTANCES):
-        #if the instance file actually exists
-        if os.path.exists(path + str(inst) + '.dat_0'):
-            #get data from file
-            current_dat = str(inst) + '.dat_0'
-            file = open(path +current_dat)
-            #for each line
-            global vdd
-            global vdd18
-            vdd = ""
-            vdd18 = ""
-            for line in file:
-                #check header
-                if re.search("^Data ivdd18/bit", line) and first:
-                    categories = line[:-1] + " vdd vdd18\n"
-                    data_list[0] += (categories.replace(" ",","))
-                check_data_output(line, inst, temp_date, lbw, part)
-            file.close()
-    write_output()
-    return
+    writer = ""
+
+    global CHIP, TEST
+
+    if not os.path.exists("./parsed_data/" + CHIP + "/" + TEST):
+        os.mkdir("./parsed_data/" + CHIP + "/" + TEST)
+
+    
+    data_path = path
+    instance = "0"
+    print(path)
+    part = data_path.split("/")[7]
+    print(part)
+    part_num = data_path.split("/")[8]
+    print(part_num)
+    temp = data_path.split("/")[9].split("_")[0]
+    print(temp)
+    date = data_path.split("/")[9].split("_")[1]
+    print(date)
+
+    if(partNumber == 0):
+        if not os.path.exists("./parsed_data/" + CHIP + "/" + TEST):
+            os.mkdir("./parsed_data/" + CHIP + "/" + TEST)
+        with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "w") as new_file:
+            writer = csv.DictWriter(new_file, fieldnames=headers, lineterminator = '\n')
+            writer.writeheader()
+            new_file.close()
+
+    raw_data_files = os.listdir(data_path)
+    raw_data_files = natsorted(raw_data_files)
+
+    
+    with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+        
+        for file in raw_data_files:
+
+            if("prog_shmoo" in file and "dat_0" in file):
+                print(file)
+                instance = file.split("_")[-2][1]
+
+                with open(data_path + "/" + file , "r") as txt_file:
+                #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+                    writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
+                    data_set = []                    
+                    dictionary = {}
+                    vdd = 0
+                    vdd18 = 0
+
+                    'Reads the lines and appends certain information into a dictionary for storing into the csv'
+                    for line_read in txt_file.readlines():
+                        
+                        line = line_read
+                        
+
+                        if re.search("DEBUG_MSG Received ", line):
+                            line = line[47:]
+
+                        if "#< set_vdd " in line:
+                            vdd = line.split()[-1]
+                            
+
+                        if "#< set_vddbl " in line:
+                            vdd18 = line.split()[-1]
+
+                        # This section adds a new line in the csv
+                        if line[0:5] == "0x00:" or line[0:5] == "0xff:":
+                            dictionary["Data"] = line.split()[0][:-1]
+                            dictionary["ivdd18/bit"] = line.split()[1]
+                            dictionary["ivdd/bit"] = line.split()[2]
+                            dictionary["VWL"] = line.split()[3]
+                            dictionary["Vwl(meas)"] = line.split()[4]
+                            dictionary["VBL"] = line.split()[5]
+                            dictionary["Vbl(meas)"] = line.split()[6]
+                            dictionary["PRG_CNT"] = line.split()[7]
+                            dictionary["PRG_Time"] = line.split()[8]
+                            
+                            try:
+                                dictionary["Pulse1"] = line.split()[9]
+                                dictionary["Pulse1(ECC)"] = line.split()[10]
+                                dictionary["Pulse2"] = line.split()[11]
+                                dictionary["Pulse2(ECC)"] = line.split()[12]
+                                dictionary["Pulse3"] = line.split()[13]
+                                dictionary["Pulse3(ECC)"] = line.split()[14]
+                                dictionary["Pulse4"] = line.split()[15]
+                                dictionary["Pulse4(ECC)"] = line.split()[16]
+                                dictionary["Pulse5"] = line.split()[17]
+                                dictionary["Pulse5(ECC)"] = line.split()[18]
+                                dictionary["Pulse6"] = line.split()[19]
+                                dictionary["Pulse6(ECC)"] = line.split()[20]
+                            except: 
+                                dictionary["Pulse1"] = line.split()[9]
+                                dictionary["Pulse2"] = line.split()[10]
+                                dictionary["Pulse3"] = line.split()[11]
+                                dictionary["Pulse4"] = line.split()[12]
+                                dictionary["Pulse5"] = line.split()[13]
+                                dictionary["Pulse6"] = line.split()[14]
+                                dictionary["Pulse1(ECC)"] = ""
+                                dictionary["Pulse2(ECC)"] = ""
+                                dictionary["Pulse3(ECC)"] = ""
+                                dictionary["Pulse4(ECC)"] = ""
+                                dictionary["Pulse5(ECC)"] = ""
+                                dictionary["Pulse6(ECC)"] = ""
+
+                            dictionary["instance"] = instance
+                            dictionary["temp"] = temp
+                            dictionary["Lot_Bin_Wafer"] = part
+                            dictionary["part"] = part_num
+                            dictionary["date"] = date
+                            dictionary["vdd"] = vdd
+                            dictionary["vdd18"] = vdd18
+
+                            new_data = {}
+                            new_data.update(dictionary)
+                            data_set.append(new_data)
+                            dictionary.clear()
+
+                    #writer.writeheader()
+                    for row in data_set:
+                        writer.writerow(row)
+                    txt_file.close()
+        save_file.close()
+    print("Returned true")
+    return True
+
+
 
 #What Gui calls to run script
 def run_script(chip, datapath, path_to_part, save, save_path, partNum):
-    print("running...")
     global CHIP, TEST, PATH_TO_DATA, path, save_name, save_directory, partNumber
-    TEST = "prog_shmoo_i"
+    TEST = "write_shmoo"
     PATH_TO_DATA = datapath
 
     partNumber = partNum
 
     CHIP = chip
-    path  = path_to_part + TEST
+    path  = path_to_part
+
     save_name = save
+    if(".csv" in save_name):
+        save_name = save_name[:-4]
     save_directory = save_path
     main()
-    return
+    return 
+
+
+
+#if os.path.exists("parsed_data/" + save_name):
+#        os.remove("parsed_data/" + save_name)
+#main()

@@ -1,7 +1,7 @@
 #HAHA
 
 import string
-from tkinter import *
+from tkinter import * 
 from ttkwidgets.autocomplete import AutocompleteCombobox
 import tkinter as tk
 from tkinter import ttk
