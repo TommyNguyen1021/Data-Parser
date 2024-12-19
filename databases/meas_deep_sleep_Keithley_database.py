@@ -2,7 +2,7 @@ import psycopg2
 import re
 import os
 
-conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
+conn = psycopg2.connect(host="localhost", dbname="meas_deep_sleep_Keithley",  user ="postgres", password = "numem@184", port = 5432)
 
 # Create cursor object
 cur = conn.cursor()
@@ -332,131 +332,77 @@ for chip in chip_types:
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     part_num_path = os.path.join(lbw_path, part_num)
-                                    if test == 'otp':
-                                        temp = None
-                                        date = None
-                                        for otp_data in os.listdir(part_num_path):
-                                            if '.dat' in otp_data:
-                                                match = re.search(pattern, otp_data)
-                                                test_data = os.path.join(part_num_path, otp_data)
-                                                instance_num = match.group(1) if match else None
-
-                                                # Check if the file exists before attempting to open it
-                                                if os.path.exists(test_data):
-                                                    # Open the file in binary mode and read its contents
-                                                    with open(test_data, 'rb') as f:
-                                                        file_content = f.read()
-                                                        
-                                                query_chip_id = """
-                                                SELECT "Chip Id" FROM Chip
-                                                WHERE "Chip Type" = %s
-                                                AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
-                                                """
-                                                params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
-                                                
-                                                cur.execute(query_chip_id, params_chip_id)
-                                                chip_id = cur.fetchone()
-                                                
-                                                if chip_id:
-                                                    chip_id = chip_id[0]
-                                                    # Find the corresponding Test Id
-                                                    query_test_id = """
-                                                    SELECT "Test Id" FROM Test
-                                                    WHERE "Chip Id" = %s
-                                                    AND "Test" = %s
-                                                    AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
-                                                    AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
-                                                    """
-                                                    params_test_id = (chip_id, test, date, date, temp, temp)
-                                                    
-                                                    cur.execute(query_test_id, params_test_id)
-                                                    test_id = cur.fetchone()
-                                                    
-                                                    if test_id:
-                                                        test_id = test_id[0]
-                                                        # Insert the test data into Test_File2
-                                                        cur.execute("""
-                                                        INSERT INTO Test_File ("Test Data", "Instance Num", "Test Id")
-                                                        VALUES (%s, %s, %s)
-                                                        """, (file_content, instance_num, test_id))
-                                                        
-                                                        # Commit the transaction
-                                                        conn.commit()
-
-                                    elif os.path.exists(part_num_path) and os.path.isdir(part_num_path):
-                                        for temp_date in os.listdir(part_num_path):
-                                            if temp_date == 'vili_otp_savejj2.mac':
-                                                continue
-                                            elif temp_date == 'week1':
-                                                temp = None
-                                                date = 'week1'
-                                            else:
-                                                first_part = temp_date
-                                                parts = first_part.split("_")
-                                                if len(parts) > 1:
-                                                    temp = parts[0]
-                                                    date = parts[1]
-                                                elif 'reload' in temp or 'bin' in temp or 'dat' in temp:
+                                    if os.path.exists(part_num_path) and os.path.isdir(part_num_path):
+                                        if test == 'meas_deep_sleep_Keithley':
+                                            for temp_date in os.listdir(part_num_path):
+                                                if temp_date == 'vili_otp_savejj2.mac':
+                                                    continue
+                                                elif temp_date == 'week1':
                                                     temp = None
-                                                    date = None
-                                            data_path = os.path.join(part_num_path, temp_date)
-                                            if os.path.exists(data_path) and os.path.isdir(data_path):
-                                                for data in os.listdir(data_path):
-                                                    if '.dat' in data:
-                                                        match = re.search(pattern, data)
-                                                        test_data = os.path.join(data_path, data)
-                                                        instance_num = match.group(1) if match else None
-                                                        
-                                                        # Check if the file exists before attempting to open it
-                                                        if os.path.exists(test_data):
-                                                            # Open the file in binary mode and read its contents
-                                                            with open(test_data, 'rb') as f:
-                                                                file_content = f.read()
+                                                    date = 'week1'
+                                                else:
+                                                    first_part = temp_date
+                                                    parts = first_part.split("_")
+                                                    if len(parts) > 1:
+                                                        temp = parts[0]
+                                                        date = parts[1]
+                                                    elif 'reload' in temp or 'bin' in temp or 'dat' in temp:
+                                                        temp = None
+                                                        date = None
+                                                data_path = os.path.join(part_num_path, temp_date)
+                                                if os.path.exists(data_path) and os.path.isdir(data_path):
+                                                    for data in os.listdir(data_path):
+                                                        if '.dat' in data:
+                                                            match = re.search(pattern, data)
+                                                            test_data = os.path.join(data_path, data)
+                                                            instance_num = match.group(1) if match else None
                                                             
-                                                            # Find the corresponding Chip Id
-                                                            query_chip_id = """
-                                                            SELECT "Chip Id" FROM Chip
-                                                            WHERE "Chip Type" = %s
-                                                            AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                            AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                            AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                            AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                            AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
-                                                            """
-                                                            params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
-                                                            
-                                                            cur.execute(query_chip_id, params_chip_id)
-                                                            chip_id = cur.fetchone()
-                                                            
-                                                            if chip_id:
-                                                                chip_id = chip_id[0]
-                                                                # Find the corresponding Test Id
-                                                                query_test_id = """
-                                                                SELECT "Test Id" FROM Test
-                                                                WHERE "Chip Id" = %s
-                                                                AND "Test" = %s
-                                                                AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
-                                                                AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
+                                                            # Check if the file exists before attempting to open it
+                                                            if os.path.exists(test_data):
+                                                                # Open the file in binary mode and read its contents
+                                                                with open(test_data, 'rb') as f:
+                                                                    file_content = f.read()
+                                                                
+                                                                # Find the corresponding Chip Id
+                                                                query_chip_id = """
+                                                                SELECT "Chip Id" FROM Chip
+                                                                WHERE "Chip Type" = %s
+                                                                AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
+                                                                AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
+                                                                AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
+                                                                AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
+                                                                AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
                                                                 """
-                                                                params_test_id = (chip_id, test, date, date, temp, temp)
+                                                                params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
                                                                 
-                                                                cur.execute(query_test_id, params_test_id)
-                                                                test_id = cur.fetchone()
+                                                                cur.execute(query_chip_id, params_chip_id)
+                                                                chip_id = cur.fetchone()
                                                                 
-                                                                if test_id:
-                                                                    test_id = test_id[0]
-                                                                    # Insert the test data into Test_File2
-                                                                    cur.execute("""
-                                                                    INSERT INTO Test_File ("Test Data", "Instance Num", "Test Id")
-                                                                    VALUES (%s, %s, %s)
-                                                                    """, (file_content, instance_num, test_id))
+                                                                if chip_id:
+                                                                    chip_id = chip_id[0]
+                                                                    # Find the corresponding Test Id
+                                                                    query_test_id = """
+                                                                    SELECT "Test Id" FROM Test
+                                                                    WHERE "Chip Id" = %s
+                                                                    AND "Test" = %s
+                                                                    AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
+                                                                    AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
+                                                                    """
+                                                                    params_test_id = (chip_id, test, date, date, temp, temp)
                                                                     
-                                                                    # Commit the transaction
-                                                                    conn.commit()
+                                                                    cur.execute(query_test_id, params_test_id)
+                                                                    test_id = cur.fetchone()
+                                                                    
+                                                                    if test_id:
+                                                                        test_id = test_id[0]
+                                                                        # Insert the test data into Test_File2
+                                                                        cur.execute("""
+                                                                        INSERT INTO Test_File ("Test Data", "Instance Num", "Test Id")
+                                                                        VALUES (%s, %s, %s)
+                                                                        """, (file_content, instance_num, test_id))
+                                                                        
+                                                                        # Commit the transaction
+                                                                        conn.commit()
 
 
                                                         
@@ -568,121 +514,72 @@ for chip in chip_types:
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     part_num_path = os.path.join(lbw_path, part_num)
-                                    if test == 'otp':
-                                        temp = None
-                                        date = None
-                                        for otp_data in os.listdir(part_num_path):
-                                            if '.dat' in otp_data:
-                                                match = re.search(pattern, otp_data)
-                                                test_data = os.path.join(part_num_path, otp_data)
-                                                instance_num = match.group(1) if match else None
-                                                file_content = otp_data
-
-                                                query_chip_id = """
-                                                SELECT "Chip Id" FROM Chip
-                                                WHERE "Chip Type" = %s
-                                                AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
-                                                """
-                                                params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
-                                                
-                                                cur.execute(query_chip_id, params_chip_id)
-                                                chip_id = cur.fetchone()
-                                                
-                                                if chip_id:
-                                                    chip_id = chip_id[0]
-                                                    # Find the corresponding Test Id
-                                                    query_test_id = """
-                                                    SELECT "Test Id" FROM Test
-                                                    WHERE "Chip Id" = %s
-                                                    AND "Test" = %s
-                                                    AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
-                                                    AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
-                                                    """
-                                                    params_test_id = (chip_id, test, date, date, temp, temp)
-                                                    
-                                                    cur.execute(query_test_id, params_test_id)
-                                                    test_id = cur.fetchone()
-                                                    
-                                                    if test_id:
-                                                        test_id = test_id[0]
-                                                        # Insert the test data into Test_File2
-                                                        cur.execute("""
-                                                        INSERT INTO Test_File2 ("Test Data", "Instance Num", "Test Id")
-                                                        VALUES (%s, %s, %s)
-                                                        """, (file_content, instance_num, test_id))
-                                                        
-                                                        # Commit the transaction
-                                                        conn.commit()
-
-                                    elif os.path.exists(part_num_path) and os.path.isdir(part_num_path):
-                                        for temp_date in os.listdir(part_num_path):
-                                            if temp_date == 'vili_otp_savejj2.mac':
-                                                continue
-                                            elif temp_date == 'week1':
-                                                temp = None
-                                                date = 'week1'
-                                            else:
-                                                first_part = temp_date
-                                                parts = first_part.split("_")
-                                                if len(parts) > 1:
-                                                    temp = parts[0]
-                                                    date = parts[1]
-                                                elif 'reload' in temp or 'bin' in temp or 'dat' in temp:
+                                    if os.path.exists(part_num_path) and os.path.isdir(part_num_path):
+                                        if test == 'meas_deep_sleep_Keithley':
+                                            for temp_date in os.listdir(part_num_path):
+                                                if temp_date == 'vili_otp_savejj2.mac':
+                                                    continue
+                                                elif temp_date == 'week1':
                                                     temp = None
-                                                    date = None
-                                            data_path = os.path.join(part_num_path, temp_date)
-                                            if os.path.exists(data_path) and os.path.isdir(data_path):
-                                                for data in os.listdir(data_path):
-                                                    if '.dat' in data:
-                                                        match = re.search(pattern, data)
-                                                        test_data = os.path.join(data_path, data)
-                                                        instance_num = match.group(1) if match else None
-                                                        file_content = data
-                                                            
-                                                        # Find the corresponding Chip Id
-                                                        query_chip_id = """
-                                                        SELECT "Chip Id" FROM Chip
-                                                        WHERE "Chip Type" = %s
-                                                        AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                        AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                        AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                        AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                        AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
-                                                        """
-                                                        params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
-                                                        
-                                                        cur.execute(query_chip_id, params_chip_id)
-                                                        chip_id = cur.fetchone()
-                                                        
-                                                        if chip_id:
-                                                            chip_id = chip_id[0]
-                                                            # Find the corresponding Test Id
-                                                            query_test_id = """
-                                                            SELECT "Test Id" FROM Test
-                                                            WHERE "Chip Id" = %s
-                                                            AND "Test" = %s
-                                                            AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
-                                                            AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
-                                                            """
-                                                            params_test_id = (chip_id, test, date, date, temp, temp)
-                                                            
-                                                            cur.execute(query_test_id, params_test_id)
-                                                            test_id = cur.fetchone()
-                                                            
-                                                            if test_id:
-                                                                test_id = test_id[0]
-                                                                # Insert the test data into Test_File2
-                                                                cur.execute("""
-                                                                INSERT INTO Test_File2 ("Test Data", "Instance Num", "Test Id")
-                                                                VALUES (%s, %s, %s)
-                                                                """, (file_content, instance_num, test_id))
+                                                    date = 'week1'
+                                                else:
+                                                    first_part = temp_date
+                                                    parts = first_part.split("_")
+                                                    if len(parts) > 1:
+                                                        temp = parts[0]
+                                                        date = parts[1]
+                                                    elif 'reload' in temp or 'bin' in temp or 'dat' in temp:
+                                                        temp = None
+                                                        date = None
+                                                data_path = os.path.join(part_num_path, temp_date)
+                                                if os.path.exists(data_path) and os.path.isdir(data_path):
+                                                    for data in os.listdir(data_path):
+                                                        if '.dat' in data:
+                                                            match = re.search(pattern, data)
+                                                            test_data = os.path.join(data_path, data)
+                                                            instance_num = match.group(1) if match else None
+                                                            file_content = data
                                                                 
-                                                                # Commit the transaction
-                                                                conn.commit()
+                                                            # Find the corresponding Chip Id
+                                                            query_chip_id = """
+                                                            SELECT "Chip Id" FROM Chip
+                                                            WHERE "Chip Type" = %s
+                                                            AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
+                                                            AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
+                                                            AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
+                                                            AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
+                                                            AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
+                                                            """
+                                                            params_chip_id = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
+                                                            
+                                                            cur.execute(query_chip_id, params_chip_id)
+                                                            chip_id = cur.fetchone()
+                                                            
+                                                            if chip_id:
+                                                                chip_id = chip_id[0]
+                                                                # Find the corresponding Test Id
+                                                                query_test_id = """
+                                                                SELECT "Test Id" FROM Test
+                                                                WHERE "Chip Id" = %s
+                                                                AND "Test" = %s
+                                                                AND ("Date" = %s OR ("Date" IS NULL AND %s IS NULL))
+                                                                AND ("Temp" = %s OR ("Temp" IS NULL AND %s IS NULL))
+                                                                """
+                                                                params_test_id = (chip_id, test, date, date, temp, temp)
+                                                                
+                                                                cur.execute(query_test_id, params_test_id)
+                                                                test_id = cur.fetchone()
+                                                                
+                                                                if test_id:
+                                                                    test_id = test_id[0]
+                                                                    # Insert the test data into Test_File2
+                                                                    cur.execute("""
+                                                                    INSERT INTO Test_File2 ("Test Data", "Instance Num", "Test Id")
+                                                                    VALUES (%s, %s, %s)
+                                                                    """, (file_content, instance_num, test_id))
+                                                                    
+                                                                    # Commit the transaction
+                                                                    conn.commit()
 
 
 # Define the folder path and file name

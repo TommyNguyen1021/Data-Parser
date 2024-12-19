@@ -5,6 +5,12 @@ import re
 from numpy import double, empty
 
 from pyparsing import col
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="htol",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()  
 
 arg_length = len(sys.argv)
 
@@ -21,6 +27,7 @@ path  = "si_data/" + CHIP + '/' + TEST +  "/P9HT98_0p_1/P0003/125C_220630/"
 save_name = "parsed_data.csv"
 current_wordline = 0
 save_directory = "parsed_data/CHIP/TEST/LBW/PART_NUM/TEMP_DATE"
+
 
 #An array of lines that will be saved
 data_list = []
@@ -150,85 +157,138 @@ def main():
 
     data_list[0] += "wordline,"
 
-    #if the instance file actually exists
-    print(path + 'full-RAP-dma_pre_htol.dat_0')
-    if os.path.exists(path + 'full-RAP-dma_pre_htol.dat_0'):
-        print("Im in")
-        #get data from file
-        current_dat = 'full-RAP-dma_pre_htol.dat_0'
-        file = open(path +current_dat)
 
-        line_starter(temp_date, lbw, part, "RAP-pre")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
-                bitline_iterator = 0
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "RAP-pre")
-                current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
-                
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-    bitline_iterator = 0
-    if os.path.exists(path + 'full-RAP-dma_post_htol.dat_0'):
-            
-        #get data from file
-        current_dat = 'full-RAP-dma_post_htol.dat_0'
-        file = open(path +current_dat)
-        line_starter(temp_date, lbw, part, "RAP-post")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
-                bitline_iterator = 0
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "RAP-pre")
-                current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-        
-    bitline_iterator = 0
-    if os.path.exists(path + 'full-RP-dma_pre_htol.dat_0'):
-            
-        #get data from file
-        current_dat = 'full-RP-dma_pre_htol.dat_0'
-        file = open(path +current_dat)
-        #for each line
-        line_starter(temp_date, lbw, part, "RP-pre")
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
-                bitline_iterator = 0
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "RAP-pre")
-                current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
-            check_data_output(line.rstrip('\n') )
-        file.close()
-        first = False
+    #data_list[0] += "instance,"
+    lbw_parts = get_lbw().split('_')
+    temp = path.split("/")[9].split("_")[0]
+    date = path.split("/")[9].split("_")[1]
 
-    bitline_iterator = 0
+    lot = bin = wafer = process_corner = None
 
+    # Assign values based on the number of parts
+    if len(lbw_parts) >= 1:
+        lot = lbw_parts[0]
+    if len(lbw_parts) >= 2:
+        bin = lbw_parts[1]
+    if len(lbw_parts) >= 3:
+        wafer = lbw_parts[2]
+    if len(lbw_parts) == 4:
+        process_corner = lbw_parts[3]
 
-    if os.path.exists(path + 'full-RP-dma_post_htol.dat_0'):
-            
-        #get data from file
-        current_dat = 'full-RP-dma_post_htol.dat_0'
-        file = open(path +current_dat)
+    cur.execute("""
+    SELECT 
+    tf."Test Data"
+    FROM 
+        test_file tf
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'htol'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part, part))
+    files = cur.fetchall()
+    raw_data_files = [file[0] for file in files]
 
-        line_starter(temp_date, lbw, part, "RP-post")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
-                bitline_iterator = 0
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "RAP-pre")
-                current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
-            check_data_output(line.rstrip('\n'))
-        file.close()
+    cur.execute("""
+    SELECT 
+        tf2."Test Data"
+    FROM 
+        test_file2 tf2
+    INNER JOIN 
+        test_file tf ON tf."File Id" = tf2."File Id"
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'htol'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part, part))
+    files_names = cur.fetchall()
+    file_names_data = [name[0] for name in files_names]
+
+    for data_files, file in zip(raw_data_files, file_names_data):
+        #if the instance file actually exists
+        if ("full-RAP-dma_pre_htol.dat_0" in file):
+            print("Im in")
+            #get data from file
+
+            decoded_data = data_files.tobytes().decode('utf-8')
+
+            line_starter(temp_date, lbw, part, "RAP-pre")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
+                    bitline_iterator = 0
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "RAP-pre")
+                    current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
+                check_data_output(line.rstrip('\n'))
+            first = False
+        bitline_iterator = 0
+
+        if ("full-RAP-dma_post_htol.dat_0" in file):
+            #get data from file
+            decoded_data = data_files.tobytes().decode('utf-8')
+
+            line_starter(temp_date, lbw, part, "RAP-post")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
+                    bitline_iterator = 0
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "RAP-pre")
+                    current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
+                check_data_output(line.rstrip('\n'))
+            first = False
+        bitline_iterator = 0
+        if ("full-RP-dma_pre_htol.dat_0" in file):  
+            #get data from file
+            decoded_data = data_files.tobytes().decode('utf-8')
+            line_starter(temp_date, lbw, part, "RP-pre")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
+                    bitline_iterator = 0
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "RAP-pre")
+                    current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
+                check_data_output(line.rstrip('\n') )
+            first = False
+        bitline_iterator = 0
+
+        if ("full-RP-dma_post_htol.dat_0" in file):  
+            #get data from file
+            decoded_data = data_files.tobytes().decode('utf-8')
+
+            line_starter(temp_date, lbw, part, "RP-post")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^#>> get_dma_wl ", line)):
+                    bitline_iterator = 0
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "RAP-pre")
+                    current_wordline = int(line[(len("^#>> get_dma_wl ")):len(line)])
+                check_data_output(line.rstrip('\n'))
+
     bitline_iterator = 0
     data_list[0] += "\n"
     data_list[1] += "\n"
@@ -237,7 +297,7 @@ def main():
     data_list[4] += "\n"
     write_output()
 
-    ##########################################################################
+        ##########################################################################
     data_list=[]
     lbw = get_lbw()
     part = get_part()
@@ -247,87 +307,78 @@ def main():
 
     data_list[0] += "wordline,"
 
-    if os.path.exists(path + 'RAP_read_pre_htol.dat_0'):
-        print("Im in the beef")
-        #get data from file
-        current_dat = 'RAP_read_pre_htol.dat_0'
-        file = open(path +current_dat)
+    for data_files, file in zip(raw_data_files, file_names_data):
+        if ("RAP_read_pre_htol.dat_0" in file):  
+            print("Im in the beef")
+            decoded_data = data_files.tobytes().decode('utf-8')
 
-        line_starter(temp_date, lbw, part, "read-RAP-pre")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "read-RAP-pre")
-                current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
-                
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-        data_list.append("\n")
+            line_starter(temp_date, lbw, part, "read-RAP-pre")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "read-RAP-pre")
+                    current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
+                    
+                check_data_output(line.rstrip('\n'))
+            first = False
+            data_list.append("\n")
 
-    if os.path.exists(path + 'RAP_read_post_htol.dat_0'):
-        print("Im in the beef")
-        #get data from file
-        current_dat = 'RAP_read_post_htol.dat_0'
-        file = open(path +current_dat)
+        if ("RAP_read_post_htol.dat_0" in file):  
+            print("Im in the beef")
+            decoded_data = data_files.tobytes().decode('utf-8')
 
-        line_starter(temp_date, lbw, part, "read-RAP-post")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "read-RAP-post")
-                current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
-                
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-        data_list.append("\n")
+            line_starter(temp_date, lbw, part, "read-RAP-post")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "read-RAP-post")
+                    current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
+                    
+                check_data_output(line.rstrip('\n'))
+            first = False
+            data_list.append("\n")
 
-    if os.path.exists(path + 'RP_read_pre_htol.dat_0'):
-        print("Im in the beef")
-        #get data from file
-        current_dat = 'RP_read_pre_htol.dat_0'
-        file = open(path +current_dat)
+        if ("RP_read_pre_htol.dat_0" in file):
+            print("Im in the beef")
+            #get data from file
+            decoded_data = data_files.tobytes().decode('utf-8')
 
-        line_starter(temp_date, lbw, part, "read-RP-pre")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "read-RP-pre")
-                current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
-                
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-        data_list.append("\n")
+            line_starter(temp_date, lbw, part, "read-RP-pre")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "read-RP-pre")
+                    current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
+                    
+                check_data_output(line.rstrip('\n'))
 
-    if os.path.exists(path + 'RP_read_post_htol.dat_0'):
-        print("Im in the beef")
-        #get data from file
-        current_dat = 'RP_read_post_htol.dat_0'
-        file = open(path +current_dat)
+            first = False
+            data_list.append("\n")
 
-        line_starter(temp_date, lbw, part, "read-RP-post")
-        #for each line
-        for line in file:
-            #check header
-            if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
-                data_list[len(data_list)-1] += "\n"
-                line_starter(temp_date, lbw, part, "read-RP-post")
-                current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
-            print(line)
-            check_data_output(line.rstrip('\n'))
-        file.close()
-        first = False
-        data_list.append("\n")
+        if ("RP_read_post_htol.dat_0" in file):
+            print("Im in the beef")
+            #get data from file
+            decoded_data = data_files.tobytes().decode('utf-8')
 
-    write_output()
+            line_starter(temp_date, lbw, part, "read-RP-post")
+            #for each line
+            for line in decoded_data.splitlines():
+                #check header
+                if (line[0:3] == OUTPUT) and (re.search("^wordline\[", line)):
+                    data_list[len(data_list)-1] += "\n"
+                    line_starter(temp_date, lbw, part, "read-RP-post")
+                    current_wordline = int(line[(len("wordline[")):len("wordline[")+6])
+                check_data_output(line.rstrip('\n'))
+            first = False
+            data_list.append("\n")
+
+        write_output()
 
     return True
 
@@ -343,11 +394,12 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
 
 
     CHIP = chip
-    path  = path_to_part
+    path  = path_to_part + "/"
     save_name = save
     save_directory = save_path
     main()
     return 
+conn.commit()
 
 
 

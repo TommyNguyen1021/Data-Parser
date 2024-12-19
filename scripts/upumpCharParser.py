@@ -5,6 +5,12 @@ import re
 import tkinter as tk
 from tkinter import filedialog
 from natsort import natsorted
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="upump_char",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()
 
 def contains_digits(input_string):
     # Use regular expression to check for any digits in the input string
@@ -41,76 +47,143 @@ def main():
             writer.writeheader()
             new_file.close()
 
-    raw_data_files = os.listdir(data_path)
-    raw_data_files = natsorted(raw_data_files)
+    parts = part.split('_')
+
+    lot = bin = wafer = process_corner = None
+    
+    # Assign values based on the number of parts
+    if len(parts) >= 1:
+        lot = parts[0]
+    if len(parts) >= 2:
+        bin = parts[1]
+    if len(parts) >= 3:
+        wafer = parts[2]
+    if len(parts) == 4:
+        process_corner = parts[3]
+
+    cur.execute("""
+    SELECT 
+    tf."Test Data"
+    FROM 
+        test_file tf
+    INNER JOIN 
+        test_file2 tf2 ON tf."File Id" = tf2."File Id"
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'upump_char'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+        AND tf2."Test Data" LIKE '%%upump%%'
+        AND tf2."Test Data" LIKE '%%dat_0%%'
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files = cur.fetchall()
+    raw_data_files = [file[0] for file in files]
+    print(len(raw_data_files))
+
+    cur.execute("""
+    SELECT 
+        tf2."Test Data"
+    FROM 
+        test_file2 tf2
+    INNER JOIN 
+        test_file tf ON tf."File Id" = tf2."File Id"
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'upump_char'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+        AND tf2."Test Data" LIKE '%%upump%%'
+        AND tf2."Test Data" LIKE '%%dat_0%%'
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files_names = cur.fetchall()
+    file_names_data = [name[0] for name in files_names]
+    print(len(file_names_data))
+
+    instance_num = []
+
+    for checked_file in file_names_data:
+        if("upump" in checked_file and "dat_0" in checked_file):
+            instance_num.append(int(str(checked_file).split("_")[-2][1]))
 
     
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+        run_index = 0
         for file in raw_data_files:
-            if("upump" in file and "dat_0" in file):
-                
-                vwl = 0
-                iwl = 0
-                vdd = 0
-                vdd18 = 0
-                vwl_trim_level = 0
-                loaded = 0
+            vwl = 0
+            iwl = 0
+            vdd = 0
+            vdd18 = 0
+            vwl_trim_level = 0
+            loaded = 0
 
-
-                print(file)
-                instance = file.split("_")[-2][1]
+        #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+            decoded_data = file.tobytes().decode('utf-8')
+            writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
+            data_set = []
             
-                with open(data_path + "/" + file , "r") as txt_file:
-                #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
-                    writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
-                    data_set = []
-                    
-                    dictionary = {}
+            dictionary = {}
 
-                    'Reads the lines and appends certain information into a dictionary for storing into the csv'
-                    for line_read in txt_file.readlines():
-                        
-                        line = line_read
+            'Reads the lines and appends certain information into a dictionary for storing into the csv'
+            for line_read in decoded_data.splitlines():
+                
+                line = line_read
 
-                        if re.search("DEBUG_MSG Received ", line):
-                            line = line[47:]
+                if re.search("DEBUG_MSG Received ", line):
+                    line = line[47:]
 
-                        if "#< # vdd" in line or "#< # running" in line:
-                            continue
-                        elif "#< # " in line:
-                            vdd = line.split()[2]
-                            vdd18 = line.split()[3]
-                            vwl_trim_level = line.split()[4]
-                            loaded = line.split()[5]
+                if "#< # vdd" in line or "#< # running" in line:
+                    continue
+                elif "#< # " in line:
+                    vdd = line.split()[2]
+                    vdd18 = line.split()[3]
+                    vwl_trim_level = line.split()[4]
+                    loaded = line.split()[5]
 
-                        if "#>> VWL =" in line:
-                            vwl = line.split()[3]
+                if "#>> VWL =" in line:
+                    vwl = line.split()[3]
 
-                        # This section adds a new line in the csv
-                        if "#>> IWL = " in line: 
-                            iwl = abs(float(line.split()[3]))
-                            dictionary["VWL"] = vwl
-                            dictionary["IWL"] = iwl
-                            dictionary["vdd"] = vdd
-                            dictionary["vdd18"] = vdd18
-                            dictionary["vwl_trim_level"] = vwl_trim_level
-                            dictionary["loaded"] = loaded
+                # This section adds a new line in the csv
+                if "#>> IWL = " in line: 
+                    iwl = abs(float(line.split()[3]))
+                    dictionary["VWL"] = vwl
+                    dictionary["IWL"] = iwl
+                    dictionary["vdd"] = vdd
+                    dictionary["vdd18"] = vdd18
+                    dictionary["vwl_trim_level"] = vwl_trim_level
+                    dictionary["loaded"] = loaded
 
-                            dictionary["Instance"] = instance
-                            dictionary["Temp"] = temp
-                            dictionary["Lot Bin Wafer"] = part
-                            dictionary["Part Number"] = part_num
-                            dictionary["Date"] = date
+                    dictionary["Instance"] = instance_num[run_index]
+                    dictionary["Temp"] = temp
+                    dictionary["Lot Bin Wafer"] = part
+                    dictionary["Part Number"] = part_num
+                    dictionary["Date"] = date
 
-                            new_data = {}
-                            new_data.update(dictionary)
-                            data_set.append(new_data)
-                            dictionary.clear()
+                    new_data = {}
+                    new_data.update(dictionary)
+                    data_set.append(new_data)
+                    dictionary.clear()
+            run_index = run_index + 1
 
-                    #writer.writeheader()
-                    for row in data_set:
-                        writer.writerow(row)
-                    txt_file.close()
+            #writer.writeheader()
+            for row in data_set:
+                writer.writerow(row)
+
         save_file.close()
     print("Returned true")
     return True
@@ -135,7 +208,7 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     main()
     return 
 
-
+conn.commit()
 
 #if os.path.exists("parsed_data/" + save_name):
 #        os.remove("parsed_data/" + save_name)

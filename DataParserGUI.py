@@ -11,9 +11,77 @@ import subprocess
 import psycopg2
 
 conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
+bin_breg_check = psycopg2.connect(host="localhost", dbname="bin_breg_check",  user ="postgres", password = "numem@184", port = 5432)
+die_id = psycopg2.connect(host="localhost", dbname="die_id",  user ="postgres", password = "numem@184", port = 5432)
+eng_func = psycopg2.connect(host="localhost", dbname="eng_func",  user ="postgres", password = "numem@184", port = 5432)
+eng_func_Keithley = psycopg2.connect(host="localhost", dbname="eng_func_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+htdr = psycopg2.connect(host="localhost", dbname="htdr",  user ="postgres", password = "numem@184", port = 5432)
+htol = psycopg2.connect(host="localhost", dbname="htol",  user ="postgres", password = "numem@184", port = 5432)
+ims = psycopg2.connect(host="localhost", dbname="ims",  user ="postgres", password = "numem@184", port = 5432)
+ims_search = psycopg2.connect(host="localhost", dbname="ims_search",  user ="postgres", password = "numem@184", port = 5432)
+ims_search_with_saoffset = psycopg2.connect(host="localhost", dbname="ims_search_with_saoffset",  user ="postgres", password = "numem@184", port = 5432)
+internal_biases = psycopg2.connect(host="localhost", dbname="internal_biases",  user ="postgres", password = "numem@184", port = 5432)
+ltdr = psycopg2.connect(host="localhost", dbname="ltdr",  user ="postgres", password = "numem@184", port = 5432)
+meas_deep_sleep = psycopg2.connect(host="localhost", dbname="meas_deep_sleep",  user ="postgres", password = "numem@184", port = 5432)
+meas_deep_sleep_Keithley = psycopg2.connect(host="localhost", dbname="meas_deep_sleep_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_power_leak = psycopg2.connect(host="localhost", dbname="meas_power_leak",  user ="postgres", password = "numem@184", port = 5432)
+meas_power_leak_Keithley = psycopg2.connect(host="localhost", dbname="meas_power_leak_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_read_curr = psycopg2.connect(host="localhost", dbname="meas_read_curr",  user ="postgres", password = "numem@184", port = 5432)
+meas_standby = psycopg2.connect(host="localhost", dbname="meas_standby",  user ="postgres", password = "numem@184", port = 5432)
+meas_standby_Keithley = psycopg2.connect(host="localhost", dbname="meas_standby_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_vbl_vwl_inst_osc = psycopg2.connect(host="localhost", dbname="meas_vbl_vwl_inst_osc",  user ="postgres", password = "numem@184", port = 5432)
+meas_write_curr = psycopg2.connect(host="localhost", dbname="meas_write_curr",  user ="postgres", password = "numem@184", port = 5432)
+otp = psycopg2.connect(host="localhost", dbname="otp",  user ="postgres", password = "numem@184", port = 5432)
+otp_load_test = psycopg2.connect(host="localhost", dbname="otp_load_test",  user ="postgres", password = "numem@184", port = 5432)
+otp_save_test = psycopg2.connect(host="localhost", dbname="otp_save_test",  user ="postgres", password = "numem@184", port = 5432)
+part_screening = psycopg2.connect(host="localhost", dbname="part_screening",  user ="postgres", password = "numem@184", port = 5432)
+print_sa_trim = psycopg2.connect(host="localhost", dbname="print_sa_trim",  user ="postgres", password = "numem@184", port = 5432)
+read_disturb = psycopg2.connect(host="localhost", dbname="read_disturb",  user ="postgres", password = "numem@184", port = 5432)
+read_shmoo = psycopg2.connect(host="localhost", dbname="read_shmoo",  user ="postgres", password = "numem@184", port = 5432)
+read_shmoo_pat = psycopg2.connect(host="localhost", dbname="read_shmoo_pat",  user ="postgres", password = "numem@184", port = 5432)
+ser = psycopg2.connect(host="localhost", dbname="ser",  user ="postgres", password = "numem@184", port = 5432)
+upump_char = psycopg2.connect(host="localhost", dbname="upump_char",  user ="postgres", password = "numem@184", port = 5432)
+vili_main_v2 = psycopg2.connect(host="localhost", dbname="vili_main_v2",  user ="postgres", password = "numem@184", port = 5432)
+vili_main_v2_otp_bkdn = psycopg2.connect(host="localhost", dbname="vili_main_v2_otp_bkdn",  user ="postgres", password = "numem@184", port = 5432)
+write_endurance = psycopg2.connect(host="localhost", dbname="write_endurance",  user ="postgres", password = "numem@184", port = 5432)
+write_shmoo = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
 
 # Create cursor object
 cur = conn.cursor()        
+bin_breg_check_cur = bin_breg_check.cursor()
+die_id_cur = die_id.cursor()
+eng_func_cur = eng_func.cursor()
+eng_func_Keithley_cur = eng_func_Keithley.cursor()
+htdr_cur = htdr.cursor()
+htol_cur = htol.cursor()
+ims_cur = ims.cursor()
+ims_search_cur = ims_search.cursor()
+ims_search_with_saoffset_cur = ims_search_with_saoffset.cursor()
+internal_biases_cur = internal_biases.cursor()
+ltdr_cur = ltdr.cursor()
+meas_deep_sleep_cur = meas_deep_sleep.cursor()
+meas_deep_sleep_Keithley_cur = meas_deep_sleep_Keithley.cursor()
+meas_power_leak_cur = meas_power_leak.cursor()
+meas_power_leak_Keithley_cur = meas_power_leak_Keithley.cursor()
+meas_read_curr_cur = meas_read_curr.cursor()
+meas_standby_cur = meas_standby.cursor()
+meas_standby_Keithley_cur = meas_standby_Keithley.cursor()
+meas_vbl_vwl_inst_osc_cur = meas_vbl_vwl_inst_osc.cursor()
+meas_write_curr_cur = meas_write_curr.cursor()
+otp_cur = otp.cursor()
+otp_load_test_cur = otp_load_test.cursor()
+otp_save_test_cur = otp_save_test.cursor()
+part_screening_cur = part_screening.cursor()
+print_sa_trim_cur = print_sa_trim.cursor()
+read_disturb_cur = read_disturb.cursor()
+read_shmoo_cur = read_shmoo.cursor()
+read_shmoo_pat_cur = read_shmoo_pat.cursor()
+ser_cur = ser.cursor()
+upump_char_cur = upump_char.cursor()
+vili_main_v2_cur = vili_main_v2.cursor()
+vili_main_v2_otp_bkdn_cur = vili_main_v2_otp_bkdn.cursor()
+write_endurance_cur = write_endurance.cursor() 
+write_shmoo_cur = write_shmoo.cursor()       
 
 # ####################################################################################
 #                             INITIALIZING WINDOWS AND WIDGETS
@@ -165,8 +233,7 @@ def trim_part_list(part_list, test_selected_value):
     return trimmed_list
 
 
-def pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no
-):
+def pressed_add_part(paths):
     # Disable buttons for the duration of processing
     for btn in window.grid_slaves():
         if int(btn.grid_info()["row"]) < 3 and int(btn.grid_info()["column"]) == 1:
@@ -183,50 +250,14 @@ def pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, t
 
     btn_remove_part["state"] = "normal"
     btn_reset_select["state"] = "normal"
-
-    # Create a new list for paths
-    new_paths = []
-
-    # Determine which paths to add based on the current selections
-    if lbw_sel == "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
-        new_paths = test
-    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
-        new_paths = lbw
-    elif date_selected.get() != "" and lbw_sel == "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
-        new_paths = date
-    elif temp_selected.get() != "" and date_selected.get() == "" and lbw_sel == "" and part_sel == "" and temp_date_sel == "":
-        new_paths = temp
-    elif lbw_sel == "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
-        new_paths = part_num
-    elif date_selected.get() != "" and lbw_sel == "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
-        new_paths = date_temp
-    elif lbw_sel == "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
-        new_paths = date_part_no
-    elif lbw_sel == "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
-        new_paths = temp_part_no
-    elif lbw_sel == "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
-        new_paths = temp_date_part_no
-    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel == "" and temp_date_sel == "":
-        new_paths = lbw_date
-    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
-        new_paths = lbw_temp
-    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel == "" and temp_date_sel == "":
-        new_paths = lbw_temp_date
-    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
-        new_paths = lbw_part_no
-    elif lbw_sel != "" and date_selected.get() == "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
-        new_paths = lbw_temp_part_no
-    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() == "" and part_sel != "" and temp_date_sel == "":
-        new_paths = lbw_date_part_no
-    elif lbw_sel != "" and date_selected.get() != "" and temp_selected.get() != "" and part_sel != "" and temp_date_sel == "":
-        new_paths = lbw_temp_date_part_no
     
-    for path in new_paths:
+    for path in paths:
         selection_window.full_part_list.append(path)
 
     # Append new paths to the part list
-    for path in new_paths:
+    for path in paths:
         selection_window.part_list.append(path)
+    
 
     # Trim all paths in selection_window.part_list
     trimmed_paths = trim_part_list(selection_window.part_list, test_sel)
@@ -235,64 +266,50 @@ def pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, t
     selection_window.part_list = trimmed_paths
 
     # Check if any files were added
-    if not new_paths:
+    if not paths:
         write_console("Path does not exist")
     else:
         update_selection_window()
         clear_console()
-        write_console(f"{len(new_paths)} Files collected")
-        write_console(f"{len(selection_window.full_part_list)} Total files collected")
+        write_console(f"{len(selection_window.part_list)} Total files collected")
         write_console("You can now parse your listed parts by pressing \"Parse Data\" or you can add more.")
 
 
 
 def pressed_select_all():
-    test = []
-    lbw= []
-    date = []
-    temp = []
-    part_num =[]
-    date_temp = []
-    date_part_no =[]
-    temp_part_no = []
-    temp_date_part_no=[]
-    lbw_date = []
-    lbw_temp = []
-    lbw_temp_date = []
-    lbw_part_no =[]
-    lbw_temp_part_no =[]
-    lbw_date_part_no= []
-    lbw_temp_date_part_no= []
+    
+    paths = []
 
     #selected only test
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("test")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            write_shmoo_cur.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
                 '/' ||
                 COALESCE(test."Test", '') ||
                 '/' ||
-                    chip."Lot" || 
-                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
-                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
-                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
-                    '/' || 
-                    COALESCE(chip."Part Number", '') ||
-                    '/' || 
-                    COALESCE(test."Temp", '') || 
-                    '_' || 
-                    COALESCE(test."Date", ''),
-                    -- Remove underscore before the first slash
-                    '_/',  -- Match an underscore followed by a slash
-                    '/'  -- Replace it with a single slash
-                || '/' AS unique_id  -- Append a slash at the end
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '_/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -320,9 +337,8 @@ def pressed_select_all():
             """, (test_selected.get(),))
         
         test_path = cur.fetchall()
-        test = [all_test[0] for all_test in test_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_test[0] for all_test in test_path]
+        check_enable_selection(paths)
            
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -394,10 +410,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw.append(full_path)
-        print(lbw)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -470,10 +484,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_date.append(full_path)
-        print(lbw)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -547,10 +559,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_temp.append(full_path)
-        print(lbw)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -625,9 +635,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_temp_date.append(full_path)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -698,9 +707,8 @@ def pressed_select_all():
         """, (test_selected.get(), date_selected.get(), temp_selected.get()))
        
         date_temp_path = cur.fetchall()
-        date_temp = [all_temp_date[0] for all_temp_date in date_temp_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_temp_date[0] for all_temp_date in date_temp_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -770,9 +778,8 @@ def pressed_select_all():
         """, (test_selected.get(), date_selected.get()))
        
         date_path = cur.fetchall()
-        date = [all_date[0] for all_date in date_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_date[0] for all_date in date_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -842,9 +849,8 @@ def pressed_select_all():
                 AND test."Temp" = %s;
         """, (test_selected.get(), temp_selected.get()))
         temp_path = cur.fetchall()
-        temp = [all_temp[0] for all_temp in temp_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_temp[0] for all_temp in temp_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -917,9 +923,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_part_no.append(full_path)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -992,9 +997,8 @@ def pressed_select_all():
 
        
         date_part_no_path = cur.fetchall()
-        date_part_no = [all_date_part_no[0] for all_date_part_no in date_part_no_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_date_part_no[0] for all_date_part_no in date_part_no_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1066,9 +1070,8 @@ def pressed_select_all():
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
        
         temp_part_no_path = cur.fetchall()
-        temp_part_no = [all_temp_part_no[0] for all_temp_part_no in temp_part_no_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_temp_part_no[0] for all_temp_part_no in temp_part_no_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1143,9 +1146,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_temp_part_no.append(full_path)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
                             
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1220,9 +1222,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_date_part_no.append(full_path)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+                paths.append(full_path)
+        check_enable_selection(paths)
                             
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1296,9 +1297,8 @@ def pressed_select_all():
         """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
        
         temp_date_part_no_path = cur.fetchall()
-        temp_date_part_no = [all_temp_date_part_no[0] for all_temp_date_part_no in temp_date_part_no_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_temp_date_part_no[0] for all_temp_date_part_no in temp_date_part_no_path]
+        check_enable_selection(paths)
 
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1375,9 +1375,8 @@ def pressed_select_all():
             full_path = row[0]
             # Check if lbw_selected.get() is a part of the path
             if lbw_selected.get() in full_path:
-                lbw_temp_date_part_no.append(full_path)
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):        
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)  
+                paths.append(full_path)
+        check_enable_selection(paths)
                             
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1450,9 +1449,8 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
         part_num_path = cur.fetchall()
-        part_num = [all_part_num[0] for all_part_num in part_num_path]
-        if check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
-            pressed_add_part(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no)
+        paths = [all_part_num[0] for all_part_num in part_num_path]
+        check_enable_selection(paths)
                         
         file_select = tk.Entry(window, textvariable=file_name_entry)
         file_select.grid(row=6,column=1, sticky='ew')
@@ -1976,14 +1974,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         test ON chip."Chip Id" = test."Chip Id"
         WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
         """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
-        date = cur.fetchall()
+        temp = cur.fetchall()
 
         # Update the window.dates list
-        window.dates = [""] + [date_type[0] for date_type in date]
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
         
 
         # Update existing combobox values
-        dates_combobox['values'] = window.dates
+        temp_combobox['values'] = window.temp
 
         cur.execute("""
         SELECT DISTINCT 
@@ -2181,60 +2179,23 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
 
 
 
-def check_enable_selection(test, lbw, date, temp, part_num, date_temp, date_part_no, temp_part_no, temp_date_part_no, lbw_date, lbw_temp, lbw_temp_date, lbw_part_no, lbw_temp_part_no, lbw_date_part_no, lbw_temp_date_part_no):
+def check_enable_selection(paths):
 
-    # Initialize selected paths list
-    selected_paths = []
+    found = False
 
-    # Construct paths based on provided parameters
-    if test:
-        selected_paths.extend(test)
-    if date:
-        selected_paths.extend(date)
-    if lbw:
-        selected_paths.extend(lbw)
-    if temp:
-        selected_paths.extend(temp)
-    if part_num:
-        selected_paths.extend(part_num)
-    if date_temp:
-        selected_paths.extend(date_temp)
-    if date_part_no:
-        selected_paths.extend(date_part_no)
-    if temp_part_no:
-        selected_paths.extend(temp_part_no)
-    if temp_date_part_no:
-        selected_paths.extend(temp_date_part_no)
-    if lbw_date:
-        selected_paths.extend(lbw_date)
-    if lbw_temp:
-        selected_paths.extend(lbw_temp)
-    if lbw_temp_date:
-        selected_paths.extend(lbw_temp_date)
-    if lbw_part_no:
-        selected_paths.extend(lbw_part_no)
-    if lbw_temp_part_no:
-        selected_paths.extend(lbw_temp_part_no)
-    if lbw_date_part_no:
-        selected_paths.extend(lbw_date_part_no)
-    if lbw_temp_date_part_no:
-        selected_paths.extend(lbw_temp_date_part_no)
-
-    # Check for already selected paths
-    existing_paths = set(selection_window.full_part_list)
-    # List to collect duplicate paths
-    duplicates = []
-    
-    for path in selected_paths:
-        if path in existing_paths:
-            duplicates.append(path)
-    
-    # Check if there are duplicates
-    if duplicates:
-        write_console("Paths already selected:\n" + "\n".join(duplicates))
-        return False
-
-    
+    if len(selection_window.full_part_list) == 0:
+        pressed_add_part(paths)
+    else:       
+        for path in paths:
+            found = False
+            for part in selection_window.full_part_list:
+                if path == part:
+                    write_console("Paths already selected:\n" + part)
+                    print("Paths already selected:\n" + part)
+                    found = True
+            if found == False:
+                pressed_add_part([path])
+                
     if(temp_date_selected.get() != ""): 
         btn_select_all["state"] = "disabled"
     
@@ -2499,7 +2460,7 @@ def pressed_test(event):
         write_console("No Lots/Wafer/Bins that had that ran that test can be found")
         return
 
-    # Creating a frame inside the 'window' frame
+    # Creating a frame inside the 'window' frame2
     window_inner_frame = tk.Frame(window)
     window_inner_frame.grid(row=3, column=0, columnspan=2, sticky='nsew')
     window_inner_frame.columnconfigure(1, minsize=50, weight=1)
@@ -2657,6 +2618,29 @@ def pressed_test(event):
     #enable select all button
     btn_select_all["state"] = "normal"
 
+    #reset the options back to blank
+    def reset_options():
+
+        # Reset the text variables bound to the comboboxes
+        lbw_selected.set("")
+        part_no_selected.set("")
+        temp_date_selected.set("")
+        temp_selected.set("")
+        date_selected.set("")
+
+        update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox)
+
+    btn_reset_options = tk.Button(window, text="Reset Options", command=reset_options)
+    btn_reset_options.grid(row=8, column=0, columnspan=2, sticky='esw')  # sticky='ew' to stretch the button horizontally
+    btn_reset_options["state"] = "active"
+
+    #allows this button to be at the bottom
+    window.grid_rowconfigure(8, weight=1) 
+
+
+    #enable select all button
+    btn_select_all["state"] = "normal"
+
 
 #enables the parse data button when temp/date is selected
 def pressed_temp_date(event):
@@ -2755,7 +2739,7 @@ btn_parse_data.config(width="20")
 btn_parse_data["font"]= ("Arial", 13)
 parse_button_off()
 #LOOP
-# Commit changes to database
+
 conn.commit()
 
 # Close cursor and connection

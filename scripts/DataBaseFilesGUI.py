@@ -1,0 +1,5644 @@
+#HAHA
+
+import string
+from tkinter import *
+from ttkwidgets.autocomplete import AutocompleteCombobox
+import tkinter as tk
+from tkinter import ttk
+import DataBaseParser as parser
+import os
+import subprocess
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
+bin_breg_check = psycopg2.connect(host="localhost", dbname="bin_breg_check",  user ="postgres", password = "numem@184", port = 5432)
+die_id = psycopg2.connect(host="localhost", dbname="die_id",  user ="postgres", password = "numem@184", port = 5432)
+eng_func = psycopg2.connect(host="localhost", dbname="eng_func",  user ="postgres", password = "numem@184", port = 5432)
+eng_func_Keithley = psycopg2.connect(host="localhost", dbname="eng_func_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+htdr = psycopg2.connect(host="localhost", dbname="htdr",  user ="postgres", password = "numem@184", port = 5432)
+htol = psycopg2.connect(host="localhost", dbname="htol",  user ="postgres", password = "numem@184", port = 5432)
+ims = psycopg2.connect(host="localhost", dbname="ims",  user ="postgres", password = "numem@184", port = 5432)
+ims_search = psycopg2.connect(host="localhost", dbname="ims_search",  user ="postgres", password = "numem@184", port = 5432)
+ims_search_with_saoffset = psycopg2.connect(host="localhost", dbname="ims_search_with_saoffset",  user ="postgres", password = "numem@184", port = 5432)
+internal_biases = psycopg2.connect(host="localhost", dbname="internal_biases",  user ="postgres", password = "numem@184", port = 5432)
+ltdr = psycopg2.connect(host="localhost", dbname="ltdr",  user ="postgres", password = "numem@184", port = 5432)
+meas_deep_sleep = psycopg2.connect(host="localhost", dbname="meas_deep_sleep",  user ="postgres", password = "numem@184", port = 5432)
+meas_deep_sleep_Keithley = psycopg2.connect(host="localhost", dbname="meas_deep_sleep_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_power_leak = psycopg2.connect(host="localhost", dbname="meas_power_leak",  user ="postgres", password = "numem@184", port = 5432)
+meas_power_leak_Keithley = psycopg2.connect(host="localhost", dbname="meas_power_leak_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_read_curr = psycopg2.connect(host="localhost", dbname="meas_read_curr",  user ="postgres", password = "numem@184", port = 5432)
+meas_standby = psycopg2.connect(host="localhost", dbname="meas_standby",  user ="postgres", password = "numem@184", port = 5432)
+meas_standby_Keithley = psycopg2.connect(host="localhost", dbname="meas_standby_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+meas_vbl_vwl_inst_osc = psycopg2.connect(host="localhost", dbname="meas_vbl_vwl_inst_osc",  user ="postgres", password = "numem@184", port = 5432)
+meas_write_curr = psycopg2.connect(host="localhost", dbname="meas_write_curr",  user ="postgres", password = "numem@184", port = 5432)
+otp = psycopg2.connect(host="localhost", dbname="otp",  user ="postgres", password = "numem@184", port = 5432)
+otp_load_test = psycopg2.connect(host="localhost", dbname="otp_load_test",  user ="postgres", password = "numem@184", port = 5432)
+otp_save_test = psycopg2.connect(host="localhost", dbname="otp_save_test",  user ="postgres", password = "numem@184", port = 5432)
+part_screening = psycopg2.connect(host="localhost", dbname="part_screening",  user ="postgres", password = "numem@184", port = 5432)
+print_sa_trim = psycopg2.connect(host="localhost", dbname="print_sa_trim",  user ="postgres", password = "numem@184", port = 5432)
+read_disturb = psycopg2.connect(host="localhost", dbname="read_disturb",  user ="postgres", password = "numem@184", port = 5432)
+read_shmoo = psycopg2.connect(host="localhost", dbname="read_shmoo",  user ="postgres", password = "numem@184", port = 5432)
+read_shmoo_pat = psycopg2.connect(host="localhost", dbname="read_shmoo_pat",  user ="postgres", password = "numem@184", port = 5432)
+ser = psycopg2.connect(host="localhost", dbname="ser",  user ="postgres", password = "numem@184", port = 5432)
+upump_char = psycopg2.connect(host="localhost", dbname="upump_char",  user ="postgres", password = "numem@184", port = 5432)
+vili_main_v2 = psycopg2.connect(host="localhost", dbname="vili_main_v2",  user ="postgres", password = "numem@184", port = 5432)
+vili_main_v2_otp_bkdn = psycopg2.connect(host="localhost", dbname="vili_main_v2_otp_bkdn",  user ="postgres", password = "numem@184", port = 5432)
+write_endurance = psycopg2.connect(host="localhost", dbname="write_endurance",  user ="postgres", password = "numem@184", port = 5432)
+write_shmoo = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()        
+bin_breg_check_cur = bin_breg_check.cursor()
+die_id_cur = die_id.cursor()
+eng_func_cur = eng_func.cursor()
+eng_func_Keithley_cur = eng_func_Keithley.cursor()
+htdr_cur = htdr.cursor()
+htol_cur = htol.cursor()
+ims_cur = ims.cursor()
+ims_search_cur = ims_search.cursor()
+ims_search_with_saoffset_cur = ims_search_with_saoffset.cursor()
+internal_biases_cur = internal_biases.cursor()
+ltdr_cur = ltdr.cursor()
+meas_deep_sleep_cur = meas_deep_sleep.cursor()
+meas_deep_sleep_Keithley_cur = meas_deep_sleep_Keithley.cursor()
+meas_power_leak_cur = meas_power_leak.cursor()
+meas_power_leak_Keithley_cur = meas_power_leak_Keithley.cursor()
+meas_read_curr_cur = meas_read_curr.cursor()
+meas_standby_cur = meas_standby.cursor()
+meas_standby_Keithley_cur = meas_standby_Keithley.cursor()
+meas_vbl_vwl_inst_osc_cur = meas_vbl_vwl_inst_osc.cursor()
+meas_write_curr_cur = meas_write_curr.cursor()
+otp_cur = otp.cursor()
+otp_load_test_cur = otp_load_test.cursor()
+otp_save_test_cur = otp_save_test.cursor()
+part_screening_cur = part_screening.cursor()
+print_sa_trim_cur = print_sa_trim.cursor()
+read_disturb_cur = read_disturb.cursor()
+read_shmoo_cur = read_shmoo.cursor()
+read_shmoo_pat_cur = read_shmoo_pat.cursor()
+ser_cur = ser.cursor()
+upump_char_cur = upump_char.cursor()
+vili_main_v2_cur = vili_main_v2.cursor()
+vili_main_v2_otp_bkdn_cur = vili_main_v2_otp_bkdn.cursor()
+write_endurance_cur = write_endurance.cursor() 
+write_shmoo_cur = write_shmoo.cursor() 
+
+cursor_map = {
+    'bin_breg_check': bin_breg_check_cur,
+    'die_id': die_id_cur,
+    'eng_func': eng_func_cur,
+    'eng_func_Keithley': eng_func_Keithley_cur,
+    'htdr': htdr_cur,
+    'htol': htol_cur,
+    'ims': ims_cur,
+    'ims_search': ims_search_cur,
+    'ims_search_with_saoffset': ims_search_with_saoffset_cur,
+    'internal_biases': internal_biases_cur,
+    'ltdr': ltdr_cur,
+    'meas_deep_sleep': meas_deep_sleep_cur,
+    'meas_deep_sleep_Keithley': meas_deep_sleep_Keithley_cur,
+    'meas_power_leak': meas_power_leak_cur,
+    'meas_power_leak_Keithley': meas_power_leak_Keithley_cur,
+    'meas_read_curr': meas_read_curr_cur,
+    'meas_standby': meas_standby_cur,
+    'meas_standby_Keithley': meas_standby_Keithley_cur,
+    'meas_vbl_vwl_inst_osc': meas_vbl_vwl_inst_osc_cur,
+    'meas_write_curr': meas_write_curr_cur,
+    'otp': otp_cur,
+    'otp_load_test': otp_load_test_cur,
+    'otp_save_test': otp_save_test_cur,
+    'part_screening': part_screening_cur,
+    'print_sa_trim': print_sa_trim_cur,
+    'read_disturb': read_disturb_cur,
+    'read_shmoo': read_shmoo_cur,
+    'read_shmoo_pat': read_shmoo_pat_cur,
+    'ser': ser_cur,
+    'upump_char': upump_char_cur,
+    'vili_main_v2': vili_main_v2_cur,
+    'vili_main_v2_otp_bkdn': vili_main_v2_otp_bkdn_cur,
+    'write_endurance': write_endurance_cur,
+    'write_shmoo': write_shmoo_cur,
+}
+
+
+#####################################################
+#                             INITIALIZING WINDOWS AND WIDGETS
+# ####################################################################################
+
+
+#Main Window for Frame
+main_window = tk.Tk()
+main_window.rowconfigure(0, minsize=50, weight=0)
+main_window.rowconfigure(1, minsize=50, weight=1)
+main_window.rowconfigure(2, minsize=50, weight=1)
+main_window.columnconfigure(0, minsize=50, weight=1)
+main_window.title("Data Parser")
+#main_window.resizable(width=False, height=False)
+main_window.eval('tk::PlaceWindow . center')
+
+#shell window frame for window and selection window
+sw = tk.Frame(main_window, relief=tk.RAISED, bd=2,)
+sw.grid(row=0,column=0,sticky= 'nsew')
+sw.columnconfigure(0, minsize="520", weight=0)
+sw.columnconfigure(1, minsize="300", weight=1)
+
+#top Window frame
+window = tk.Frame(sw, relief=tk.RAISED, bd=2)
+window.grid(row=0,column=0, sticky= 'nsew')
+window.columnconfigure(1, minsize=420, weight=1)
+window.columnconfigure(0, minsize=90, weight=1)
+
+
+
+#TODO: check if these are used
+window.datapath = "//DS220P/ds220_vol1/si_data/"
+#window.datapath = './si_data/'
+window.chip_path = ""
+
+#lists used to build option selects
+window.chips = []
+window.tests = []
+window.lbw = []
+window.parts = []
+window.temp_dates = []
+window.files =[]
+
+#selection window
+selection_window = tk.Frame(sw,)
+selection_window.grid(row=0,column=1, sticky= 'nsew')
+selection_window.columnconfigure(0, weight=1 , minsize=300)
+selection_window.rowconfigure(0, weight=1, minsize=300)
+selection_window.part_list = []
+selection_window.full_part_list = []
+
+#button frame for the window
+parent_btn_frame = tk.Frame(main_window, bd=2)
+parent_btn_frame.columnconfigure(0, weight=2, minsize=400)
+parent_btn_frame.columnconfigure(1, weight=2, minsize=200)
+parent_btn_frame.rowconfigure(0, minsize=50, weight=1)
+parent_btn_frame.grid(row=1,column=0, sticky='nsew')
+
+#Grid to split button pane in the right side of the parent
+split_btn_frame = tk.Frame(parent_btn_frame)
+split_btn_frame.grid(row=0, column=1, sticky='nsew')
+split_btn_frame.columnconfigure(0, weight=2, minsize=100)
+split_btn_frame.rowconfigure(0, minsize=25, weight=1)
+split_btn_frame.rowconfigure(1, minsize=25, weight=1)
+
+# split_frame = tk.Frame(split_btn_frame)
+# split_frame.grid(row=0, column=0, sticky='nsew')
+# split_frame.columnconfigure(0, weight=2, minsize=100)
+# split_frame.columnconfigure(1, weight=2, minsize=100)
+# split_frame.rowconfigure(0, minsize=25, weight=1)
+
+# select_btn_frame = tk.Frame(split_frame)
+# select_btn_frame.grid(row=0, column=0, sticky='nsew')
+# select_btn_frame.columnconfigure(0, weight=2, minsize=100)
+# select_btn_frame.rowconfigure(0, minsize=25, weight=1)
+
+reset_btn_frame = tk.Frame(split_btn_frame)
+reset_btn_frame.grid(row=0, column=0, sticky='nsew')
+reset_btn_frame.columnconfigure(0, weight=2, minsize=100)
+reset_btn_frame.rowconfigure(0, minsize=25, weight=1)
+
+
+bottom_right_btn_frame = tk.Frame(split_btn_frame)
+bottom_right_btn_frame.grid(row=1, column=0, sticky='nsew')
+bottom_right_btn_frame.rowconfigure(0, minsize=25, weight=1)
+bottom_right_btn_frame.columnconfigure(0, weight=1)
+
+
+#Console frame
+console_frame = tk.Frame(main_window, relief=tk.RAISED)
+console_frame.grid(row=2,column=0, sticky= 'nsew')
+console_frame.rowconfigure(0, weight=1)
+console_frame.columnconfigure(0, weight=1)
+
+#place frames in grid
+#btn_frame.grid(row=1,column=0, sticky='nsew')
+#variables that store the selected value of option selects
+chip_selected = tk.StringVar()
+test_selected = tk.StringVar()
+lbw_selected = tk.StringVar()
+part_no_selected = tk.StringVar()
+temp_date_selected = tk.StringVar()
+file_name_entry = tk.StringVar()
+remove_part_selected = tk.StringVar()
+date_selected = tk.StringVar()
+temp_selected = tk.StringVar()
+files_selected = tk.StringVar()
+
+window_inner_frame = tk.Frame(window)
+
+total_file_count = 0
+
+
+# ####################################################################################
+#                            Selection Window Functiobtn_select_partns
+# ####################################################################################
+
+
+
+
+
+def write_selection(text:string):
+
+    """"
+    while len(text) > 40:
+        sub_text = text[0:text[0:40].rfind(' ')]
+        selection_screen.insert("end", sub_text + "\n")
+        text = text[len(sub_text) + 1 : len(text)]
+
+    selection_screen.insert("end", text)
+    selection_screen.insert("end", "\n\n")
+    """
+    selection_screen.insert(selection_screen.size(), (text))
+
+def clear_selection():
+    selection_screen.delete(0, selection_screen.size())
+
+def add_newline_to_list(strings_list):
+    return [s + '\n' for s in strings_list]
+
+def trim_part_list(part_list, test_selected_value):
+    trimmed_list = []
+
+    for part in part_list:
+        # Check if the part has already been trimmed
+        # If test_selected_value is found in the path, trim it once
+        if test_selected_value in part:
+            # Split the path into parts
+            parts = part.split('/')
+            
+            # Find the index of the test_selected_value
+            test_index = -1
+            for i, p in enumerate(parts):
+                if p == test_selected_value:
+                    test_index = i
+                    break
+
+            # If test_selected_value is found, we want to keep everything after it (5th '/' or after)
+            if test_index != -1 and len(parts) > test_index + 1:
+                # Join the parts after the 5th segment
+                trimmed_str = '/'.join(parts[test_index + 1:])
+                trimmed_list.append(trimmed_str)
+            else:
+                # If the test_selected_value is near the end or already trimmed, just add the part as is
+                trimmed_list.append(part)
+        else:
+            # If test_selected_value is not found, just append the part
+            trimmed_list.append(part)
+
+    return trimmed_list
+
+def pressed_add_part(paths):
+    # Disable buttons for the duration of processing
+    for btn in window.grid_slaves():
+        if int(btn.grid_info()["row"]) < 3 and int(btn.grid_info()["column"]) == 1:
+            btn["state"] = "disabled"
+
+    parse_button_on()
+
+    # Collect the current selections
+    chip_sel = chip_selected.get()
+    test_sel = test_selected.get()
+    lbw_sel = lbw_selected.get()
+    part_sel = part_no_selected.get()
+    temp_date_sel = temp_date_selected.get()
+    file_sel = files_selected.get()
+
+    btn_remove_part["state"] = "normal"
+    btn_reset_select["state"] = "normal"
+
+    global trimmed_paths
+
+    # Create a new list for paths
+    trimmed_paths = []
+    
+    for path in paths:
+        selection_window.full_part_list.append(path)
+
+    # Append new paths to the part list
+    for path in paths:
+        selection_window.part_list.append(path)
+
+    # Trim all paths in selection_window.part_list
+    trimmed_paths = trim_part_list(selection_window.part_list, test_sel)
+
+    # Update selection_window.part_list to the trimmed paths
+    selection_window.part_list = trimmed_paths
+
+    # Check if any files were added
+    if not paths:
+        write_console("Path does not exist")
+    else:
+        update_selection_window()
+        clear_console()
+        write_console(f"{len(selection_window.full_part_list)} Total files collected")
+        write_console("You can now parse your listed parts by pressing \"Parse Data\" or you can add more.")
+
+
+
+def pressed_select_all():
+
+    cursor_to_use = cursor_map.get(test_selected.get())
+    paths = []
+
+    #selected only test
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("test")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        else:
+           cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        
+        test_path = cursor_to_use.fetchall()
+        paths = [all_test[0] for all_test in test_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected only lbw
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        else:
+           cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s;
+            """, (test_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and date")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and temp
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and temp")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s;
+            """, (test_selected.get(),temp_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND test."Date" = %s;
+                """, (test_selected.get(),date_selected.get(),))
+
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and temp and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and temp and date")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get()))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected temp and date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Date" = %s
+                AND test."Temp" = %s
+        """, (test_selected.get(), date_selected.get(), temp_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND test."Temp" = %s
+        """, (test_selected.get(), date_selected.get(), temp_selected.get()))
+       
+        date_temp_path = cursor_to_use.fetchall()
+        paths = [all_temp_date[0] for all_temp_date in date_temp_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected only date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("date")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s;
+        """, (test_selected.get(), date_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s;
+        """, (test_selected.get(), date_selected.get()))
+       
+        date_path = cursor_to_use.fetchall()
+        paths = [all_date[0] for all_date in date_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+    
+        return
+
+    #selected only temp
+    if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("temp")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s;
+        """, (test_selected.get(), temp_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s;
+        """, (test_selected.get(), temp_selected.get()))
+        temp_path = cursor_to_use.fetchall()
+        paths = [all_temp[0] for all_temp in temp_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),part_no_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("date and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+
+       
+        date_part_no_path = cursor_to_use.fetchall()
+        paths = [all_date_part_no[0] for all_date_part_no in date_part_no_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected temp and part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("temp and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
+       
+        temp_part_no_path = cursor_to_use.fetchall()
+        paths = [all_temp_part_no[0] for all_temp_part_no in temp_part_no_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and temp and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+        else:
+            cur.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and date and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),date_selected.get(),part_no_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected temp and date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("temp and date and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
+       
+        temp_date_part_no_path = cursor_to_use.fetchall()
+        paths = [all_temp_date_part_no[0] for all_temp_date_part_no in temp_date_part_no_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and date and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("lbw and date and temp and part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND test."Temp" = %s
+                AND test."Date" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
+
+        lbw_path = cursor_to_use.fetchall()
+        for row in lbw_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+                            
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    # dp += lbw_selected.get() + '/'
+
+    # selected only part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("only part no.")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(), part_no_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s
+                AND chip."Part Number" = %s;
+            """, (test_selected.get(), part_no_selected.get(),))
+        part_num_path = cursor_to_use.fetchall()
+        paths = [all_part_num[0] for all_part_num in part_num_path]
+        check_enable_selection(paths)
+ 
+                        
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected only test
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        print("test")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s;
+            """, (test_selected.get(),))
+        
+        test_path = cursor_to_use.fetchall()
+        paths = [all_test[0] for all_test in test_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected only file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), files_selected.get()))
+        
+        file_path = cursor_to_use.fetchall()
+        paths = [all_file[0] for all_file in file_path]
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE 
+                    test."Test" = %s AND
+                    test_file2."Test Data" = %s;
+            """, (test_selected.get(), files_selected.get()))
+        else:
+           cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE 
+                test."Test" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), files_selected.get()))
+
+        lbw_file_path = cursor_to_use.fetchall()
+        for row in lbw_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected date and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("date and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), files_selected.get()))
+        
+        date_file_path = cursor_to_use.fetchall()
+        paths = [all_date_file[0] for all_date_file in date_file_path]
+
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected temp and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("temp and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        
+        temp_file_path = cursor_to_use.fetchall()
+        paths = [all_temp_file[0] for all_temp_file in temp_file_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected part number and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("part number and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        part_no_file_path = cursor_to_use.fetchall()
+        paths = [all_part_no_file[0] for all_part_no_file in part_no_file_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected temp and date and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get()!= "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("temp and date and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        
+        temp_date_file_path = cursor_to_use.fetchall()
+        paths = [all_temp_date_file[0] for all_temp_date_file in temp_date_file_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected temp and part_no and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("temp and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        temp_part_no_file_path = cursor_to_use.fetchall()
+        paths = [all_temp_part_no_file[0] for all_temp_part_no_file in temp_part_no_file_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return   
+
+    #selected date and part_no and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get()== "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("date and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        date_part_no_file_path = cursor_to_use.fetchall()
+        paths = [all_date_part_no_file[0] for all_date_part_no_file in date_part_no_file_path]
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return   
+
+    #selected lbw and temp and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and temp and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), files_selected.get()))
+        
+        lbw_temp_file_path = cursor_to_use.fetchall()
+        for row in lbw_temp_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and date and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and date and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), files_selected.get()))
+        
+        lbw_date_file_path = cursor_to_use.fetchall()
+        for row in lbw_date_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and part_no and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        lbw_part_no_file_path = cursor_to_use.fetchall()
+        for row in lbw_part_no_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and temp and part_no and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and temp and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        lbw_temp_part_no_file_path = cursor_to_use.fetchall()
+        for row in lbw_temp_part_no_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+        
+
+    #selected lbw and date and part_no and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get()== "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("lbw and date and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        lbw_date_part_no_file_path = cursor_to_use.fetchall()
+        for row in lbw_date_part_no_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+    
+    #selected lbw and temp and date and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("selected lbw and temp and date and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), date_selected.get(), temp_selected.get(), files_selected.get()))
+
+        lbw_temp_date_file_path = cursor_to_use.fetchall()
+        for row in lbw_temp_date_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected temp and date and part_no and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("temp and date and part_no and file")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        temp_date_part_no_file_path = cursor_to_use.fetchall()
+        paths = [all_temp_date_part_no_file[0] for all_temp_date_part_no_file in temp_date_part_no_file_path]
+
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+    #selected lbw and date and temp and part_no and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get()!= "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+        print("test")
+        if (test_selected.get() != 'otp' and test_selected.get() != 'otp_save_test'):
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                COALESCE(test."Temp", '') || 
+                '_' || 
+                COALESCE(test."Date", '') ||
+                -- Remove underscore before the first slash
+                '/' ||  -- Match an underscore followed by a slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        else:
+            cursor_to_use.execute("""
+            SELECT DISTINCT
+                '//DS220P/ds220_vol1/si_data/' ||
+                COALESCE(chip."Chip Type", '') ||
+                '/' ||
+                COALESCE(test."Test", '') ||
+                '/' ||
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                '/' || 
+                COALESCE(chip."Part Number", '') ||
+                '/' || 
+                -- Remove underscore before the first slash
+                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file2 ON test."Test Id" = test_file2."Test Id"
+            WHERE  
+                test."Test" = %s AND
+                test."Temp" = %s AND
+                test."Date" = %s AND
+                chip."Part Number" = %s AND
+                test_file2."Test Data" = %s;
+            """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        
+        lbw_temp_date_part_no_file_path = cursor_to_use.fetchall()
+        for row in lbw_temp_date_part_no_file_path:
+            # Assuming 'row' is a tuple with a single element (unique_id)
+            full_path = row[0]
+            # Check if lbw_selected.get() is a part of the path
+            if lbw_selected.get() in full_path:
+                paths.append(full_path)
+        check_enable_selection(paths)
+ 
+           
+        file_select = tk.Entry(window, textvariable=file_name_entry)
+        file_select.grid(row=7,column=1, sticky='ew')
+        file_select["font"]=("helvetica",10)
+        file_label = tk.Label(window,text="save file name")
+        file_label.grid(row=7,column=0)
+        file_label["font"]=("helvetica",10)
+        file_name_entry.set(chip_selected.get() + '_' + test_selected.get())
+        write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + " have been selected.")
+        return
+
+
+
+
+        
+    # if(part_no_selected.get() == ""):
+    #     print("E")
+    #     part_list = os.listdir(dp)
+    #     for part in part_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/')
+    #         temp_date_list = os.listdir(dp)
+    #         for temp_date in temp_date_list:
+    #             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part + '/' + temp_date + '/')
+    #             if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date):
+    #                 pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part, temp_date)
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + " have been selected.")
+    #     return
+    
+    # if(temp_date_selected.get() != "" and part_no_selected.get() == ""):
+    #     print("F")
+    #     lbw_list = os.listdir(dp)
+    #     for lbw in lbw_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/')
+    #         part_list = os.listdir(dp)
+    #         for part in part_list:
+    #             dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/')
+    #             temp_date_list = os.listdir(dp)
+    #             for temp_date in temp_date_list:
+    #                 if temp_date == temp_date_selected.get():
+    #                     dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw + '/' + part + '/' + temp_date + '/')
+    #                     if check_enable_selection(chip_selected.get(), test_selected.get(), lbw, part, temp_date):
+    #                         pressed_add_part(chip_selected.get(), test_selected.get(), lbw, part, temp_date)  
+
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
+    #     return
+
+
+
+    # if(temp_date_selected.get() == ""):
+    #     print("G")
+    #     temp_date_list = os.listdir(dp)
+    #     for temp_date in temp_date_list:
+    #         dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + '/' + temp_date + '/')
+    #         if check_enable_selection(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date):
+    #             pressed_add_part(chip_selected.get(), test_selected.get(), lbw_selected.get(), part_no_selected.get(), temp_date)
+    #     file_select = tk.Entry(window, textvariable=file_name_entry)
+    #     file_select.grid(row=6,column=1, sticky='ew')
+    #     file_select["font"]=("helvetica",10)
+    #     file_label = tk.Label(window,text="save file name")
+    #     file_label.grid(row=6,column=0)
+    #     file_label["font"]=("helvetica",10)
+    #     file_name_entry.set(chip_selected.get() + '_' + lbw_selected.get() + '_' + part_no_selected.get() + '_' + test_selected.get())
+    #     write_console("All parts within " + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() + '/' + part_no_selected.get() + " have been selected.")
+    #     return
+
+def update_selection_window():
+    clear_selection()
+    for part in selection_window.part_list:
+        write_selection(part)
+
+    if selection_screen.size() == 0:
+            for btn in window.grid_slaves():
+                if int(btn.grid_info()["row"]) < 3 and int(btn.grid_info()["column"]) == 1:
+                    btn["state"] = "normal"
+
+
+def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox):
+
+    # Clear existing options
+    window.temp.clear()
+    window.dates.clear()
+    window.lbw.clear()
+    window.parts.clear()
+    window.files.clear()
+
+    lbw_parts = lbw_selected.get().split('_')
+    # Use list unpacking with defaults
+    lot, bin, wafer, proc_corner = (lbw_parts + [''] * 4)[:4]
+
+    cursor_to_use = cursor_map.get(test_selected.get())
+
+    #selected only lbw
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner,))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+            SELECT DISTINCT "Date"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner,))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot,bin, wafer, proc_corner,))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL);
+        """,(test_selected.get(), lot, bin, wafer, proc_corner,))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(),))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and temp
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM test 
+        JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp"
+            FROM 
+                chip
+            JOIN 
+                test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, part_no_selected.get(),))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM test 
+        JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, part_no_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, part_no_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and temp and date
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            And "Date" = %s
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(),temp_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            And "Date" = %s
+            AND "Temp" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(),temp_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected only temp
+    if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Date" 
+            FROM test 
+            JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s AND "Temp" = %s
+        """,(test_selected.get(), temp_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s
+        """, (test_selected.get(), temp_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Temp" = %s
+        """, (test_selected.get(), temp_selected.get(),))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Temp" = %s
+        """,(test_selected.get(), temp_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected only date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+            SELECT DISTINCT "Temp" 
+            FROM test 
+            JOIN chip ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s AND "Date" = %s
+        """,(test_selected.get(), date_selected.get(),))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s
+        """, (test_selected.get(), date_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Date" = %s
+        """, (test_selected.get(), date_selected.get(),))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Date" = %s
+        """,(test_selected.get(), date_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    # selected only part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Part Number" = %s
+        """,(test_selected.get(), part_no_selected.get(),))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Part Number" = %s
+        """,(test_selected.get(), part_no_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s AND "Part Number" = %s
+        """, (test_selected.get(), part_no_selected.get(),))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Part Number" = %s
+        """,(test_selected.get(), part_no_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected temp and date
+    if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Part Number" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get()))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(),))
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Temp" = %s
+        AND "Date" = %s
+        """,(test_selected.get(), temp_selected.get(), date_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+
+    #selected date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [date_temp[0] for date_temp in temp]
+        
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), date_selected.get(), part_no_selected.get(),))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Date" = %s
+        AND "Part Number" = %s
+        """,(test_selected.get(), date_selected.get(), part_no_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected temp and part no.
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Chip
+        JOIN Test ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), part_no_selected.get(),))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Temp" = %s
+        AND "Part Number" = %s
+        """,(test_selected.get(), temp_selected.get(), part_no_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected temp and date and part no.
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        
+        cur.execute("""
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Chip
+        JOIN Test ON test."Chip Id" = chip."Chip Id"
+        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s AND "Part Number" = %s
+        """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get()))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        AND "Temp" = %s
+        AND "Date" = %s
+        AND "Part Number" = %s
+        """,(test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get()))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and temp and part no.
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+        cur.execute("""
+        SELECT DISTINCT "Date" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get()))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get()))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and date and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute("""
+        SELECT DISTINCT "Temp" 
+        FROM chip 
+		JOIN 
+        test ON chip."Chip Id" = test."Chip Id"
+            WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(), part_no_selected.get()))
+        temp = cur.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+        
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(), part_no_selected.get()))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected lbw and temp and date and part no.
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            AND "Date" = %s
+            And "Part Number" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), date_selected.get(), part_no_selected.get()))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+    #selected only file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            t."Test" = %s 
+            AND tf2."Test Data" = %s;
+        """, (test_selected.get(), files_selected.get(),))
+
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            t."Test" = %s 
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), files_selected.get(),))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            t."Test" = %s 
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), files_selected.get(),))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE             
+            t."Test" = %s 
+            AND tf2."Test Data" = %s;
+        """, (test_selected.get(), files_selected.get(),))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected lbw and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
+
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected temp and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE             
+            "Test" = %s
+            AND "Temp" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected date and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), date_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), date_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), date_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected part no. and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected lbw and temp and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and date and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [date_temp[0] for date_temp in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [parts_type[0] for parts_type in parts]
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and part no. and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, part_no_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [date_temp[0] for date_temp in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, part_no_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+    #selected temp and date and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected temp and part no. and file
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected date and part no. and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Date" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Date" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+    #selected lbw and temp and date and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Part Number"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            AND "Date" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), date_selected.get(), files_selected.get()))
+        parts = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+    #selected lbw and temp and part no. and file
+    if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Date"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Temp" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get(), files_selected.get()))
+        date = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+    #selected lbw and date and part no. and file
+    if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT "Temp"
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Lot" = %s
+            AND ("Bin" = %s OR "Bin" IS NULL)
+            AND ("Wafer" = %s OR "Wafer" IS NULL)
+            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+            AND "Date" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), part_no_selected.get(), files_selected.get()))
+        temp = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+    #selected temp and date and part no. and file
+    if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() != ""):
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT 
+            c."Lot" || 
+            CASE WHEN COALESCE(c."Bin", '') <> '' THEN '_' || c."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(c."Wafer", '') <> '' THEN '_' || c."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(c."Process Corner", '') <> '' THEN '_' || c."Process Corner" ELSE '' END
+	    FROM 
+	        test t
+	    INNER JOIN 
+	        chip c ON t."Chip Id" = c."Chip Id"
+	    INNER JOIN 
+	        test_file tf ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+            test_file2 tf2 ON tf2."File Id" = tf."File Id"
+        WHERE
+            "Test" = %s
+            AND "Temp" = %s
+            AND "Date" = %s
+            AND "Part Number" = %s
+            AND tf2."Test Data" = %s;
+        """,(test_selected.get(), temp_selected.get() , date_selected.get(), part_no_selected.get(), files_selected.get()))
+
+        window.lbw.append("")
+        lbw = cursor_to_use.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        # Update existing combobox values
+        lbw_combobox['values'] = window.lbw
+
+
+    # all empty
+    if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == "" and files_selected.get() == ""):
+
+        cur.execute(""" 
+            SELECT DISTINCT 
+                chip."Lot" || 
+                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+            FROM Test
+            JOIN Chip ON test."Chip Id" = chip."Chip Id"
+            WHERE test."Test" = %s;
+        """, (test_selected.get(),))
+
+        window.lbw.append("")
+        lbw = cur.fetchall()
+        for row in lbw:
+            combined_info = row[0] if row[0] is not None else ""
+            window.lbw.append(combined_info)
+
+        window.lbw = list(set(window.lbw))  # Remove duplicates
+        window.lbw.sort()  # Sort the list
+
+        lbw_combobox['values'] = window.lbw
+
+        cur.execute(""" 
+            SELECT DISTINCT "Date" FROM test WHERE "Test" = %s
+        """, (test_selected.get(),))
+        date = cur.fetchall()
+
+        # Update the window.dates list
+        window.dates = [""] + [date_type[0] for date_type in date]
+        window.dates.sort()  # Sort the list
+
+        # Update existing combobox values
+        dates_combobox['values'] = window.dates
+
+
+        cur.execute("""
+            SELECT DISTINCT "Temp" FROM test WHERE "Test" = %s
+        """, (test_selected.get(),))
+        temp = cur.fetchall()
+        # Update the window.dates list
+        window.temp = [""] + [temp_type[0] for temp_type in temp]
+
+        # Update existing combobox values
+        temp_combobox['values'] = window.temp
+
+        cur.execute("""
+        SELECT DISTINCT chip."Part Number" FROM Test JOIN Chip ON test."Chip Id" = chip."Chip Id" WHERE test."Test" = %s
+        """, (test_selected.get(),))
+        parts = cur.fetchall()
+
+        # Update the window.dates list
+        window.parts = [""] + [part_type[0] for part_type in parts]
+        window.parts.sort()  # Sort the list
+        
+
+        # Update existing combobox values
+        parts_combobox['values'] = window.parts
+
+        cursor_to_use.execute("""
+        SELECT DISTINCT tf2."Test Data" 
+	    FROM 
+	        test_file2 tf2
+	    INNER JOIN 
+	        test_file tf ON tf."File Id" = tf2."File Id"
+	    INNER JOIN 
+	        test t ON tf."Test Id" = t."Test Id"
+	    INNER JOIN 
+	        chip c ON c."Chip Id" = t."Chip Id"
+        WHERE "Test" = %s
+        """, (test_selected.get(),))
+        files = cursor_to_use.fetchall()
+
+        # Update the window.dates list
+        window.files = [""] + sorted([files_type[0] for files_type in files])
+
+        # Update existing combobox values
+        files_combobox['values'] = window.files
+
+
+
+
+def check_enable_selection(paths):
+
+    found = False
+
+    if len(selection_window.full_part_list) == 0:
+        pressed_add_part(paths)
+    else:       
+        for path in paths:
+            found = False
+            for part in selection_window.full_part_list:
+                if path == part:
+                    write_console("Paths already selected:\n" + part)
+                    print("Paths already selected:\n" + part)
+                    found = True
+            if found == False:
+                pressed_add_part([path])
+                
+    if(temp_date_selected.get() != ""): 
+        btn_select_all["state"] = "disabled"
+    
+    return True
+
+def reset_selection():
+    global total_file_count
+    total_file_count = 0
+    btn_reset_select["state"] = "disabled"
+    selection_window.part_list = []
+    selection_window.full_part_list = []
+    parse_button_off()
+    delete_remove_part()
+    update_selection_window()
+    write_console("All parts are removed")
+
+def parse_button_on():
+    global btn_parse_data
+    btn_parse_data["bg"] = "#3DED97"
+    btn_parse_data["state"] = "normal"
+
+def parse_button_off():
+    global btn_parse_data
+    btn_parse_data["bg"] = "#E97F7F"
+    btn_parse_data["state"] = "disabled"
+
+#part selection reset button
+btn_reset_select = tk.Button(reset_btn_frame, text="Reset Selection", command=reset_selection)
+btn_reset_select.grid(row=0,column=0, sticky='nsew')
+btn_reset_select["state"] = "disabled"
+
+#part select all button
+btn_select_all = tk.Button(bottom_right_btn_frame, text="Select Parts", command=pressed_select_all)
+btn_select_all.grid(sticky='nsew')
+btn_select_all["state"] = "disabled"
+
+
+
+#def enable_remove(event):
+    #btn_remove_part["state"] = "normal"
+
+def pressed_remove():
+    print(selection_screen.curselection())
+    tuple = selection_screen.curselection()
+    for selected_part in range(len(tuple)):   
+        for part in range(len(selection_window.part_list)):
+            try:
+                if selection_window.part_list[part] == selection_screen.get(tuple[selected_part]):
+                    del selection_window.part_list[part]
+                    del selection_window.full_part_list[part]
+                    write_console("Part Removed")
+                    break
+            except:
+                write_console("No part selected")
+                write_console("You must click on a part that is listed on the righthand side")
+    update_selection_window()
+    if (selection_window.part_list == []):
+        delete_remove_part()
+        return
+
+
+def delete_remove_part():
+    parse_button_off()
+    btn_reset_select["state"] = "disabled"
+    btn_remove_part["state"] = "disabled"
+
+#text area for selectionn screen
+selection_screen = tk.Listbox(selection_window,font=("helvetica",12),selectmode=tk.MULTIPLE)
+selection_screen.grid(row=0,column=0, sticky="nswe")
+# Create a Scrollbar widget
+scrollbar = tk.Scrollbar(selection_window, orient=tk.VERTICAL)
+scrollbar.config(command=selection_screen.yview)
+scrollbar.grid(row=0, column=1, sticky="ns")
+
+
+
+# Configure resizing behavior
+selection_window.grid_rowconfigure(0, weight=1)
+selection_window.grid_columnconfigure(0, weight=1)
+
+            
+
+btn_remove_part = tk.Button(selection_window, text="Remove Part", command=pressed_remove)
+btn_remove_part.grid(row=1,column=0, sticky='ew')
+btn_remove_part["state"] = "disabled"
+
+
+# ####################################################################################
+#                                  Console Functions
+# ####################################################################################
+
+console = tk.Text(console_frame, font=("Arial", 13), state="disabled")
+console.grid(row=0,column=0, sticky="nswe")
+console['height'] = 10
+
+def write_console(text:string):
+    console.configure(state='normal')
+    console.insert("end", text)
+    console.insert("end", "\n")
+    console.configure(state='disabled')
+
+def clear_console():
+    console.configure(state='normal')
+    console.delete('1.0' , END)
+    console.configure(state='disabled')
+
+
+# ####################################################################################
+#                                      SI_DATA
+# ####################################################################################
+# if os.path.isdir("/mnt/nfs/si_data"):
+#     window.datapath = "/mnt/nfs/si_data/"
+# elif os.path.isdir("./../si_data"):
+#     window.datapath = "./../si_data/"
+# elif os.path.isdir("./../../si_data"):
+#     window.datapath = "./../../si_data/"
+# elif os.path.isdir("./si_data"):
+#     window.datapath = "./si_data/"
+
+# ####################################################################################
+#                                   EVENT FUNCTIONS
+# ####################################################################################
+#used to remove items in rows greater than the given row
+def remove_options(window, row):
+    for label in window.grid_slaves():
+        if int(label.grid_info()["row"]) > row:
+            label.grid_forget()
+            label["text"] = ""
+
+def chip_supported():
+    if chip_selected.get() == 'vili':
+        return True
+    return False
+
+def change_option_size(label, combobox):
+    # Adjust font for the dropdown menu of the combobox
+    style = ttk.Style()
+    style.configure('TCombobox', font=('helvetica', 12))
+    combobox.config(font=('helvetica', 12))
+    label.config(font=('helvetica', 12))
+
+
+
+#Event function for when a chip option is selected
+def pressed(event):
+    #reset all values that were previously selected for rows below chip 
+    test_selected.set("")
+    lbw_selected.set("")
+    part_no_selected.set("")
+    temp_date_selected.set("")
+    date_selected.set("")
+    files_selected.set("")
+
+    clear_console()
+
+
+
+    #disable the select all button
+    btn_select_all["state"] = "disabled"
+
+    if (not chip_supported()):
+        remove_options(window, 1)
+        write_console("WARNING: This chip is NOT supported. Please select a different chip.")
+        return
+
+    #enter chip directory
+    # item = chip_selected.get()
+    # window.chip_path = item + '/'
+    # new_dp = window.datapath + window.chip_path
+    # #empty tests and add test directorys to test option select
+    # window.tests = []
+    # window.tests.append("")
+    # for name in os.listdir(new_dp):
+    #     if os.path.isdir(new_dp + name):
+    #         window.tests.append(name)
+
+    cur.execute("""
+        SELECT DISTINCT "Test" FROM test JOIN chip ON test."Chip Id" = chip."Chip Id" WHERE chip."Chip Type" = %s
+    """, (chip_selected.get(),))
+
+    tests = cur.fetchall()
+    window.tests = [test_type[0] for test_type in tests]
+    window.tests.append("")
+    
+    #if there are no tests in chip directory
+    if not window.tests:
+        remove_options(window, 1)
+        test_label = tk.Label(window,text="select tests")
+        test_label.grid(row=2,column=0)
+        test_label = tk.Label(window,text="main has no tests")
+        test_label.grid(row=2,column=1)
+        write_console("No test data can be found for that chip")
+        return
+    #label for test select
+    test_label = tk.Label(window,text="select test")
+    test_label.grid(row=2,column=0)
+
+    test_combobox = AutocompleteCombobox(window, completevalues=window.tests, textvariable=test_selected)
+    test_combobox.grid(row=2, column=1, sticky='ew')
+
+    # Define a function to handle the Enter key press event
+    def handle_enter(event):
+        if event.keysym == "Return":
+            pressed_test(test_combobox.get())
+   
+    # Bind events
+    test_combobox.bind("<Return>", handle_enter)
+    test_combobox.bind("<<ComboboxSelected>>", lambda event: pressed_test(test_combobox.get()))
+    change_option_size(test_label, test_combobox)
+    remove_options(window, 2)
+    write_console("Supported Tests:\n write_shmoo\n read_shmoo\n read_shmoo_pat\n htol\n ims\n upump_char\n internal_bias\n ser\n read_disturb")
+    
+#Event function for when a test option is selected
+def pressed_test(event):
+    global window_inner_frame
+    
+    # Reset all values that were previously selected for rows below test 
+    lbw_selected.set("")
+    part_no_selected.set("")
+    temp_date_selected.set("")
+    temp_selected.set("")
+    date_selected.set("")
+    files_selected.set("")
+
+    clear_console()
+    btn_reset_select["state"] = "normal"
+
+    # Enter test directory
+    item = test_selected.get() or ""
+    new_dp = window.datapath + chip_selected.get() + '/' + item + '/'
+    print(new_dp)
+
+    # Empty LBW (Lot/Bin/Wafer) and add LBW directories to LBW option select
+    window.lbw = [""]
+    
+    # Fetch distinct LBWs from the database
+    cur.execute(""" 
+        SELECT DISTINCT 
+            chip."Lot" || 
+            CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+            CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
+        FROM Test
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        WHERE test."Test" = %s;
+    """, (item,))
+    lbw = cur.fetchall()
+    for row in lbw:
+        combined_info = row[0] if row[0] is not None else ""
+        window.lbw.append(combined_info)
+    window.lbw.append("")
+
+    # Remove duplicates and sort the list
+    window.lbw = list(set(window.lbw))  # Remove duplicates
+    window.lbw.sort()  # Sort the list
+    
+    # If there are no LBWs available in the directory
+    if not window.lbw:
+        remove_options(window_inner_frame, 2)
+        lbw_label = tk.Label(window_inner_frame, text="select LBW")
+        lbw_label.grid(row=3, column=5)
+        lbw_label = tk.Label(window_inner_frame, text="main has no LBW")
+        lbw_label.grid(row=3, column=4)
+        write_console("No Lots/Wafer/Bins that had that ran that test can be found")
+        return
+
+    # Creating a frame inside the 'window' frame2
+    window_inner_frame = tk.Frame(window)
+    window_inner_frame.grid(row=3, column=0, columnspan=2, sticky='nsew')
+    window_inner_frame.columnconfigure(1, minsize=50, weight=1)
+    window_inner_frame.columnconfigure(3, minsize=50, weight=1)
+    
+    # LBW option select
+    lbw_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.lbw, textvariable=lbw_selected)
+    lbw_combobox.grid(row=0, column=1, sticky='we')
+    
+    # Bind events
+    lbw_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox))
+
+    # Label for LBW selection
+    lbw_label = tk.Label(window_inner_frame, text="select LBW")
+    lbw_label.grid(row=0, column=0)
+
+    # Gather all dates for the selected test
+    cur.execute(""" 
+        SELECT DISTINCT "Date" FROM test WHERE "Test" = %s
+    """, (test_selected.get(),))
+    date = cur.fetchall()
+    window.dates = [date_type[0] for date_type in date if date_type[0] is not None]
+    window.dates.append("")
+
+    # If there are no dates
+    if not window.dates:
+        remove_options(window_inner_frame, 2)
+        dates_label = tk.Label(window_inner_frame, text="select dates")
+        dates_label.grid(row=0, column=0)
+        dates_label = tk.Label(window_inner_frame, text="main has no dates")
+        dates_label.grid(row=0, column=1)
+        write_console("There are no parts that were ran under a specific date")
+        return
+
+    # Date option select
+    dates_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.dates, textvariable=date_selected)
+    dates_combobox.grid(row=0, column=5, sticky='we')
+
+    # Bind events
+    dates_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox))
+
+    dates_label = tk.Label(window_inner_frame, text="select date")
+    dates_label.grid(row=0, column=4)
+    remove_options(window_inner_frame, 3)
+
+    # window.temp = []
+    # window.temp.append("")
+    # for lbw_name in os.listdir(new_dp):
+    #     lbw_path = os.path.join(new_dp, lbw_name)
+    #     if os.path.isdir(lbw_path):
+    #         for part_name in os.listdir(lbw_path):
+    #             part_path = os.path.join(lbw_path, part_name)
+    #             if os.path.isdir(part_path):
+    #                 for temp_date_name in os.listdir(part_path):
+    #                     temp_date_path = os.path.join(part_path, temp_date_name)
+    #                     if os.path.isdir(temp_date_path):
+    #                         try:
+    #                             temp_part = temp_date_name.split('_')[0]
+    #                             window.temp.append(temp_part)
+    #                             if temp_part[-1] != 'C' or not any(char.isdigit() for char in temp_part):
+    #                                 raise ValueError(temp_part + "must contain numbers and end with 'C")
+    #                         except (IndexError, ValueError) as e:
+    #                             print(f"Warning: {e}")
+    cur.execute("""
+        SELECT DISTINCT "Temp" FROM test WHERE "Test" = %s
+    """, (test_selected.get(),))
+    temp = cur.fetchall()
+    window.temp = [temp_type[0] for temp_type in temp if temp_type[0] is not None]
+    window.temp.append("")
+
+
+    # If there are no temp
+    if not window.temp:
+        remove_options(window_inner_frame, 2)
+        temp_label = tk.Label(window_inner_frame, text="select temp")
+        temp.grid(row=0, column=2)
+        temp = tk.Label(window_inner_frame, text="main has no temp")
+        temp.grid(row=0, column=3)
+        write_console("There are no parts that were ran under a specific temperature")
+        return
+
+    # Remove duplicates from temp list
+    # temp_options = list(OrderedDict.fromkeys(window.temp))
+
+    # temp option select
+    temp_combobox = AutocompleteCombobox(window_inner_frame, completevalues=window.temp,textvariable=temp_selected)
+    temp_combobox.grid(row=0, column=3, sticky='we')
+    # Bind events
+    temp_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox))
+
+    temp_label = tk.Label(window_inner_frame, text="select temp")
+    temp_label.grid(row=0, column=2)
+    remove_options(window_inner_frame, 3)
+
+    btn_select_all["state"] = "normal"
+
+    #reset all values that were previously selected for rows below LBW 
+    part_no_selected.set("")
+    temp_date_selected.set("")
+
+    clear_console()
+
+
+    #enable select all button
+    btn_select_all["state"] = "normal"
+
+    #empty Part list and add part number directorys to part number option select
+    # window.parts = []
+    # window.parts.append("")
+    # for lbw_name in os.listdir(new_dp):
+    #     lbw_path = os.path.join(new_dp, lbw_name)
+    #     if os.path.isdir(lbw_path):
+    #         for part_name in os.listdir(lbw_path):
+    #             part_path = os.path.join(lbw_path, part_name)
+    #             if os.path.isdir(part_path):
+    #                 window.parts.append(part_name)
+
+    cur.execute("""
+    SELECT DISTINCT chip."Part Number" FROM Test JOIN Chip ON test."Chip Id" = chip."Chip Id" WHERE test."Test" = %s
+    """, (test_selected.get(),))
+    parts = cur.fetchall()
+    window.parts = [part[0] for part in parts if part[0] is not None]
+    window.parts.append("")
+    
+    #if no part numbers were found
+    if not window.parts:
+        remove_options(window, 3)
+        parts_label = tk.Label(window,text="select parts")
+        parts_label.grid(row=4,column=0)
+        parts_label = tk.Label(window,text="main has no parts")
+        parts_label.grid(row=4,column=1)
+        write_console("There is no data on parts from that Lot/Wafer/Bin")
+        return
+    
+    # part_options = list(OrderedDict.fromkeys(window.parts))
+
+    #part option select
+    parts_label = tk.Label(window,text="select part no.")
+    parts_label.grid(row=4,column=0)
+    parts_combobox = AutocompleteCombobox(window, completevalues=window.parts ,textvariable=part_no_selected)
+    parts_combobox.grid(row=4, column=1, sticky='ew')
+
+    # Bind events
+    parts_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox))
+
+    change_option_size(parts_label, parts_combobox)
+    remove_options(window_inner_frame, 4)
+
+    cursor_to_use = cursor_map.get(test_selected.get())
+
+    cursor_to_use.execute("""
+        SELECT DISTINCT "Test Data" FROM test_file2
+    """, (test_selected.get(),))
+    files = cursor_to_use.fetchall()
+    window.files = [files_type[0] for files_type in files if files_type[0] is not None]
+    window.files.append("")
+
+    #if no part numbers were found
+    if not window.parts:
+        remove_options(window, 4)
+        parts_label = tk.Label(window,text="select parts")
+        parts_label.grid(row=5,column=0)
+        parts_label = tk.Label(window,text="main has no parts")
+        parts_label.grid(row=5,column=1)
+        write_console("There is no data on parts from that Lot/Wafer/Bin")
+        return
+    
+    # part_options = list(OrderedDict.fromkeys(window.parts))
+
+    #part option select
+    files_label = tk.Label(window,text="select file names")
+    files_label.grid(row=5,column=0)
+    files_combobox = AutocompleteCombobox(window, completevalues=window.files ,textvariable=files_selected)
+    files_combobox.grid(row=5, column=1, sticky='ew')
+
+    # Bind events
+    files_combobox.bind("<<ComboboxSelected>>", lambda event: update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox))
+
+    change_option_size(files_label, files_combobox)
+    remove_options(window_inner_frame, 5)
+
+    #reset all values that were previously selected for rows below Part number 
+    temp_date_selected.set("")
+
+    clear_console()
+
+    #reset the options back to blank
+    def reset_options():
+
+        # Reset the text variables bound to the comboboxes
+        lbw_selected.set("")
+        part_no_selected.set("")
+        temp_date_selected.set("")
+        temp_selected.set("")
+        date_selected.set("")
+        files_selected.set("")
+
+        update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, files_combobox)
+
+    btn_reset_options = tk.Button(window, text="Reset Options", command=reset_options)
+    btn_reset_options.grid(row=8, column=0, columnspan=2, sticky='esw')  # sticky='ew' to stretch the button horizontally
+    btn_reset_options["state"] = "active"
+
+    #allows this button to be at the bottom
+    window.grid_rowconfigure(8, weight=1) 
+
+
+    #enable select all button
+    btn_select_all["state"] = "normal"
+
+
+#enables the parse data button when temp/date is selected
+def pressed_temp_date(event):
+    clear_console()
+    if check_enable_selection():
+        write_console("All of the necessary information has been gathered")
+        write_console("")
+        write_console("You can rename the file containing the parsed data")
+        write_console("Press \"Select Part\" to add your part to the list of data to be parsed")
+    
+#function that actually runs the parser.
+#called in pressed_parse_data
+def parse_data():
+    dp = (window.datapath + chip_selected.get() + '/' + test_selected.get() + '/' + lbw_selected.get() +
+    '/' + part_no_selected.get() + '/' + temp_date_selected.get() + '/')
+
+    global trimmed_paths
+
+    file_paths = [os.path.dirname(path) for path in trimmed_paths]
+
+    save_name = file_name_entry.get() + ".txt"
+
+    # path = "./parsed_files/" + chip_selected.get() + '/' + test_selected.get() + '/'
+    # Check if chip directory exists
+    for path in file_paths:
+        full_path = os.path.join("./parsed_files/", chip_selected.get(), test_selected.get(),path)
+        if not os.path.exists(full_path):
+            os.makedirs(full_path)
+            print("Directory created")
+
+    open_file_explorer = os.path.abspath(f"./parsed_files/{chip_selected.get()}/{test_selected.get()}")
+    
+    # Debugging line to verify the path
+    print(f"Attempting to open file explorer at: {open_file_explorer}")
+    
+    if os.path.exists(open_file_explorer):  # Ensure the directory exists before opening it
+        os.startfile(open_file_explorer)
+    else:
+        print(f"Error: The path does not exist: {open_file_explorer}")
+
+    
+    
+    parser.run_script(chip_selected.get(), test_selected.get(), window.datapath, selection_window.full_part_list, save_name, path)
+    write_console("Done")
+    write_console("Parsed data is located in Data_Parser\parsed_files")
+    btn_parse_data["state"] = "normal"
+
+
+
+    # if os.name == 'nt':
+    #     path = './Excel_Parsers.xlsm'
+    #     subprocess.Popen(f'explorer {os.path.realpath(path)}')
+
+    
+
+#the parse data button was pressed
+def pressed_parse_data():
+    btn_parse_data["state"] = "disabled"
+
+    write_console("Running...")
+
+    #essentially used to force asynchronicity 
+    main_window.after(100, parse_data)
+
+    
+    
+    
+
+# ####################################################################################
+#                            BUILDING WINDOWS AND WIDGETS
+# ####################################################################################
+
+# print(window.datapath)
+
+#populate chip option select
+# for name in os.listdir(window.datapath):
+#     if os.path.isdir(window.datapath + name):
+#         window.chips.append(name)
+cur.execute("""
+    SELECT DISTINCT "Chip Type" FROM chip
+""", )
+
+chips = cur.fetchall()
+window.chips = [chip_type[0] for chip_type in chips]
+window.chips.append("")
+print(window.chips)
+
+write_console("Data Parser Initiated")
+write_console("start by selecting the chip")
+
+#chip option select
+chip_combobox = AutocompleteCombobox(window, completevalues = window.chips ,textvariable=chip_selected)
+chip_combobox.grid(row=0, column=1, sticky='we')
+
+def handle_enter(event):
+    if event.keysym == "Return":
+        pressed(chip_combobox.get())
+
+# Bind events
+chip_combobox.bind("<Return>", handle_enter)
+chip_combobox.bind("<<ComboboxSelected>>", lambda event: pressed(chip_combobox.get()))        
+
+chip_label = tk.Label(window,text="select chip")
+chip_label.grid(row=0,column=0)
+change_option_size(chip_label, chip_combobox)
+
+
+#Parse data button
+btn_parse_data = tk.Button(parent_btn_frame, text="Parse Data", command=pressed_parse_data)
+#btn_parse_data.bind('<ButtonRelease-1>', pressed_parse_data)
+btn_parse_data.grid(row=0,column=0, sticky='nsew')
+btn_parse_data.config(width="20")
+btn_parse_data["font"]= ("Arial", 13)
+parse_button_off()
+#LOOP
+
+conn.commit()
+
+# Close cursor and connection
+
+main_window.mainloop()

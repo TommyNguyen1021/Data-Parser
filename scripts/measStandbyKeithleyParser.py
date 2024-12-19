@@ -5,6 +5,12 @@ import re
 import tkinter as tk
 from tkinter import filedialog
 from natsort import natsorted
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="meas_standby_Keithley",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()
 
 def contains_digits(input_string):
     # Use regular expression to check for any digits in the input string
@@ -40,122 +46,153 @@ def main():
             writer.writeheader()
             new_file.close()
 
-    raw_data_files = os.listdir(data_path)
-    raw_data_files = natsorted(raw_data_files)
+    parts = part.split('_')
+
+    lot = bin = wafer = process_corner = None
+    
+    # Assign values based on the number of parts
+    if len(parts) >= 1:
+        lot = parts[0]
+    if len(parts) >= 2:
+        bin = parts[1]
+    if len(parts) >= 3:
+        wafer = parts[2]
+    if len(parts) == 4:
+        process_corner = parts[3]
+
+    cur.execute("""
+    SELECT 
+    tf."Test Data"
+    FROM 
+        test_file tf
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'meas_standby_Keithley'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files = cur.fetchall()
+    raw_data_files = [file[0] for file in files]
 
     
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
         for file in raw_data_files:
-            print("File: " + file)
-            if("meas-standby-current-Keithley" in file and "dat_0" in file):
                 
-                expected_vdd = 0
-                expected_vdd18 = 0
-                expected_vddio = 0
-                meas_vdd_voltage = 0
-                meas_vdd18_voltage = 0
-                meas_vddio_voltage = 0
-                offset_vdd_current = 0
-                offset_vdd18_current = 0
-                offset_vddio_current = 0
-                meas_vdd_current = 0
-                meas_vdd18_current = 0
-                meas_vddio_current = 0
+            expected_vdd = 0
+            expected_vdd18 = 0
+            expected_vddio = 0
+            meas_vdd_voltage = 0
+            meas_vdd18_voltage = 0
+            meas_vddio_voltage = 0
+            offset_vdd_current = 0
+            offset_vdd18_current = 0
+            offset_vddio_current = 0
+            meas_vdd_current = 0
+            meas_vdd18_current = 0
+            meas_vddio_current = 0
 
-                voltage_being_checked = ""
-                measurement_type = ""
+            voltage_being_checked = ""
+            measurement_type = ""
 
 
 
-                # print(file)
+        # print(file)
+    
+        #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+            decoded_data = file.tobytes().decode('utf-8')
+            writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
+            data_set = []
             
-                with open(data_path + "/" + file , "r") as txt_file:
-                #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
-                    writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
-                    data_set = []
-                    
-                    dictionary = {}
+            dictionary = {}
 
-                    'Reads the lines and appends certain information into a dictionary for storing into the csv'
-                    for line_read in txt_file.readlines():
-                        
-                        line = line_read
+            'Reads the lines and appends certain information into a dictionary for storing into the csv'
+            for line_read in decoded_data.splitlines():
+                
+                line = line_read
 
-                        if re.search("DEBUG_MSG Received ", line):
-                            line = line[47:]
+                if re.search("DEBUG_MSG Received ", line):
+                    line = line[47:]
 
-                        if "#< #Vdd =" in line:
-                            expected_vdd = line.split()[-1]
-                        elif "#< #Vdd18 =" in line:
-                            expected_vdd18 = line.split()[-1]
-                        elif "#< #VddIO =" in line:
-                            expected_vddio = line.split()[-1]
+                if "#< #Vdd =" in line:
+                    expected_vdd = line.split()[-1]
+                elif "#< #Vdd18 =" in line:
+                    expected_vdd18 = line.split()[-1]
+                elif "#< #VddIO =" in line:
+                    expected_vddio = line.split()[-1]
 
-                        elif "set_keithley" in line:
-                            voltage_being_checked = line.split()[-1]
-                        elif "meas_keithley_voltage" in line:
-                            measurement_type = "voltage"
-                        elif "meas_keithley_current" in line:
-                            measurement_type = "current"
+                elif "set_keithley" in line:
+                    voltage_being_checked = line.split()[-1]
+                elif "meas_keithley_voltage" in line:
+                    measurement_type = "voltage"
+                elif "meas_keithley_current" in line:
+                    measurement_type = "current"
 
-                        elif "#D> " in line:
-                            if "Vdd18" in voltage_being_checked and measurement_type == "voltage":
-                                meas_vdd18_voltage = line.split()[-1]
-                            elif "Vdd18" in voltage_being_checked and measurement_type == "current":
-                                meas_vdd18_current   = line.split()[-1]
-                                offset_vdd18_current = line.split()[-2][:-1]
-                                #offset_vdd18_current = line.split(",")[-2]
-                                #offset_vdd18_current = offset_vdd18_current.split()[-1]
-                            elif "VddIO" in voltage_being_checked and measurement_type == "voltage":
-                                meas_vddio_voltage = line.split()[-1]
-                            elif "VddIO" in voltage_being_checked and measurement_type == "current":
-                                meas_vddio_current   = line.split()[-1]
-                                offset_vddio_current = line.split()[-2][:-1]
-                                #offset_vddio_current = line.split(",")[-2]
-                                #offset_vddio_current = offset_vddio_current.split()[-1]
+                elif "#D> " in line:
+                    if "Vdd18" in voltage_being_checked and measurement_type == "voltage":
+                        meas_vdd18_voltage = line.split()[-1]
+                    elif "Vdd18" in voltage_being_checked and measurement_type == "current":
+                        meas_vdd18_current   = line.split()[-1]
+                        offset_vdd18_current = line.split()[-2][:-1]
+                        #offset_vdd18_current = line.split(",")[-2]
+                        #offset_vdd18_current = offset_vdd18_current.split()[-1]
+                    elif "VddIO" in voltage_being_checked and measurement_type == "voltage":
+                        meas_vddio_voltage = line.split()[-1]
+                    elif "VddIO" in voltage_being_checked and measurement_type == "current":
+                        meas_vddio_current   = line.split()[-1]
+                        offset_vddio_current = line.split()[-2][:-1]
+                        #offset_vddio_current = line.split(",")[-2]
+                        #offset_vddio_current = offset_vddio_current.split()[-1]
 
-                                dictionary["Vdd[V]"] = expected_vdd
-                                dictionary["Vdd18[V]"] = expected_vdd18
-                                dictionary["VddIO[V]"] = expected_vddio
-                                dictionary["Vdd Meas[V]"] = meas_vdd_voltage
-                                dictionary["Vdd18 Meas[V]"] = meas_vdd18_voltage
-                                dictionary["VddIO Meas[V]"] = meas_vddio_voltage
-                                dictionary["Idd Offset[A]"] = offset_vdd_current
-                                dictionary["Idd18 Offset[A]"] = offset_vdd18_current
-                                dictionary["IddIO Offset[A]"] = offset_vddio_current
-                                dictionary["Idd Standby[A]"] = meas_vdd_current
-                                dictionary["Idd Standby[µA/Mb]"] = f"{float(meas_vdd_current) / 16 * 1000000:.2f}"
-                                dictionary["Idd18 Standby[A]"] = meas_vdd18_current
-                                dictionary["Idd18 Standby[µA/Mb]"] = f"{float(meas_vdd18_current) / 16 * 1000000:.2f}"
-                                dictionary["IddIO Standby[A]"] = meas_vddio_current
-                                dictionary["IddIO Standby[µA/Mb]"] = f"{float(meas_vddio_current) / 16 * 1000000:.2f}"
+                        dictionary["Vdd[V]"] = expected_vdd
+                        dictionary["Vdd18[V]"] = expected_vdd18
+                        dictionary["VddIO[V]"] = expected_vddio
+                        dictionary["Vdd Meas[V]"] = meas_vdd_voltage
+                        dictionary["Vdd18 Meas[V]"] = meas_vdd18_voltage
+                        dictionary["VddIO Meas[V]"] = meas_vddio_voltage
+                        dictionary["Idd Offset[A]"] = offset_vdd_current
+                        dictionary["Idd18 Offset[A]"] = offset_vdd18_current
+                        dictionary["IddIO Offset[A]"] = offset_vddio_current
+                        dictionary["Idd Standby[A]"] = meas_vdd_current
+                        dictionary["Idd Standby[µA/Mb]"] = f"{float(meas_vdd_current) / 16 * 1000000:.2f}"
+                        dictionary["Idd18 Standby[A]"] = meas_vdd18_current
+                        dictionary["Idd18 Standby[µA/Mb]"] = f"{float(meas_vdd18_current) / 16 * 1000000:.2f}"
+                        dictionary["IddIO Standby[A]"] = meas_vddio_current
+                        dictionary["IddIO Standby[µA/Mb]"] = f"{float(meas_vddio_current) / 16 * 1000000:.2f}"
 
-                                dictionary["Temp"] = temp
-                                dictionary["Lot Bin Wafer"] = part
-                                dictionary["Process Corner"] = part.split("_")[-1]
-                                dictionary["Part Number"] = part_num
-                                dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
-                                dictionary["Date"] = date
+                        dictionary["Temp"] = temp
+                        dictionary["Lot Bin Wafer"] = part
+                        dictionary["Process Corner"] = part.split("_")[-1]
+                        dictionary["Part Number"] = part_num
+                        dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
+                        dictionary["Date"] = date
 
-                                # This section adds a new line in the csv
-                                new_data = {}
-                                new_data.update(dictionary)
-                                data_set.append(new_data)
-                                dictionary.clear()
+                        # This section adds a new line in the csv
+                        new_data = {}
+                        new_data.update(dictionary)
+                        data_set.append(new_data)
+                        dictionary.clear()
 
-                            elif "Vdd" in voltage_being_checked and measurement_type == "voltage":
-                                meas_vdd_voltage = line.split()[-1]
-                            elif "Vdd" in voltage_being_checked and measurement_type == "current":
-                                meas_vdd_current   = line.split()[-1]
-                                offset_vdd_current = line.split()[-2][:-1]
-                                #offset_vdd_current = line.split(",")[-2]
-                                #offset_vdd_current = offset_vdd_current.split()[-1]
+                    elif "Vdd" in voltage_being_checked and measurement_type == "voltage":
+                        meas_vdd_voltage = line.split()[-1]
+                    elif "Vdd" in voltage_being_checked and measurement_type == "current":
+                        meas_vdd_current   = line.split()[-1]
+                        offset_vdd_current = line.split()[-2][:-1]
+                        #offset_vdd_current = line.split(",")[-2]
+                        #offset_vdd_current = offset_vdd_current.split()[-1]
 
 
-                    #writer.writeheader()
-                    for row in data_set:
-                        writer.writerow(row)
-                    txt_file.close()
+            #writer.writeheader()
+            for row in data_set:
+                writer.writerow(row)
+
 
         save_file.close()
     print("Returned true")
@@ -180,7 +217,7 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     save_directory = save_path
     main()
     return 
-
+conn.commit()
 
 
 #if os.path.exists("parsed_data/" + save_name):

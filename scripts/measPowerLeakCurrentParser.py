@@ -5,6 +5,12 @@ import re
 import tkinter as tk
 from tkinter import filedialog
 from natsort import natsorted
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="meas_power_leak",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()
 
 def contains_digits(input_string):
     # Use regular expression to check for any digits in the input string
@@ -40,55 +46,87 @@ def main():
             writer.writeheader()
             new_file.close()
 
-    raw_data_files = os.listdir(data_path)
-    raw_data_files = natsorted(raw_data_files)
+    parts = part.split('_')
+
+    lot = bin = wafer = process_corner = None
+    
+    # Assign values based on the number of parts
+    if len(parts) >= 1:
+        lot = parts[0]
+    if len(parts) >= 2:
+        bin = parts[1]
+    if len(parts) >= 3:
+        wafer = parts[2]
+    if len(parts) == 4:
+        process_corner = parts[3]
+
+    cur.execute("""
+    SELECT 
+    tf."Test Data"
+    FROM 
+        test_file tf
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'meas_power_leak'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files = cur.fetchall()
+    raw_data_files = [file[0] for file in files]
 
     
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
         for file in raw_data_files:
-            if("meas-power-leak-current" in file and "dat_0" in file):
-                # print(file)
+        # print(file)
+        #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+            decoded_data = file.tobytes().decode('utf-8')
+            writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
+            data_set = []
             
-                with open(data_path + "/" + file , "r") as txt_file:
-                #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
-                    writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
-                    data_set = []
-                    
-                    dictionary = {}
+            dictionary = {}
 
-                    'Reads the lines and appends certain information into a dictionary for storing into the csv'
-                    for line_read in txt_file.readlines():
-                        
-                        line = line_read
+            'Reads the lines and appends certain information into a dictionary for storing into the csv'
+            for line_read in decoded_data.splitlines():
+                
+                line = line_read
 
-                        if re.search("DEBUG_MSG Received ", line):
-                            line = line[47:]
+                if re.search("DEBUG_MSG Received ", line):
+                    line = line[47:]
 
-                        # This section adds a new line in the csv
-                        if "#DD>" in line: 
-                            dictionary["Vdd[V]"] = line.split(",")[1]
-                            dictionary["Vdd18[V]"] = line.split(",")[2]
-                            dictionary["VddIO[V]"] = line.split(",")[3]
-                            dictionary["Idd_leak[mA]"] = line.split(",")[4]
-                            dictionary["Idd18_leak[mA]"] = line.split(",")[5]
-                            dictionary["IddIO_leak[mA]"] = line.split(",")[6][:-1]
+                # This section adds a new line in the csv
+                if "#DD>" in line: 
+                    dictionary["Vdd[V]"] = line.split(",")[1]
+                    dictionary["Vdd18[V]"] = line.split(",")[2]
+                    dictionary["VddIO[V]"] = line.split(",")[3]
+                    dictionary["Idd_leak[mA]"] = line.split(",")[4]
+                    dictionary["Idd18_leak[mA]"] = line.split(",")[5]
+                    dictionary["IddIO_leak[mA]"] = line.split(",")[6].strip()
 
-                            dictionary["Temp"] = temp
-                            dictionary["Lot Bin Wafer"] = part
-                            dictionary["Process Corner"] = part.split("_")[-1]
-                            dictionary["Part Number"] = part_num
-                            dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
-                            dictionary["Date"] = date
 
-                            new_data = {}
-                            new_data.update(dictionary)
-                            data_set.append(new_data)
-                            dictionary.clear()
+                    dictionary["Temp"] = temp
+                    dictionary["Lot Bin Wafer"] = part
+                    dictionary["Process Corner"] = part.split("_")[-1]
+                    dictionary["Part Number"] = part_num
+                    dictionary["Part ID"] = part.split("_")[-1] + "_" + part + "_" + part_num
+                    dictionary["Date"] = date
 
-                    #writer.writeheader()
-                    for row in data_set:
-                        writer.writerow(row)
-                    txt_file.close()
+                    new_data = {}
+                    new_data.update(dictionary)
+                    data_set.append(new_data)
+                    dictionary.clear()
+
+            #writer.writeheader()
+            for row in data_set:
+                writer.writerow(row)
+
         save_file.close()
     print("Returned true")
     return True
@@ -112,7 +150,7 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     save_directory = save_path
     main()
     return 
-
+conn.commit()
 
 
 #if os.path.exists("parsed_data/" + save_name):
