@@ -1,0 +1,4071 @@
+# HEADER
+# GIT REVISION: master
+# HEADER
+#< # running test
+#< set_vdd   0.9
+#< set_vdd18 1.98
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4419 V
+#< meas_iwl 0 0
+#>> IWL = -1.5262 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4413 V
+#< meas_iwl 0 1
+#>> IWL = -1.5264 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4900 V
+#< meas_iwl 1 0
+#>> IWL = -1.5018 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4903 V
+#< meas_iwl 1 1
+#>> IWL = -1.5024 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5400 V
+#< meas_iwl 2 0
+#>> IWL = -1.4773 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5403 V
+#< meas_iwl 2 1
+#>> IWL = -1.4772 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5889 V
+#< meas_iwl 3 0
+#>> IWL = -1.4544 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5895 V
+#< meas_iwl 3 1
+#>> IWL = -1.4530 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6382 V
+#< meas_iwl 4 0
+#>> IWL = -1.4293 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6369 V
+#< meas_iwl 4 1
+#>> IWL = -1.4294 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6855 V
+#< meas_iwl 5 0
+#>> IWL = -1.4058 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6867 V
+#< meas_iwl 5 1
+#>> IWL = -1.4055 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7351 V
+#< meas_iwl 6 0
+#>> IWL = -1.3814 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7354 V
+#< meas_iwl 6 1
+#>> IWL = -1.3803 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7833 V
+#< meas_iwl 7 0
+#>> IWL = -1.3573 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7830 V
+#< meas_iwl 7 1
+#>> IWL = -1.3565 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8329 V
+#< meas_iwl 8 0
+#>> IWL = -1.3325 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8320 V
+#< meas_iwl 8 1
+#>> IWL = -1.3326 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8814 V
+#< meas_iwl 9 0
+#>> IWL = -1.3087 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8816 V
+#< meas_iwl 9 1
+#>> IWL = -1.3083 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9296 V
+#< meas_iwl 10 0
+#>> IWL = -1.2846 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9313 V
+#< meas_iwl 10 1
+#>> IWL = -1.2846 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9809 V
+#< meas_iwl 11 0
+#>> IWL = -1.2602 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9818 V
+#< meas_iwl 11 1
+#>> IWL = -1.2586 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0279 V
+#< meas_iwl 12 0
+#>> IWL = -1.2354 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0297 V
+#< meas_iwl 12 1
+#>> IWL = -1.2353 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0772 V
+#< meas_iwl 13 0
+#>> IWL = -1.2122 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0776 V
+#< meas_iwl 13 1
+#>> IWL = -1.2115 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1256 V
+#< meas_iwl 14 0
+#>> IWL = -1.1879 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1277 V
+#< meas_iwl 14 1
+#>> IWL = -1.1863 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1755 V
+#< meas_iwl 15 0
+#>> IWL = -1.1632 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1762 V
+#< meas_iwl 15 1
+#>> IWL = -1.1621 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2240 V
+#< meas_iwl 16 0
+#>> IWL = -1.1401 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2255 V
+#< meas_iwl 16 1
+#>> IWL = -1.1399 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2722 V
+#< meas_iwl 17 0
+#>> IWL = -1.1161 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2745 V
+#< meas_iwl 17 1
+#>> IWL = -1.1148 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3227 V
+#< meas_iwl 18 0
+#>> IWL = -1.0928 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3250 V
+#< meas_iwl 18 1
+#>> IWL = -1.0913 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3711 V
+#< meas_iwl 19 0
+#>> IWL = -1.0697 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3746 V
+#< meas_iwl 19 1
+#>> IWL = -1.0683 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4202 V
+#< meas_iwl 20 0
+#>> IWL = -1.0454 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4248 V
+#< meas_iwl 20 1
+#>> IWL = -1.0444 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4694 V
+#< meas_iwl 21 0
+#>> IWL = -1.0242 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4741 V
+#< meas_iwl 21 1
+#>> IWL = -1.0226 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5176 V
+#< meas_iwl 22 0
+#>> IWL = -1.0026 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5223 V
+#< meas_iwl 22 1
+#>> IWL = -0.9997 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5670 V
+#< meas_iwl 23 0
+#>> IWL = -0.9799 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5707 V
+#< meas_iwl 23 1
+#>> IWL = -0.9771 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6154 V
+#< meas_iwl 24 0
+#>> IWL = -0.9573 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.6194 V
+#< meas_iwl 24 1
+#>> IWL = -0.9558 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6653 V
+#< meas_iwl 25 0
+#>> IWL = -0.9364 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.6702 V
+#< meas_iwl 25 1
+#>> IWL = -0.9337 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7149 V
+#< meas_iwl 26 0
+#>> IWL = -0.9147 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.7210 V
+#< meas_iwl 26 1
+#>> IWL = -0.9126 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7648 V
+#< meas_iwl 27 0
+#>> IWL = -0.8925 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.7659 V
+#< meas_iwl 27 1
+#>> IWL = -0.8924 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8130 V
+#< meas_iwl 28 0
+#>> IWL = -0.8744 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.7674 V
+#< meas_iwl 28 1
+#>> IWL = -0.8920 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8622 V
+#< meas_iwl 29 0
+#>> IWL = -0.8549 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.7674 V
+#< meas_iwl 29 1
+#>> IWL = -0.8920 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9096 V
+#< meas_iwl 30 0
+#>> IWL = -0.8354 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.7668 V
+#< meas_iwl 30 1
+#>> IWL = -0.8915 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9600 V
+#< meas_iwl 31 0
+#>> IWL = -0.8178 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.98 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.7677 V
+#< meas_iwl 31 1
+#>> IWL = -0.8926 mA
+#< #
+#< # running test
+#< set_vdd   0.9
+#< set_vdd18 1.8
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4387 V
+#< meas_iwl 0 0
+#>> IWL = -1.5290 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4389 V
+#< meas_iwl 0 1
+#>> IWL = -1.5298 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4872 V
+#< meas_iwl 1 0
+#>> IWL = -1.5048 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4878 V
+#< meas_iwl 1 1
+#>> IWL = -1.5047 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5374 V
+#< meas_iwl 2 0
+#>> IWL = -1.4806 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5381 V
+#< meas_iwl 2 1
+#>> IWL = -1.4807 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5873 V
+#< meas_iwl 3 0
+#>> IWL = -1.4558 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5864 V
+#< meas_iwl 3 1
+#>> IWL = -1.4556 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6347 V
+#< meas_iwl 4 0
+#>> IWL = -1.4310 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6354 V
+#< meas_iwl 4 1
+#>> IWL = -1.4306 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6842 V
+#< meas_iwl 5 0
+#>> IWL = -1.4076 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6846 V
+#< meas_iwl 5 1
+#>> IWL = -1.4070 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7309 V
+#< meas_iwl 6 0
+#>> IWL = -1.3833 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7322 V
+#< meas_iwl 6 1
+#>> IWL = -1.3834 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7804 V
+#< meas_iwl 7 0
+#>> IWL = -1.3585 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7802 V
+#< meas_iwl 7 1
+#>> IWL = -1.3596 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8288 V
+#< meas_iwl 8 0
+#>> IWL = -1.3351 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8285 V
+#< meas_iwl 8 1
+#>> IWL = -1.3346 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8782 V
+#< meas_iwl 9 0
+#>> IWL = -1.3105 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8788 V
+#< meas_iwl 9 1
+#>> IWL = -1.3097 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9283 V
+#< meas_iwl 10 0
+#>> IWL = -1.2854 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9284 V
+#< meas_iwl 10 1
+#>> IWL = -1.2856 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9766 V
+#< meas_iwl 11 0
+#>> IWL = -1.2612 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9786 V
+#< meas_iwl 11 1
+#>> IWL = -1.2604 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0264 V
+#< meas_iwl 12 0
+#>> IWL = -1.2372 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0265 V
+#< meas_iwl 12 1
+#>> IWL = -1.2355 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0737 V
+#< meas_iwl 13 0
+#>> IWL = -1.2132 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0764 V
+#< meas_iwl 13 1
+#>> IWL = -1.2120 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1228 V
+#< meas_iwl 14 0
+#>> IWL = -1.1890 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1256 V
+#< meas_iwl 14 1
+#>> IWL = -1.1873 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1724 V
+#< meas_iwl 15 0
+#>> IWL = -1.1658 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1753 V
+#< meas_iwl 15 1
+#>> IWL = -1.1648 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2214 V
+#< meas_iwl 16 0
+#>> IWL = -1.1412 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2237 V
+#< meas_iwl 16 1
+#>> IWL = -1.1394 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2727 V
+#< meas_iwl 17 0
+#>> IWL = -1.1169 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2728 V
+#< meas_iwl 17 1
+#>> IWL = -1.1151 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3214 V
+#< meas_iwl 18 0
+#>> IWL = -1.0924 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3243 V
+#< meas_iwl 18 1
+#>> IWL = -1.0909 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3693 V
+#< meas_iwl 19 0
+#>> IWL = -1.0702 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3726 V
+#< meas_iwl 19 1
+#>> IWL = -1.0676 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4184 V
+#< meas_iwl 20 0
+#>> IWL = -1.0469 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4227 V
+#< meas_iwl 20 1
+#>> IWL = -1.0454 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4677 V
+#< meas_iwl 21 0
+#>> IWL = -1.0231 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4711 V
+#< meas_iwl 21 1
+#>> IWL = -1.0223 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5165 V
+#< meas_iwl 22 0
+#>> IWL = -1.0014 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5214 V
+#< meas_iwl 22 1
+#>> IWL = -1.0001 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5664 V
+#< meas_iwl 23 0
+#>> IWL = -0.9797 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5704 V
+#< meas_iwl 23 1
+#>> IWL = -0.9772 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6146 V
+#< meas_iwl 24 0
+#>> IWL = -0.9569 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.5896 V
+#< meas_iwl 24 1
+#>> IWL = -0.9684 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6635 V
+#< meas_iwl 25 0
+#>> IWL = -0.9357 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.5895 V
+#< meas_iwl 25 1
+#>> IWL = -0.9687 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7138 V
+#< meas_iwl 26 0
+#>> IWL = -0.9146 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.5890 V
+#< meas_iwl 26 1
+#>> IWL = -0.9689 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7619 V
+#< meas_iwl 27 0
+#>> IWL = -0.8945 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.5893 V
+#< meas_iwl 27 1
+#>> IWL = -0.9675 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8110 V
+#< meas_iwl 28 0
+#>> IWL = -0.8750 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.5895 V
+#< meas_iwl 28 1
+#>> IWL = -0.9693 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8606 V
+#< meas_iwl 29 0
+#>> IWL = -0.8550 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.5896 V
+#< meas_iwl 29 1
+#>> IWL = -0.9683 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9075 V
+#< meas_iwl 30 0
+#>> IWL = -0.8363 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.5890 V
+#< meas_iwl 30 1
+#>> IWL = -0.9680 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9556 V
+#< meas_iwl 31 0
+#>> IWL = -0.8187 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.8 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.5890 V
+#< meas_iwl 31 1
+#>> IWL = -0.9691 mA
+#< #
+#< # running test
+#< set_vdd   0.9
+#< set_vdd18 1.62
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4378 V
+#< meas_iwl 0 0
+#>> IWL = -1.5299 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4398 V
+#< meas_iwl 0 1
+#>> IWL = -1.5293 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4863 V
+#< meas_iwl 1 0
+#>> IWL = -1.5060 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4859 V
+#< meas_iwl 1 1
+#>> IWL = -1.5060 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5364 V
+#< meas_iwl 2 0
+#>> IWL = -1.4809 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5364 V
+#< meas_iwl 2 1
+#>> IWL = -1.4801 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5851 V
+#< meas_iwl 3 0
+#>> IWL = -1.4564 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5846 V
+#< meas_iwl 3 1
+#>> IWL = -1.4565 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6325 V
+#< meas_iwl 4 0
+#>> IWL = -1.4323 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6337 V
+#< meas_iwl 4 1
+#>> IWL = -1.4324 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6820 V
+#< meas_iwl 5 0
+#>> IWL = -1.4078 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6818 V
+#< meas_iwl 5 1
+#>> IWL = -1.4080 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7299 V
+#< meas_iwl 6 0
+#>> IWL = -1.3842 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7302 V
+#< meas_iwl 6 1
+#>> IWL = -1.3840 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7775 V
+#< meas_iwl 7 0
+#>> IWL = -1.3609 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7779 V
+#< meas_iwl 7 1
+#>> IWL = -1.3604 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8268 V
+#< meas_iwl 8 0
+#>> IWL = -1.3359 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8266 V
+#< meas_iwl 8 1
+#>> IWL = -1.3362 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8771 V
+#< meas_iwl 9 0
+#>> IWL = -1.3114 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8770 V
+#< meas_iwl 9 1
+#>> IWL = -1.3104 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9255 V
+#< meas_iwl 10 0
+#>> IWL = -1.2869 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9264 V
+#< meas_iwl 10 1
+#>> IWL = -1.2860 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9742 V
+#< meas_iwl 11 0
+#>> IWL = -1.2629 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9765 V
+#< meas_iwl 11 1
+#>> IWL = -1.2623 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0238 V
+#< meas_iwl 12 0
+#>> IWL = -1.2377 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0256 V
+#< meas_iwl 12 1
+#>> IWL = -1.2371 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0729 V
+#< meas_iwl 13 0
+#>> IWL = -1.2143 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0743 V
+#< meas_iwl 13 1
+#>> IWL = -1.2130 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1210 V
+#< meas_iwl 14 0
+#>> IWL = -1.1913 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1234 V
+#< meas_iwl 14 1
+#>> IWL = -1.1894 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1698 V
+#< meas_iwl 15 0
+#>> IWL = -1.1657 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1726 V
+#< meas_iwl 15 1
+#>> IWL = -1.1651 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2190 V
+#< meas_iwl 16 0
+#>> IWL = -1.1428 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2219 V
+#< meas_iwl 16 1
+#>> IWL = -1.1409 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2675 V
+#< meas_iwl 17 0
+#>> IWL = -1.1193 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2704 V
+#< meas_iwl 17 1
+#>> IWL = -1.1173 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3185 V
+#< meas_iwl 18 0
+#>> IWL = -1.0949 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3214 V
+#< meas_iwl 18 1
+#>> IWL = -1.0935 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3676 V
+#< meas_iwl 19 0
+#>> IWL = -1.0716 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3708 V
+#< meas_iwl 19 1
+#>> IWL = -1.0699 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4167 V
+#< meas_iwl 20 0
+#>> IWL = -1.0489 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4059 V
+#< meas_iwl 20 1
+#>> IWL = -1.0524 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4642 V
+#< meas_iwl 21 0
+#>> IWL = -1.0271 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4056 V
+#< meas_iwl 21 1
+#>> IWL = -1.0524 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5142 V
+#< meas_iwl 22 0
+#>> IWL = -1.0041 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.4056 V
+#< meas_iwl 22 1
+#>> IWL = -1.0539 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5615 V
+#< meas_iwl 23 0
+#>> IWL = -0.9817 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.4059 V
+#< meas_iwl 23 1
+#>> IWL = -1.0523 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6121 V
+#< meas_iwl 24 0
+#>> IWL = -0.9603 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.4062 V
+#< meas_iwl 24 1
+#>> IWL = -1.0530 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6609 V
+#< meas_iwl 25 0
+#>> IWL = -0.9376 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.4065 V
+#< meas_iwl 25 1
+#>> IWL = -1.0529 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7106 V
+#< meas_iwl 26 0
+#>> IWL = -0.9168 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.4053 V
+#< meas_iwl 26 1
+#>> IWL = -1.0536 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7227 V
+#< meas_iwl 27 0
+#>> IWL = -0.9109 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.4059 V
+#< meas_iwl 27 1
+#>> IWL = -1.0527 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.7231 V
+#< meas_iwl 28 0
+#>> IWL = -0.9119 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.4059 V
+#< meas_iwl 28 1
+#>> IWL = -1.0525 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.7236 V
+#< meas_iwl 29 0
+#>> IWL = -0.9108 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.4062 V
+#< meas_iwl 29 1
+#>> IWL = -1.0529 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.7228 V
+#< meas_iwl 30 0
+#>> IWL = -0.9107 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.4059 V
+#< meas_iwl 30 1
+#>> IWL = -1.0526 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.7230 V
+#< meas_iwl 31 0
+#>> IWL = -0.9124 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.9 1.62 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.4060 V
+#< meas_iwl 31 1
+#>> IWL = -1.0514 mA
+#< #
+#< # running test
+#< set_vdd   0.8
+#< set_vdd18 1.98
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4404 V
+#< meas_iwl 0 0
+#>> IWL = -1.5272 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4407 V
+#< meas_iwl 0 1
+#>> IWL = -1.5261 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4888 V
+#< meas_iwl 1 0
+#>> IWL = -1.5023 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4889 V
+#< meas_iwl 1 1
+#>> IWL = -1.5030 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5397 V
+#< meas_iwl 2 0
+#>> IWL = -1.4777 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5394 V
+#< meas_iwl 2 1
+#>> IWL = -1.4783 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5880 V
+#< meas_iwl 3 0
+#>> IWL = -1.4537 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5883 V
+#< meas_iwl 3 1
+#>> IWL = -1.4534 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6371 V
+#< meas_iwl 4 0
+#>> IWL = -1.4303 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6374 V
+#< meas_iwl 4 1
+#>> IWL = -1.4298 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6856 V
+#< meas_iwl 5 0
+#>> IWL = -1.4046 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6867 V
+#< meas_iwl 5 1
+#>> IWL = -1.4054 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7332 V
+#< meas_iwl 6 0
+#>> IWL = -1.3818 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7345 V
+#< meas_iwl 6 1
+#>> IWL = -1.3813 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7822 V
+#< meas_iwl 7 0
+#>> IWL = -1.3587 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7825 V
+#< meas_iwl 7 1
+#>> IWL = -1.3572 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8307 V
+#< meas_iwl 8 0
+#>> IWL = -1.3331 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8321 V
+#< meas_iwl 8 1
+#>> IWL = -1.3335 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8805 V
+#< meas_iwl 9 0
+#>> IWL = -1.3087 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8808 V
+#< meas_iwl 9 1
+#>> IWL = -1.3087 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9304 V
+#< meas_iwl 10 0
+#>> IWL = -1.2840 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9315 V
+#< meas_iwl 10 1
+#>> IWL = -1.2835 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9794 V
+#< meas_iwl 11 0
+#>> IWL = -1.2592 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9806 V
+#< meas_iwl 11 1
+#>> IWL = -1.2589 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0281 V
+#< meas_iwl 12 0
+#>> IWL = -1.2361 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0300 V
+#< meas_iwl 12 1
+#>> IWL = -1.2356 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0783 V
+#< meas_iwl 13 0
+#>> IWL = -1.2107 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0799 V
+#< meas_iwl 13 1
+#>> IWL = -1.2107 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1262 V
+#< meas_iwl 14 0
+#>> IWL = -1.1881 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1277 V
+#< meas_iwl 14 1
+#>> IWL = -1.1873 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1749 V
+#< meas_iwl 15 0
+#>> IWL = -1.1643 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1781 V
+#< meas_iwl 15 1
+#>> IWL = -1.1616 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2235 V
+#< meas_iwl 16 0
+#>> IWL = -1.1400 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2261 V
+#< meas_iwl 16 1
+#>> IWL = -1.1389 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2734 V
+#< meas_iwl 17 0
+#>> IWL = -1.1161 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2768 V
+#< meas_iwl 17 1
+#>> IWL = -1.1143 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3236 V
+#< meas_iwl 18 0
+#>> IWL = -1.0920 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3265 V
+#< meas_iwl 18 1
+#>> IWL = -1.0902 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3720 V
+#< meas_iwl 19 0
+#>> IWL = -1.0697 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3760 V
+#< meas_iwl 19 1
+#>> IWL = -1.0678 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4212 V
+#< meas_iwl 20 0
+#>> IWL = -1.0466 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4236 V
+#< meas_iwl 20 1
+#>> IWL = -1.0435 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4703 V
+#< meas_iwl 21 0
+#>> IWL = -1.0231 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4738 V
+#< meas_iwl 21 1
+#>> IWL = -1.0205 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5181 V
+#< meas_iwl 22 0
+#>> IWL = -1.0013 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5242 V
+#< meas_iwl 22 1
+#>> IWL = -0.9987 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5669 V
+#< meas_iwl 23 0
+#>> IWL = -0.9791 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5730 V
+#< meas_iwl 23 1
+#>> IWL = -0.9756 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6177 V
+#< meas_iwl 24 0
+#>> IWL = -0.9566 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.6232 V
+#< meas_iwl 24 1
+#>> IWL = -0.9540 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6662 V
+#< meas_iwl 25 0
+#>> IWL = -0.9369 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.6717 V
+#< meas_iwl 25 1
+#>> IWL = -0.9331 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7157 V
+#< meas_iwl 26 0
+#>> IWL = -0.9147 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.7218 V
+#< meas_iwl 26 1
+#>> IWL = -0.9114 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7654 V
+#< meas_iwl 27 0
+#>> IWL = -0.8926 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.7329 V
+#< meas_iwl 27 1
+#>> IWL = -0.9071 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8149 V
+#< meas_iwl 28 0
+#>> IWL = -0.8756 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.7328 V
+#< meas_iwl 28 1
+#>> IWL = -0.9055 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8637 V
+#< meas_iwl 29 0
+#>> IWL = -0.8549 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.7349 V
+#< meas_iwl 29 1
+#>> IWL = -0.9054 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9144 V
+#< meas_iwl 30 0
+#>> IWL = -0.8350 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.7341 V
+#< meas_iwl 30 1
+#>> IWL = -0.9077 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9632 V
+#< meas_iwl 31 0
+#>> IWL = -0.8165 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.98 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.7331 V
+#< meas_iwl 31 1
+#>> IWL = -0.9057 mA
+#< #
+#< # running test
+#< set_vdd   0.8
+#< set_vdd18 1.8
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4393 V
+#< meas_iwl 0 0
+#>> IWL = -1.5288 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4390 V
+#< meas_iwl 0 1
+#>> IWL = -1.5292 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4875 V
+#< meas_iwl 1 0
+#>> IWL = -1.5046 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4877 V
+#< meas_iwl 1 1
+#>> IWL = -1.5047 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5390 V
+#< meas_iwl 2 0
+#>> IWL = -1.4794 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5385 V
+#< meas_iwl 2 1
+#>> IWL = -1.4798 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5866 V
+#< meas_iwl 3 0
+#>> IWL = -1.4553 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5872 V
+#< meas_iwl 3 1
+#>> IWL = -1.4552 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6350 V
+#< meas_iwl 4 0
+#>> IWL = -1.4308 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6365 V
+#< meas_iwl 4 1
+#>> IWL = -1.4307 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6841 V
+#< meas_iwl 5 0
+#>> IWL = -1.4078 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6850 V
+#< meas_iwl 5 1
+#>> IWL = -1.4062 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7335 V
+#< meas_iwl 6 0
+#>> IWL = -1.3829 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7335 V
+#< meas_iwl 6 1
+#>> IWL = -1.3829 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7816 V
+#< meas_iwl 7 0
+#>> IWL = -1.3581 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7827 V
+#< meas_iwl 7 1
+#>> IWL = -1.3576 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8307 V
+#< meas_iwl 8 0
+#>> IWL = -1.3343 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8309 V
+#< meas_iwl 8 1
+#>> IWL = -1.3338 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8794 V
+#< meas_iwl 9 0
+#>> IWL = -1.3099 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8787 V
+#< meas_iwl 9 1
+#>> IWL = -1.3101 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9275 V
+#< meas_iwl 10 0
+#>> IWL = -1.2846 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9293 V
+#< meas_iwl 10 1
+#>> IWL = -1.2851 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9778 V
+#< meas_iwl 11 0
+#>> IWL = -1.2618 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9797 V
+#< meas_iwl 11 1
+#>> IWL = -1.2607 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0264 V
+#< meas_iwl 12 0
+#>> IWL = -1.2374 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0281 V
+#< meas_iwl 12 1
+#>> IWL = -1.2357 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0754 V
+#< meas_iwl 13 0
+#>> IWL = -1.2121 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0773 V
+#< meas_iwl 13 1
+#>> IWL = -1.2121 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1240 V
+#< meas_iwl 14 0
+#>> IWL = -1.1882 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1268 V
+#< meas_iwl 14 1
+#>> IWL = -1.1879 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1730 V
+#< meas_iwl 15 0
+#>> IWL = -1.1657 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1767 V
+#< meas_iwl 15 1
+#>> IWL = -1.1632 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2217 V
+#< meas_iwl 16 0
+#>> IWL = -1.1409 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2243 V
+#< meas_iwl 16 1
+#>> IWL = -1.1394 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2716 V
+#< meas_iwl 17 0
+#>> IWL = -1.1167 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2745 V
+#< meas_iwl 17 1
+#>> IWL = -1.1161 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3226 V
+#< meas_iwl 18 0
+#>> IWL = -1.0927 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3243 V
+#< meas_iwl 18 1
+#>> IWL = -1.0915 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3708 V
+#< meas_iwl 19 0
+#>> IWL = -1.0707 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3752 V
+#< meas_iwl 19 1
+#>> IWL = -1.0679 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4204 V
+#< meas_iwl 20 0
+#>> IWL = -1.0470 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4239 V
+#< meas_iwl 20 1
+#>> IWL = -1.0450 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4691 V
+#< meas_iwl 21 0
+#>> IWL = -1.0247 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4730 V
+#< meas_iwl 21 1
+#>> IWL = -1.0210 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5155 V
+#< meas_iwl 22 0
+#>> IWL = -1.0018 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5200 V
+#< meas_iwl 22 1
+#>> IWL = -0.9992 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5655 V
+#< meas_iwl 23 0
+#>> IWL = -0.9793 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5545 V
+#< meas_iwl 23 1
+#>> IWL = -0.9835 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6150 V
+#< meas_iwl 24 0
+#>> IWL = -0.9577 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.5544 V
+#< meas_iwl 24 1
+#>> IWL = -0.9844 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6655 V
+#< meas_iwl 25 0
+#>> IWL = -0.9355 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.5544 V
+#< meas_iwl 25 1
+#>> IWL = -0.9832 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7151 V
+#< meas_iwl 26 0
+#>> IWL = -0.9151 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.5547 V
+#< meas_iwl 26 1
+#>> IWL = -0.9837 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7637 V
+#< meas_iwl 27 0
+#>> IWL = -0.8943 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.5544 V
+#< meas_iwl 27 1
+#>> IWL = -0.9850 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8142 V
+#< meas_iwl 28 0
+#>> IWL = -0.8745 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.5544 V
+#< meas_iwl 28 1
+#>> IWL = -0.9846 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8622 V
+#< meas_iwl 29 0
+#>> IWL = -0.8563 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.5548 V
+#< meas_iwl 29 1
+#>> IWL = -0.9838 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9104 V
+#< meas_iwl 30 0
+#>> IWL = -0.8351 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.5547 V
+#< meas_iwl 30 1
+#>> IWL = -0.9839 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9582 V
+#< meas_iwl 31 0
+#>> IWL = -0.8181 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.8 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.5547 V
+#< meas_iwl 31 1
+#>> IWL = -0.9832 mA
+#< #
+#< # running test
+#< set_vdd   0.8
+#< set_vdd18 1.62
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4370 V
+#< meas_iwl 0 0
+#>> IWL = -1.5301 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4372 V
+#< meas_iwl 0 1
+#>> IWL = -1.5310 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4860 V
+#< meas_iwl 1 0
+#>> IWL = -1.5058 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4869 V
+#< meas_iwl 1 1
+#>> IWL = -1.5048 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5365 V
+#< meas_iwl 2 0
+#>> IWL = -1.4813 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5367 V
+#< meas_iwl 2 1
+#>> IWL = -1.4803 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5855 V
+#< meas_iwl 3 0
+#>> IWL = -1.4567 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5855 V
+#< meas_iwl 3 1
+#>> IWL = -1.4560 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6342 V
+#< meas_iwl 4 0
+#>> IWL = -1.4320 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6345 V
+#< meas_iwl 4 1
+#>> IWL = -1.4316 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6823 V
+#< meas_iwl 5 0
+#>> IWL = -1.4080 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6830 V
+#< meas_iwl 5 1
+#>> IWL = -1.4067 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7302 V
+#< meas_iwl 6 0
+#>> IWL = -1.3850 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7303 V
+#< meas_iwl 6 1
+#>> IWL = -1.3838 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7781 V
+#< meas_iwl 7 0
+#>> IWL = -1.3594 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7781 V
+#< meas_iwl 7 1
+#>> IWL = -1.3603 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8298 V
+#< meas_iwl 8 0
+#>> IWL = -1.3345 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8306 V
+#< meas_iwl 8 1
+#>> IWL = -1.3344 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8765 V
+#< meas_iwl 9 0
+#>> IWL = -1.3118 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8776 V
+#< meas_iwl 9 1
+#>> IWL = -1.3099 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9263 V
+#< meas_iwl 10 0
+#>> IWL = -1.2860 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9287 V
+#< meas_iwl 10 1
+#>> IWL = -1.2851 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9759 V
+#< meas_iwl 11 0
+#>> IWL = -1.2612 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9777 V
+#< meas_iwl 11 1
+#>> IWL = -1.2615 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0250 V
+#< meas_iwl 12 0
+#>> IWL = -1.2370 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0271 V
+#< meas_iwl 12 1
+#>> IWL = -1.2358 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0752 V
+#< meas_iwl 13 0
+#>> IWL = -1.2135 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0752 V
+#< meas_iwl 13 1
+#>> IWL = -1.2126 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1228 V
+#< meas_iwl 14 0
+#>> IWL = -1.1900 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1236 V
+#< meas_iwl 14 1
+#>> IWL = -1.1891 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1701 V
+#< meas_iwl 15 0
+#>> IWL = -1.1653 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1721 V
+#< meas_iwl 15 1
+#>> IWL = -1.1640 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2202 V
+#< meas_iwl 16 0
+#>> IWL = -1.1416 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2219 V
+#< meas_iwl 16 1
+#>> IWL = -1.1408 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2704 V
+#< meas_iwl 17 0
+#>> IWL = -1.1189 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2721 V
+#< meas_iwl 17 1
+#>> IWL = -1.1166 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3191 V
+#< meas_iwl 18 0
+#>> IWL = -1.0947 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3223 V
+#< meas_iwl 18 1
+#>> IWL = -1.0933 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3680 V
+#< meas_iwl 19 0
+#>> IWL = -1.0701 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3688 V
+#< meas_iwl 19 1
+#>> IWL = -1.0704 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4169 V
+#< meas_iwl 20 0
+#>> IWL = -1.0487 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.3703 V
+#< meas_iwl 20 1
+#>> IWL = -1.0703 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4657 V
+#< meas_iwl 21 0
+#>> IWL = -1.0259 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.3703 V
+#< meas_iwl 21 1
+#>> IWL = -1.0707 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5144 V
+#< meas_iwl 22 0
+#>> IWL = -1.0027 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.3703 V
+#< meas_iwl 22 1
+#>> IWL = -1.0695 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5629 V
+#< meas_iwl 23 0
+#>> IWL = -0.9805 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.3693 V
+#< meas_iwl 23 1
+#>> IWL = -1.0689 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6137 V
+#< meas_iwl 24 0
+#>> IWL = -0.9587 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.3702 V
+#< meas_iwl 24 1
+#>> IWL = -1.0700 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6613 V
+#< meas_iwl 25 0
+#>> IWL = -0.9362 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.3702 V
+#< meas_iwl 25 1
+#>> IWL = -1.0695 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7123 V
+#< meas_iwl 26 0
+#>> IWL = -0.9158 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.3702 V
+#< meas_iwl 26 1
+#>> IWL = -1.0685 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7254 V
+#< meas_iwl 27 0
+#>> IWL = -0.9097 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.3697 V
+#< meas_iwl 27 1
+#>> IWL = -1.0695 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.7256 V
+#< meas_iwl 28 0
+#>> IWL = -0.9103 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.3706 V
+#< meas_iwl 28 1
+#>> IWL = -1.0700 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.7245 V
+#< meas_iwl 29 0
+#>> IWL = -0.9092 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.3699 V
+#< meas_iwl 29 1
+#>> IWL = -1.0695 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.7251 V
+#< meas_iwl 30 0
+#>> IWL = -0.9105 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.3706 V
+#< meas_iwl 30 1
+#>> IWL = -1.0689 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.7250 V
+#< meas_iwl 31 0
+#>> IWL = -0.9104 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.8 1.62 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.3705 V
+#< meas_iwl 31 1
+#>> IWL = -1.0694 mA
+#< #
+#< # running test
+#< set_vdd   0.7
+#< set_vdd18 1.98
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4396 V
+#< meas_iwl 0 0
+#>> IWL = -1.5274 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4398 V
+#< meas_iwl 0 1
+#>> IWL = -1.5271 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4894 V
+#< meas_iwl 1 0
+#>> IWL = -1.5022 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4889 V
+#< meas_iwl 1 1
+#>> IWL = -1.5027 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5393 V
+#< meas_iwl 2 0
+#>> IWL = -1.4777 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5394 V
+#< meas_iwl 2 1
+#>> IWL = -1.4779 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5886 V
+#< meas_iwl 3 0
+#>> IWL = -1.4543 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5883 V
+#< meas_iwl 3 1
+#>> IWL = -1.4529 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6363 V
+#< meas_iwl 4 0
+#>> IWL = -1.4300 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6376 V
+#< meas_iwl 4 1
+#>> IWL = -1.4302 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6849 V
+#< meas_iwl 5 0
+#>> IWL = -1.4046 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6858 V
+#< meas_iwl 5 1
+#>> IWL = -1.4055 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7331 V
+#< meas_iwl 6 0
+#>> IWL = -1.3822 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7338 V
+#< meas_iwl 6 1
+#>> IWL = -1.3805 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7815 V
+#< meas_iwl 7 0
+#>> IWL = -1.3577 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7831 V
+#< meas_iwl 7 1
+#>> IWL = -1.3573 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8312 V
+#< meas_iwl 8 0
+#>> IWL = -1.3334 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8314 V
+#< meas_iwl 8 1
+#>> IWL = -1.3333 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8803 V
+#< meas_iwl 9 0
+#>> IWL = -1.3091 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8811 V
+#< meas_iwl 9 1
+#>> IWL = -1.3082 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9307 V
+#< meas_iwl 10 0
+#>> IWL = -1.2843 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9324 V
+#< meas_iwl 10 1
+#>> IWL = -1.2831 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9797 V
+#< meas_iwl 11 0
+#>> IWL = -1.2596 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9803 V
+#< meas_iwl 11 1
+#>> IWL = -1.2600 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0281 V
+#< meas_iwl 12 0
+#>> IWL = -1.2356 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0302 V
+#< meas_iwl 12 1
+#>> IWL = -1.2343 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0778 V
+#< meas_iwl 13 0
+#>> IWL = -1.2113 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0799 V
+#< meas_iwl 13 1
+#>> IWL = -1.2102 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1275 V
+#< meas_iwl 14 0
+#>> IWL = -1.1875 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1311 V
+#< meas_iwl 14 1
+#>> IWL = -1.1854 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1759 V
+#< meas_iwl 15 0
+#>> IWL = -1.1629 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1791 V
+#< meas_iwl 15 1
+#>> IWL = -1.1621 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2260 V
+#< meas_iwl 16 0
+#>> IWL = -1.1395 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2281 V
+#< meas_iwl 16 1
+#>> IWL = -1.1372 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2747 V
+#< meas_iwl 17 0
+#>> IWL = -1.1161 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2777 V
+#< meas_iwl 17 1
+#>> IWL = -1.1126 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3249 V
+#< meas_iwl 18 0
+#>> IWL = -1.0911 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3287 V
+#< meas_iwl 18 1
+#>> IWL = -1.0890 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3735 V
+#< meas_iwl 19 0
+#>> IWL = -1.0672 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3774 V
+#< meas_iwl 19 1
+#>> IWL = -1.0658 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4245 V
+#< meas_iwl 20 0
+#>> IWL = -1.0445 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4292 V
+#< meas_iwl 20 1
+#>> IWL = -1.0420 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4730 V
+#< meas_iwl 21 0
+#>> IWL = -1.0222 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4770 V
+#< meas_iwl 21 1
+#>> IWL = -1.0188 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5210 V
+#< meas_iwl 22 0
+#>> IWL = -0.9986 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5261 V
+#< meas_iwl 22 1
+#>> IWL = -0.9974 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5689 V
+#< meas_iwl 23 0
+#>> IWL = -0.9780 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5760 V
+#< meas_iwl 23 1
+#>> IWL = -0.9755 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6171 V
+#< meas_iwl 24 0
+#>> IWL = -0.9573 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.6237 V
+#< meas_iwl 24 1
+#>> IWL = -0.9521 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6685 V
+#< meas_iwl 25 0
+#>> IWL = -0.9344 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.6743 V
+#< meas_iwl 25 1
+#>> IWL = -0.9312 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7177 V
+#< meas_iwl 26 0
+#>> IWL = -0.9126 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.7007 V
+#< meas_iwl 26 1
+#>> IWL = -0.9201 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7676 V
+#< meas_iwl 27 0
+#>> IWL = -0.8926 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.7013 V
+#< meas_iwl 27 1
+#>> IWL = -0.9197 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8158 V
+#< meas_iwl 28 0
+#>> IWL = -0.8737 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.7007 V
+#< meas_iwl 28 1
+#>> IWL = -0.9204 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8654 V
+#< meas_iwl 29 0
+#>> IWL = -0.8529 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.7007 V
+#< meas_iwl 29 1
+#>> IWL = -0.9203 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9140 V
+#< meas_iwl 30 0
+#>> IWL = -0.8338 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.7010 V
+#< meas_iwl 30 1
+#>> IWL = -0.9197 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9630 V
+#< meas_iwl 31 0
+#>> IWL = -0.8173 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.98 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.7006 V
+#< meas_iwl 31 1
+#>> IWL = -0.9193 mA
+#< #
+#< # running test
+#< set_vdd   0.7
+#< set_vdd18 1.8
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4389 V
+#< meas_iwl 0 0
+#>> IWL = -1.5288 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4390 V
+#< meas_iwl 0 1
+#>> IWL = -1.5283 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4878 V
+#< meas_iwl 1 0
+#>> IWL = -1.5046 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4877 V
+#< meas_iwl 1 1
+#>> IWL = -1.5053 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5385 V
+#< meas_iwl 2 0
+#>> IWL = -1.4798 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5379 V
+#< meas_iwl 2 1
+#>> IWL = -1.4799 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5873 V
+#< meas_iwl 3 0
+#>> IWL = -1.4555 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5869 V
+#< meas_iwl 3 1
+#>> IWL = -1.4554 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6354 V
+#< meas_iwl 4 0
+#>> IWL = -1.4316 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6363 V
+#< meas_iwl 4 1
+#>> IWL = -1.4304 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6842 V
+#< meas_iwl 5 0
+#>> IWL = -1.4070 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6852 V
+#< meas_iwl 5 1
+#>> IWL = -1.4076 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7329 V
+#< meas_iwl 6 0
+#>> IWL = -1.3835 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7316 V
+#< meas_iwl 6 1
+#>> IWL = -1.3829 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7802 V
+#< meas_iwl 7 0
+#>> IWL = -1.3594 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7808 V
+#< meas_iwl 7 1
+#>> IWL = -1.3584 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8294 V
+#< meas_iwl 8 0
+#>> IWL = -1.3343 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8310 V
+#< meas_iwl 8 1
+#>> IWL = -1.3340 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8779 V
+#< meas_iwl 9 0
+#>> IWL = -1.3102 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8796 V
+#< meas_iwl 9 1
+#>> IWL = -1.3096 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9289 V
+#< meas_iwl 10 0
+#>> IWL = -1.2853 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9312 V
+#< meas_iwl 10 1
+#>> IWL = -1.2841 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9775 V
+#< meas_iwl 11 0
+#>> IWL = -1.2614 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9798 V
+#< meas_iwl 11 1
+#>> IWL = -1.2593 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0268 V
+#< meas_iwl 12 0
+#>> IWL = -1.2368 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0277 V
+#< meas_iwl 12 1
+#>> IWL = -1.2361 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0760 V
+#< meas_iwl 13 0
+#>> IWL = -1.2124 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0783 V
+#< meas_iwl 13 1
+#>> IWL = -1.2118 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1245 V
+#< meas_iwl 14 0
+#>> IWL = -1.1894 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1275 V
+#< meas_iwl 14 1
+#>> IWL = -1.1870 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1732 V
+#< meas_iwl 15 0
+#>> IWL = -1.1645 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1767 V
+#< meas_iwl 15 1
+#>> IWL = -1.1637 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2225 V
+#< meas_iwl 16 0
+#>> IWL = -1.1408 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2257 V
+#< meas_iwl 16 1
+#>> IWL = -1.1390 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2727 V
+#< meas_iwl 17 0
+#>> IWL = -1.1177 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2759 V
+#< meas_iwl 17 1
+#>> IWL = -1.1155 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3230 V
+#< meas_iwl 18 0
+#>> IWL = -1.0918 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3262 V
+#< meas_iwl 18 1
+#>> IWL = -1.0912 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3717 V
+#< meas_iwl 19 0
+#>> IWL = -1.0697 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3761 V
+#< meas_iwl 19 1
+#>> IWL = -1.0671 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4205 V
+#< meas_iwl 20 0
+#>> IWL = -1.0460 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.4241 V
+#< meas_iwl 20 1
+#>> IWL = -1.0435 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4689 V
+#< meas_iwl 21 0
+#>> IWL = -1.0230 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.4741 V
+#< meas_iwl 21 1
+#>> IWL = -1.0210 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5197 V
+#< meas_iwl 22 0
+#>> IWL = -1.0010 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.5206 V
+#< meas_iwl 22 1
+#>> IWL = -1.0003 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5678 V
+#< meas_iwl 23 0
+#>> IWL = -0.9790 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.5214 V
+#< meas_iwl 23 1
+#>> IWL = -0.9987 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6180 V
+#< meas_iwl 24 0
+#>> IWL = -0.9568 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.5213 V
+#< meas_iwl 24 1
+#>> IWL = -1.0008 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6659 V
+#< meas_iwl 25 0
+#>> IWL = -0.9346 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.5208 V
+#< meas_iwl 25 1
+#>> IWL = -1.0006 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7163 V
+#< meas_iwl 26 0
+#>> IWL = -0.9122 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.5208 V
+#< meas_iwl 26 1
+#>> IWL = -0.9993 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7660 V
+#< meas_iwl 27 0
+#>> IWL = -0.8929 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.5214 V
+#< meas_iwl 27 1
+#>> IWL = -0.9986 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.8162 V
+#< meas_iwl 28 0
+#>> IWL = -0.8721 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.5208 V
+#< meas_iwl 28 1
+#>> IWL = -0.9990 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.8643 V
+#< meas_iwl 29 0
+#>> IWL = -0.8534 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.5206 V
+#< meas_iwl 29 1
+#>> IWL = -0.9998 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.9136 V
+#< meas_iwl 30 0
+#>> IWL = -0.8357 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.5210 V
+#< meas_iwl 30 1
+#>> IWL = -1.0000 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.9618 V
+#< meas_iwl 31 0
+#>> IWL = -0.8177 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.8 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.5208 V
+#< meas_iwl 31 1
+#>> IWL = -0.9995 mA
+#< #
+#< # running test
+#< set_vdd   0.7
+#< set_vdd18 1.62
+#< sleep 500
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 0 0
+#< meas_vwl 0 0
+#>> VWL = 1.4375 V
+#< meas_iwl 0 0
+#>> IWL = -1.5300 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 0 1
+#< meas_vwl 0 1
+#>> VWL = 1.4381 V
+#< meas_iwl 0 1
+#>> IWL = -1.5304 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 1 0
+#< meas_vwl 1 0
+#>> VWL = 1.4866 V
+#< meas_iwl 1 0
+#>> IWL = -1.5059 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 1 1
+#< meas_vwl 1 1
+#>> VWL = 1.4865 V
+#< meas_iwl 1 1
+#>> IWL = -1.5058 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 2 0
+#< meas_vwl 2 0
+#>> VWL = 1.5364 V
+#< meas_iwl 2 0
+#>> IWL = -1.4810 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 2 1
+#< meas_vwl 2 1
+#>> VWL = 1.5368 V
+#< meas_iwl 2 1
+#>> IWL = -1.4797 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 3 0
+#< meas_vwl 3 0
+#>> VWL = 1.5863 V
+#< meas_iwl 3 0
+#>> IWL = -1.4559 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 3 1
+#< meas_vwl 3 1
+#>> VWL = 1.5852 V
+#< meas_iwl 3 1
+#>> IWL = -1.4568 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 4 0
+#< meas_vwl 4 0
+#>> VWL = 1.6348 V
+#< meas_iwl 4 0
+#>> IWL = -1.4321 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 4 1
+#< meas_vwl 4 1
+#>> VWL = 1.6334 V
+#< meas_iwl 4 1
+#>> IWL = -1.4320 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 5 0
+#< meas_vwl 5 0
+#>> VWL = 1.6833 V
+#< meas_iwl 5 0
+#>> IWL = -1.4073 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 5 1
+#< meas_vwl 5 1
+#>> VWL = 1.6833 V
+#< meas_iwl 5 1
+#>> IWL = -1.4065 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 6 0
+#< meas_vwl 6 0
+#>> VWL = 1.7311 V
+#< meas_iwl 6 0
+#>> IWL = -1.3846 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 6 1
+#< meas_vwl 6 1
+#>> VWL = 1.7306 V
+#< meas_iwl 6 1
+#>> IWL = -1.3832 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 7 0
+#< meas_vwl 7 0
+#>> VWL = 1.7804 V
+#< meas_iwl 7 0
+#>> IWL = -1.3598 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 7 1
+#< meas_vwl 7 1
+#>> VWL = 1.7802 V
+#< meas_iwl 7 1
+#>> IWL = -1.3591 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 8 0
+#< meas_vwl 8 0
+#>> VWL = 1.8286 V
+#< meas_iwl 8 0
+#>> IWL = -1.3347 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 8 1
+#< meas_vwl 8 1
+#>> VWL = 1.8288 V
+#< meas_iwl 8 1
+#>> IWL = -1.3353 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 9 0
+#< meas_vwl 9 0
+#>> VWL = 1.8777 V
+#< meas_iwl 9 0
+#>> IWL = -1.3106 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 9 1
+#< meas_vwl 9 1
+#>> VWL = 1.8787 V
+#< meas_iwl 9 1
+#>> IWL = -1.3101 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 10 0
+#< meas_vwl 10 0
+#>> VWL = 1.9276 V
+#< meas_iwl 10 0
+#>> IWL = -1.2863 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 10 1
+#< meas_vwl 10 1
+#>> VWL = 1.9293 V
+#< meas_iwl 10 1
+#>> IWL = -1.2853 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 11 0
+#< meas_vwl 11 0
+#>> VWL = 1.9769 V
+#< meas_iwl 11 0
+#>> IWL = -1.2610 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 11 1
+#< meas_vwl 11 1
+#>> VWL = 1.9791 V
+#< meas_iwl 11 1
+#>> IWL = -1.2604 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 12 0
+#< meas_vwl 12 0
+#>> VWL = 2.0256 V
+#< meas_iwl 12 0
+#>> IWL = -1.2372 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 12 1
+#< meas_vwl 12 1
+#>> VWL = 2.0277 V
+#< meas_iwl 12 1
+#>> IWL = -1.2359 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 13 0
+#< meas_vwl 13 0
+#>> VWL = 2.0758 V
+#< meas_iwl 13 0
+#>> IWL = -1.2126 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 13 1
+#< meas_vwl 13 1
+#>> VWL = 2.0772 V
+#< meas_iwl 13 1
+#>> IWL = -1.2108 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 14 0
+#< meas_vwl 14 0
+#>> VWL = 2.1239 V
+#< meas_iwl 14 0
+#>> IWL = -1.1898 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 14 1
+#< meas_vwl 14 1
+#>> VWL = 2.1260 V
+#< meas_iwl 14 1
+#>> IWL = -1.1875 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 15 0
+#< meas_vwl 15 0
+#>> VWL = 2.1726 V
+#< meas_iwl 15 0
+#>> IWL = -1.1651 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 15 1
+#< meas_vwl 15 1
+#>> VWL = 2.1755 V
+#< meas_iwl 15 1
+#>> IWL = -1.1639 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 16 0
+#< meas_vwl 16 0
+#>> VWL = 2.2212 V
+#< meas_iwl 16 0
+#>> IWL = -1.1409 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 16 1
+#< meas_vwl 16 1
+#>> VWL = 2.2238 V
+#< meas_iwl 16 1
+#>> IWL = -1.1395 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 17 0
+#< meas_vwl 17 0
+#>> VWL = 2.2719 V
+#< meas_iwl 17 0
+#>> IWL = -1.1180 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 17 1
+#< meas_vwl 17 1
+#>> VWL = 2.2748 V
+#< meas_iwl 17 1
+#>> IWL = -1.1146 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 18 0
+#< meas_vwl 18 0
+#>> VWL = 2.3218 V
+#< meas_iwl 18 0
+#>> IWL = -1.0926 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 18 1
+#< meas_vwl 18 1
+#>> VWL = 2.3252 V
+#< meas_iwl 18 1
+#>> IWL = -1.0928 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 19 0
+#< meas_vwl 19 0
+#>> VWL = 2.3709 V
+#< meas_iwl 19 0
+#>> IWL = -1.0691 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 19 1
+#< meas_vwl 19 1
+#>> VWL = 2.3383 V
+#< meas_iwl 19 1
+#>> IWL = -1.0847 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 20 0
+#< meas_vwl 20 0
+#>> VWL = 2.4193 V
+#< meas_iwl 20 0
+#>> IWL = -1.0479 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 20 1
+#< meas_vwl 20 1
+#>> VWL = 2.3383 V
+#< meas_iwl 20 1
+#>> IWL = -1.0853 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 21 0
+#< meas_vwl 21 0
+#>> VWL = 2.4677 V
+#< meas_iwl 21 0
+#>> IWL = -1.0237 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 21 1
+#< meas_vwl 21 1
+#>> VWL = 2.3380 V
+#< meas_iwl 21 1
+#>> IWL = -1.0858 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 22 0
+#< meas_vwl 22 0
+#>> VWL = 2.5165 V
+#< meas_iwl 22 0
+#>> IWL = -1.0021 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 22 1
+#< meas_vwl 22 1
+#>> VWL = 2.3381 V
+#< meas_iwl 22 1
+#>> IWL = -1.0858 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 23 0
+#< meas_vwl 23 0
+#>> VWL = 2.5652 V
+#< meas_iwl 23 0
+#>> IWL = -0.9805 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 23 1
+#< meas_vwl 23 1
+#>> VWL = 2.3375 V
+#< meas_iwl 23 1
+#>> IWL = -1.0851 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 24 0
+#< meas_vwl 24 0
+#>> VWL = 2.6154 V
+#< meas_iwl 24 0
+#>> IWL = -0.9580 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 24 1
+#< meas_vwl 24 1
+#>> VWL = 2.3378 V
+#< meas_iwl 24 1
+#>> IWL = -1.0843 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 25 0
+#< meas_vwl 25 0
+#>> VWL = 2.6638 V
+#< meas_iwl 25 0
+#>> IWL = -0.9377 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 25 1
+#< meas_vwl 25 1
+#>> VWL = 2.3381 V
+#< meas_iwl 25 1
+#>> IWL = -1.0854 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 26 0
+#< meas_vwl 26 0
+#>> VWL = 2.7146 V
+#< meas_iwl 26 0
+#>> IWL = -0.9166 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 26 1
+#< meas_vwl 26 1
+#>> VWL = 2.3380 V
+#< meas_iwl 26 1
+#>> IWL = -1.0837 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 27 0
+#< meas_vwl 27 0
+#>> VWL = 2.7384 V
+#< meas_iwl 27 0
+#>> IWL = -0.9056 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 27 1
+#< meas_vwl 27 1
+#>> VWL = 2.3403 V
+#< meas_iwl 27 1
+#>> IWL = -1.0832 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 28 0
+#< meas_vwl 28 0
+#>> VWL = 2.7373 V
+#< meas_iwl 28 0
+#>> IWL = -0.9050 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 28 1
+#< meas_vwl 28 1
+#>> VWL = 2.3387 V
+#< meas_iwl 28 1
+#>> IWL = -1.0844 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 29 0
+#< meas_vwl 29 0
+#>> VWL = 2.7373 V
+#< meas_iwl 29 0
+#>> IWL = -0.9043 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 29 1
+#< meas_vwl 29 1
+#>> VWL = 2.3392 V
+#< meas_iwl 29 1
+#>> IWL = -1.0849 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 30 0
+#< meas_vwl 30 0
+#>> VWL = 2.7370 V
+#< meas_iwl 30 0
+#>> IWL = -0.9043 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 30 1
+#< meas_vwl 30 1
+#>> VWL = 2.3389 V
+#< meas_iwl 30 1
+#>> IWL = -1.0834 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 31 0
+#< meas_vwl 31 0
+#>> VWL = 2.7372 V
+#< meas_iwl 31 0
+#>> IWL = -0.9054 mA
+#< #
+#< # vdd vdd18 vwl loaded
+#< # 0.7 1.62 31 1
+#< meas_vwl 31 1
+#>> VWL = 2.3392 V
+#< meas_iwl 31 1
+#>> IWL = -1.0845 mA
+#< #

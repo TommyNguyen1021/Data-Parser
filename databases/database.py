@@ -2,6 +2,7 @@ import psycopg2
 import re
 import os
 
+# Creates a connection to a database in postgres
 conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
 
 # Create cursor object
@@ -38,6 +39,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts in lbw to be put into columns in the table
                             if lbw == 'P9NV42_0a_5_TT_WrongParameters':
                                 continue
                             elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
@@ -96,7 +98,8 @@ for chip in chip_types:
                                     bin = None
                                     wafer = None
                                     proc_corner = None
-                        
+
+                            # Insert the values into the chip table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     cur.execute("""
@@ -105,7 +108,7 @@ for chip in chip_types:
                                     """, (chip, lot, bin, wafer, part_num, proc_corner))
                                     conn.commit()
 
-
+# Creates Test Table
 cur.execute("""
 CREATE TABLE IF NOT EXISTS Test (
     "Test Id" SERIAL PRIMARY KEY,
@@ -130,6 +133,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts of lbw to be put into columns in the chip table
                             if lbw == 'P9NV42_0a_5_TT_WrongParameters':
                                 continue
                             elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
@@ -188,6 +192,8 @@ for chip in chip_types:
                                     bin = None
                                     wafer = None
                                     proc_corner = None
+
+                            #Insert the values for the Test table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     part_num_path = os.path.join(lbw_path, part_num)
@@ -215,6 +221,7 @@ for chip in chip_types:
                                             conn.commit()
                                     elif os.path.exists(part_num_path) and os.path.isdir(part_num_path):
                                         for temp_date in os.listdir(part_num_path):
+                                            # Seperates the temp and date to be put into columns in the test table
                                             if temp_date == 'vili_otp_savejj2.mac':
                                                 continue
                                             elif temp_date == 'week1':

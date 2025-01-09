@@ -1,0 +1,45 @@
+# HEADER
+# GIT REVISION: master
+# HEADER
+#< set_vdd 0.72
+#< vili_ims 0
+#>> VDD VDD18 vbl ims_errors read_disturb data
+#D> 0.720 1.620 0x15 0 0 0x00
+#D> 0.720 1.620 0x15 0 0 0xff
+#D> 0.720 1.620 0x17 0 0 0x00
+#D> 0.720 1.620 0x17 0 0 0xff
+#D> 0.720 1.620 0x19 0 0 0x00
+#D> 0.720 1.620 0x19 0 0 0xff
+#D> 0.720 1.620 0x1b 0 0 0x00
+#D> 0.720 1.620 0x1b 0 0 0xff
+#D> 0.720 1.620 0x1d 0 0 0x00
+#D> 0.720 1.620 0x1d 0 0 0xff
+
+#< set_vdd 0.8
+#< vili_ims 0
+#>> VDD VDD18 vbl ims_errors read_disturb data
+#D> 0.800 1.800 0x15 0 0 0x00
+#D> 0.800 1.800 0x15 0 0 0xff
+#D> 0.800 1.800 0x17 0 0 0x00
+#D> 0.800 1.800 0x17 0 0 0xff
+#D> 0.800 1.800 0x19 0 0 0x00
+#D> 0.800 1.800 0x19 0 0 0xff
+#D> 0.800 1.800 0x1b 0 0 0x00
+#D> 0.800 1.800 0x1b 0 0 0xff
+#D> 0.800 1.800 0x1d 0 0 0x00
+#D> 0.800 1.800 0x1d 0 0 0xff
+
+#< set_vdd 0.88
+#< vili_ims 0
+#>> VDD VDD18 vbl ims_errors read_disturb data
+#D> 0.880 1.980 0x15 0 0 0x00
+#D> 0.880 1.980 0x15 0 0 0xff
+#D> 0.880 1.980 0x17 0 0 0x00
+#D> 0.880 1.980 0x17 0 0 0xff
+#D> 0.880 1.980 0x19 0 0 0x00
+#D> 0.880 1.980 0x19 0 0 0xff
+#D> 0.880 1.980 0x1b 0 0 0x00
+#D> 0.880 1.980 0x1b 0 0 0xff
+#D> 0.880 1.980 0x1d 1 0 0x00
+#D> 0.880 1.980 0x1d 0 0 0xff
+

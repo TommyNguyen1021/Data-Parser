@@ -62,6 +62,7 @@ def main():
     if len(parts) == 4:
         process_corner = parts[3]
 
+    # Gets the file data
     cur.execute("""
     SELECT 
     tf."Test Data"
@@ -83,8 +84,8 @@ def main():
     """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
     files = cur.fetchall()
     raw_data_files = [file[0] for file in files]
-    print(len(raw_data_files))
 
+    # Gets the file names
     cur.execute("""
     SELECT 
         tf2."Test Data"
@@ -111,6 +112,7 @@ def main():
 
     instance_num = []
 
+    # Adds the instance number to an array
     for checked_file in file_names_data:
         if("dat" in checked_file):
             instance_num.append(int(str(checked_file).split("_")[-2][1]))

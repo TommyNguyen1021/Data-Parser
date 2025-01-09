@@ -10,6 +10,7 @@ import os
 import subprocess
 import psycopg2
 
+# Creates connections to different databases in postgres
 conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
 bin_breg_check = psycopg2.connect(host="localhost", dbname="bin_breg_check",  user ="postgres", password = "numem@184", port = 5432)
 die_id = psycopg2.connect(host="localhost", dbname="die_id",  user ="postgres", password = "numem@184", port = 5432)
@@ -46,7 +47,7 @@ vili_main_v2_otp_bkdn = psycopg2.connect(host="localhost", dbname="vili_main_v2_
 write_endurance = psycopg2.connect(host="localhost", dbname="write_endurance",  user ="postgres", password = "numem@184", port = 5432)
 write_shmoo = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
 
-# Create cursor object
+# Create cursor objects
 cur = conn.cursor()        
 bin_breg_check_cur = bin_breg_check.cursor()
 die_id_cur = die_id.cursor()
@@ -284,34 +285,32 @@ def pressed_select_all():
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("test")
         if (test_selected.get() != 'otp'):
-            write_shmoo_cur.execute("""
+            cur.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
                 '/' ||
                 COALESCE(test."Test", '') ||
                 '/' ||
-                chip."Lot" || 
-                CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
-                CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
-                CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
-                '/' || 
-                COALESCE(chip."Part Number", '') ||
-                '/' || 
-                COALESCE(test."Temp", '') || 
-                '_' || 
-                COALESCE(test."Date", '') ||
-                -- Remove underscore before the first slash
-                '_/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                    chip."Lot" || 
+                    CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
+                    CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END ||
+                    '/' || 
+                    COALESCE(chip."Part Number", '') ||
+                    '/' || 
+                    COALESCE(test."Temp", '') || 
+                    '_' || 
+                    COALESCE(test."Date", ''),
+                    -- Remove underscore before the first slash
+                    '_/',  -- Match an underscore followed by a slash
+                    '/'  -- Replace it with a single slash
+                || '/' AS unique_id  -- Append a slash at the end
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
-            JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
-            WHERE 
-                test."Test" = %s;
+            WHERE test."Test" = %s;
             """, (test_selected.get(),))
         else:
             cur.execute("""

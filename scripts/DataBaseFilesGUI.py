@@ -10,6 +10,7 @@ import os
 import subprocess
 import psycopg2
 
+# Creates connections to different databases in postgres
 conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
 bin_breg_check = psycopg2.connect(host="localhost", dbname="bin_breg_check",  user ="postgres", password = "numem@184", port = 5432)
 die_id = psycopg2.connect(host="localhost", dbname="die_id",  user ="postgres", password = "numem@184", port = 5432)

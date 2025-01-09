@@ -60,6 +60,7 @@ def main():
     if len(parts) == 4:
         process_corner = parts[3]
 
+    # Gets the file data
     cur.execute("""
     SELECT 
     tf."Test Data"

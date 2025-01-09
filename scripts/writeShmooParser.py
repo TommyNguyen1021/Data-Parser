@@ -6,18 +6,24 @@ import tkinter as tk
 from tkinter import filedialog
 from natsort import natsorted
 from numpy import double
-import psycopg2
 
-conn = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
-
-# Create cursor object
-cur = conn.cursor() 
+def contains_digits(input_string):
+    # Use regular expression to check for any digits in the input string
+    return bool(re.search(r'\d', input_string))
 
 def main():
+    headers = ["Lot_Bin_Wafer", "part", "instance", "temp", "date", "Data", "ivdd18/bit", "ivdd/bit", "VWL", "Vwl(meas)", "VBL", "Vbl(meas)", "PRG_CNT", "PRG_Time", 
+               "Pulse1", "Pulse1(ECC)", "Pulse2", "Pulse2(ECC)", "Pulse3", "Pulse3(ECC)", "Pulse4", "Pulse4(ECC)", 
+               "Pulse5", "Pulse5(ECC)", "Pulse6", "Pulse6(ECC)", "vdd", "vdd18"]
+    
+    writer = ""
 
-    if not os.path.exists("./parsed_files/" + CHIP + "/" + TEST):
-        os.mkdir("./parsed_files/" + CHIP + "/" + TEST)
+    global CHIP, TEST
 
+    if not os.path.exists("./parsed_data/" + CHIP + "/" + TEST):
+        os.mkdir("./parsed_data/" + CHIP + "/" + TEST)
+
+    
     data_path = path
     instance = "0"
     print(path)
@@ -30,58 +36,113 @@ def main():
     date = data_path.split("/")[9].split("_")[1]
     print(date)
 
-    parts = part.split('_')
+    if(partNumber == 0):
+        if not os.path.exists("./parsed_data/" + CHIP + "/" + TEST):
+            os.mkdir("./parsed_data/" + CHIP + "/" + TEST)
+        with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "w") as new_file:
+            writer = csv.DictWriter(new_file, fieldnames=headers, lineterminator = '\n')
+            writer.writeheader()
+            new_file.close()
 
-    lot = bin = wafer = process_corner = None
+    raw_data_files = os.listdir(data_path)
+    raw_data_files = natsorted(raw_data_files)
+
     
-    # Assign values based on the number of parts
-    if len(parts) >= 1:
-        lot = parts[0]
-    if len(parts) >= 2:
-        bin = parts[1]
-    if len(parts) >= 3:
-        wafer = parts[2]
-    if len(parts) == 4:
-        process_corner = parts[3]
+    with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+        
+        for file in raw_data_files:
 
-    cur.execute("""
-    SELECT 
-    tf."Test Id"
-    FROM 
-        test_file tf
-    INNER JOIN 
-        test t ON tf."Test Id" = t."Test Id"
-    INNER JOIN 
-        chip c ON c."Chip Id" = t."Chip Id"
-    WHERE 
-        t."Test" = 'write_shmoo'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
-    files = cur.fetchall()
-    test_id = [file[0] for file in files]
+            if("prog_shmoo" in file and "dat_0" in file):
+                print(file)
+                instance = file.split("_")[-2][1]
 
-    for idx, files in enumerate(test_id):
-        # Construct a unique file name based on the test_id or other properties
-        save_name = f"test_file_{files}_{idx+1}"  # You can customize the naming pattern here
+                with open(data_path + "/" + file , "r") as txt_file:
+                #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+                    writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
+                    data_set = []                    
+                    dictionary = {}
+                    vdd = 0
+                    vdd18 = 0
 
-        with open(f"./parsed_files/{CHIP}/{TEST}/{save_name}.txt", "a") as save_file:
-            # Retrieve bytea data
-            cur.execute('SELECT "Test Data" FROM test_file WHERE "File Id" = %s', (files,))
-            test_data = cur.fetchone()
-            
-            if test_data:
-                # Assuming the test data is in a bytea format, you might need to decode it
-                # Example: If it's byte data, you can decode it to a string or save as bytes.
-                save_file.write(str(test_data[0]))  # or save_file.write(test_data[0].decode('utf-8')) if it's byte data
+                    'Reads the lines and appends certain information into a dictionary for storing into the csv'
+                    for line_read in txt_file.readlines():
+                        
+                        line = line_read
+                        
+
+                        if re.search("DEBUG_MSG Received ", line):
+                            line = line[47:]
+
+                        if "#< set_vdd " in line:
+                            vdd = line.split()[-1]
+                            
+
+                        if "#< set_vddbl " in line:
+                            vdd18 = line.split()[-1]
+
+                        # This section adds a new line in the csv
+                        if line[0:5] == "0x00:" or line[0:5] == "0xff:":
+                            dictionary["Data"] = line.split()[0][:-1]
+                            dictionary["ivdd18/bit"] = line.split()[1]
+                            dictionary["ivdd/bit"] = line.split()[2]
+                            dictionary["VWL"] = line.split()[3]
+                            dictionary["Vwl(meas)"] = line.split()[4]
+                            dictionary["VBL"] = line.split()[5]
+                            dictionary["Vbl(meas)"] = line.split()[6]
+                            dictionary["PRG_CNT"] = line.split()[7]
+                            dictionary["PRG_Time"] = line.split()[8]
+                            
+                            try:
+                                dictionary["Pulse1"] = line.split()[9]
+                                dictionary["Pulse1(ECC)"] = line.split()[10]
+                                dictionary["Pulse2"] = line.split()[11]
+                                dictionary["Pulse2(ECC)"] = line.split()[12]
+                                dictionary["Pulse3"] = line.split()[13]
+                                dictionary["Pulse3(ECC)"] = line.split()[14]
+                                dictionary["Pulse4"] = line.split()[15]
+                                dictionary["Pulse4(ECC)"] = line.split()[16]
+                                dictionary["Pulse5"] = line.split()[17]
+                                dictionary["Pulse5(ECC)"] = line.split()[18]
+                                dictionary["Pulse6"] = line.split()[19]
+                                dictionary["Pulse6(ECC)"] = line.split()[20]
+                            except: 
+                                dictionary["Pulse1"] = line.split()[9]
+                                dictionary["Pulse2"] = line.split()[10]
+                                dictionary["Pulse3"] = line.split()[11]
+                                dictionary["Pulse4"] = line.split()[12]
+                                dictionary["Pulse5"] = line.split()[13]
+                                dictionary["Pulse6"] = line.split()[14]
+                                dictionary["Pulse1(ECC)"] = ""
+                                dictionary["Pulse2(ECC)"] = ""
+                                dictionary["Pulse3(ECC)"] = ""
+                                dictionary["Pulse4(ECC)"] = ""
+                                dictionary["Pulse5(ECC)"] = ""
+                                dictionary["Pulse6(ECC)"] = ""
+
+                            dictionary["instance"] = instance
+                            dictionary["temp"] = temp
+                            dictionary["Lot_Bin_Wafer"] = part
+                            dictionary["part"] = part_num
+                            dictionary["date"] = date
+                            dictionary["vdd"] = vdd
+                            dictionary["vdd18"] = vdd18
+
+                            new_data = {}
+                            new_data.update(dictionary)
+                            data_set.append(new_data)
+                            dictionary.clear()
+
+                    #writer.writeheader()
+                    for row in data_set:
+                        writer.writerow(row)
+                    txt_file.close()
+        save_file.close()
+    print("Returned true")
+    return True
 
 
 
+#What Gui calls to run script
 def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     global CHIP, TEST, PATH_TO_DATA, path, save_name, save_directory, partNumber
     TEST = "write_shmoo"
@@ -93,11 +154,14 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     path  = path_to_part
 
     save_name = save
-    if(".txt" in save_name):
+    if(".csv" in save_name):
         save_name = save_name[:-4]
     save_directory = save_path
     main()
     return 
 
-conn.commit()
 
+
+#if os.path.exists("parsed_data/" + save_name):
+#        os.remove("parsed_data/" + save_name)
+#main()

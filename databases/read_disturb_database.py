@@ -38,6 +38,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts in lbw to be put into columns in the chip table
                             if lbw == 'P9NV42_0a_5_TT_WrongParameters':
                                 continue
                             elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
@@ -96,7 +97,8 @@ for chip in chip_types:
                                     bin = None
                                     wafer = None
                                     proc_corner = None
-                        
+
+                            # Insert the values into the chip table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     cur.execute("""
@@ -130,6 +132,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts in lbw to be put into columns in the chip table
                             if lbw == 'P9NV42_0a_5_TT_WrongParameters':
                                 continue
                             elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
@@ -188,6 +191,8 @@ for chip in chip_types:
                                     bin = None
                                     wafer = None
                                     proc_corner = None
+
+                            # Insert the values into the test table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     part_num_path = os.path.join(lbw_path, part_num)
@@ -215,6 +220,7 @@ for chip in chip_types:
                                             conn.commit()
                                     elif os.path.exists(part_num_path) and os.path.isdir(part_num_path):
                                         for temp_date in os.listdir(part_num_path):
+                                            # Seperates the temp and date to be put into columns in the test table
                                             if temp_date == 'vili_otp_savejj2.mac':
                                                 continue
                                             elif temp_date == 'week1':
@@ -277,6 +283,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts in lbw to be put into columns in the chip table
                             if lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
                                 lot = lbw
                                 bin = None
@@ -344,6 +351,7 @@ for chip in chip_types:
                                     if os.path.exists(part_num_path) and os.path.isdir(part_num_path):
                                         if test == 'read_disturb':
                                             for temp_date in os.listdir(part_num_path):
+                                                # Seperates the temp and date to be put into columns in the test table
                                                 if temp_date == 'vili_otp_savejj2.mac':
                                                     continue
                                                 elif temp_date == 'week1':
@@ -464,6 +472,7 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
+                            # Seperates parts in lbw to be put into columns in the chip table
                             if lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
                                 lot = lbw
                                 bin = None
@@ -526,6 +535,7 @@ for chip in chip_types:
                                     if os.path.exists(part_num_path) and os.path.isdir(part_num_path):
                                         if test == 'read_disturb':
                                             for temp_date in os.listdir(part_num_path):
+                                                # Seperates the temp and date to be put into columns in the test table
                                                 if temp_date == 'vili_otp_savejj2.mac':
                                                     continue
                                                 elif temp_date == 'week1':

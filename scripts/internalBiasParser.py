@@ -70,6 +70,7 @@ def main():
     if len(parts) == 4:
         process_corner = parts[3]
 
+    # Gets the file data
     cur.execute("""
     SELECT 
         tf."Test Data"
@@ -101,7 +102,7 @@ def main():
     raw_data_files = [file[0] for file in files]
     print(process_corner)
 
-
+    # Gets the file names
     cur.execute("""
     SELECT 
         tf2."Test Data"

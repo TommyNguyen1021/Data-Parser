@@ -1,0 +1,9 @@
+# HEADER
+# GIT REVISION: master
+# HEADER
+#< #
+#< bin_breg_check
+#>> Bin Passed: 0
+#< #set_breg_vdd_voltage 0.9
+#< ###set_breg_vdd_voltage 0.80 upto 1.4V
+#< #
