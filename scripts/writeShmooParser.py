@@ -6,6 +6,12 @@ import tkinter as tk
 from tkinter import filedialog
 from natsort import natsorted
 from numpy import double
+import psycopg2
+
+conn = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
+
+# Create cursor object
+cur = conn.cursor()
 
 def contains_digits(input_string):
     # Use regular expression to check for any digits in the input string
@@ -44,20 +50,85 @@ def main():
             writer.writeheader()
             new_file.close()
 
-    raw_data_files = os.listdir(data_path)
-    raw_data_files = natsorted(raw_data_files)
+    parts = part.split('_')
 
+    lot = bin = wafer = process_corner = None
     
+    # Assign values based on the number of parts
+    if len(parts) >= 1:
+        lot = parts[0]
+    if len(parts) >= 2:
+        bin = parts[1]
+    if len(parts) >= 3:
+        wafer = parts[2]
+    if len(parts) == 4:
+        process_corner = parts[3]
+
+    # Gets the file data
+    cur.execute("""
+    SELECT 
+    tf."Test Data"
+    FROM 
+        test_file tf
+    INNER JOIN 
+        test_file2 tf2 ON tf."File Id" = tf2."File Id"
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'write_shmoo'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+        AND tf2."Test Data" LIKE '%%prog_shmoo%%'
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files = cur.fetchall()
+    raw_data_files = [file[0] for file in files]
+
+    # Gets the file names
+    cur.execute("""
+    SELECT 
+        tf2."Test Data"
+    FROM 
+        test_file2 tf2
+    INNER JOIN 
+        test_file tf ON tf."File Id" = tf2."File Id"
+    INNER JOIN 
+        test t ON tf."Test Id" = t."Test Id"
+    INNER JOIN 
+        chip c ON c."Chip Id" = t."Chip Id"
+    WHERE 
+        t."Test" = 'write_shmoo'
+        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
+        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
+        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
+        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
+        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
+        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
+        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
+        AND tf2."Test Data" LIKE '%%prog_shmoo%%'
+    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+    files_names = cur.fetchall()
+    file_names_data = [name[0] for name in files_names]
+
+    instance_num = []
+
+    # Adds the instance number to an array
+    for checked_file in file_names_data:
+        if("prog_shmoo" in checked_file and "dat_0" in checked_file):
+            instance_num.append(int(str(checked_file).split("_")[-2][1]))
+
+
     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
-        
+        run_index = 0
         for file in raw_data_files:
-
-            if("prog_shmoo" in file and "dat_0" in file):
-                print(file)
-                instance = file.split("_")[-2][1]
-
-                with open(data_path + "/" + file , "r") as txt_file:
                 #     with open("./parsed_data/" + CHIP + "/" + TEST + "/" + save_name + ".csv", "a") as save_file:
+                    decoded_data = file.tobytes().decode('utf-8')
                     writer = csv.DictWriter(save_file, fieldnames=headers, lineterminator = '\n')
                     data_set = []                    
                     dictionary = {}
@@ -65,7 +136,7 @@ def main():
                     vdd18 = 0
 
                     'Reads the lines and appends certain information into a dictionary for storing into the csv'
-                    for line_read in txt_file.readlines():
+                    for line_read in decoded_data.splitlines():
                         
                         line = line_read
                         
@@ -119,7 +190,7 @@ def main():
                                 dictionary["Pulse5(ECC)"] = ""
                                 dictionary["Pulse6(ECC)"] = ""
 
-                            dictionary["instance"] = instance
+                            dictionary["instance"] = instance_num[run_index]
                             dictionary["temp"] = temp
                             dictionary["Lot_Bin_Wafer"] = part
                             dictionary["part"] = part_num
@@ -131,11 +202,11 @@ def main():
                             new_data.update(dictionary)
                             data_set.append(new_data)
                             dictionary.clear()
+                    run_index = run_index + 1
 
                     #writer.writeheader()
                     for row in data_set:
                         writer.writerow(row)
-                    txt_file.close()
         save_file.close()
     print("Returned true")
     return True
@@ -160,7 +231,7 @@ def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     main()
     return 
 
-
+conn.commit()
 
 #if os.path.exists("parsed_data/" + save_name):
 #        os.remove("parsed_data/" + save_name)

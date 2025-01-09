@@ -119,6 +119,7 @@ def main():
 
     instance_num = []
 
+    # Adds the instance number to an array
     for checked_file in file_names_data:
         if("upump" in checked_file and "dat_0" in checked_file):
             instance_num.append(int(str(checked_file).split("_")[-2][1]))
