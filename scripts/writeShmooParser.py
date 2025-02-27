@@ -52,7 +52,7 @@ def main():
 
     parts = part.split('_')
 
-    lot = bin = wafer = process_corner = None
+    lot = bin = wafer = process_corner = ''
     
     # Assign values based on the number of parts
     if len(parts) >= 1:
@@ -71,48 +71,44 @@ def main():
     FROM 
         test_file tf
     INNER JOIN 
-        test_file2 tf2 ON tf."File Id" = tf2."File Id"
-    INNER JOIN 
         test t ON tf."Test Id" = t."Test Id"
     INNER JOIN 
         chip c ON c."Chip Id" = t."Chip Id"
     WHERE 
         t."Test" = 'write_shmoo'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-        AND tf2."Test Data" LIKE '%%prog_shmoo%%'
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+        AND c."Lot" = %s 
+        AND c."Bin" = %s
+        AND c."Wafer" = %s
+        AND c."Process Corner" = %s 
+        AND t."Temp" = %s
+        AND t."Date" = %s 
+        AND c."Part Number" = %s
+        AND tf."File Name" Like '%%_0'
+    """, (lot, bin, wafer, process_corner, temp, date, part_num))
     files = cur.fetchall()
     raw_data_files = [file[0] for file in files]
 
     # Gets the file names
     cur.execute("""
     SELECT 
-        tf2."Test Data"
+        tf."File Name"
     FROM 
-        test_file2 tf2
-    INNER JOIN 
-        test_file tf ON tf."File Id" = tf2."File Id"
+        test_file tf
     INNER JOIN 
         test t ON tf."Test Id" = t."Test Id"
     INNER JOIN 
         chip c ON c."Chip Id" = t."Chip Id"
     WHERE 
         t."Test" = 'write_shmoo'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-        AND tf2."Test Data" LIKE '%%prog_shmoo%%'
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+        AND c."Lot" = %s 
+        AND c."Bin" = %s
+        AND c."Wafer" = %s
+        AND c."Process Corner" = %s 
+        AND t."Temp" = %s
+        AND t."Date" = %s 
+        AND c."Part Number" = %s
+        AND tf."File Name" Like '%%_0'
+    """, (lot, bin, wafer, process_corner, temp, date, part_num))
     files_names = cur.fetchall()
     file_names_data = [name[0] for name in files_names]
 
@@ -188,7 +184,7 @@ def main():
                                 dictionary["Pulse3(ECC)"] = ""
                                 dictionary["Pulse4(ECC)"] = ""
                                 dictionary["Pulse5(ECC)"] = ""
-                                dictionary["Pulse6(ECC)"] = ""
+                                dictionary["Pulse6(ECC)"] = ""                    
 
                             dictionary["instance"] = instance_num[run_index]
                             dictionary["temp"] = temp

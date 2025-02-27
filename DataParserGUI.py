@@ -47,7 +47,7 @@ vili_main_v2_otp_bkdn = psycopg2.connect(host="localhost", dbname="vili_main_v2_
 write_endurance = psycopg2.connect(host="localhost", dbname="write_endurance",  user ="postgres", password = "numem@184", port = 5432)
 write_shmoo = psycopg2.connect(host="localhost", dbname="write_shmoo",  user ="postgres", password = "numem@184", port = 5432)
 
-# Create cursor objects
+# Create cursor object
 cur = conn.cursor()        
 bin_breg_check_cur = bin_breg_check.cursor()
 die_id_cur = die_id.cursor()
@@ -82,8 +82,44 @@ upump_char_cur = upump_char.cursor()
 vili_main_v2_cur = vili_main_v2.cursor()
 vili_main_v2_otp_bkdn_cur = vili_main_v2_otp_bkdn.cursor()
 write_endurance_cur = write_endurance.cursor() 
-write_shmoo_cur = write_shmoo.cursor()       
+write_shmoo_cur = write_shmoo.cursor() 
 
+cursor_map = {
+    'bin_breg_check': bin_breg_check_cur,
+    'die_id': die_id_cur,
+    'eng_func': eng_func_cur,
+    'eng_func_Keithley': eng_func_Keithley_cur,
+    'htdr': htdr_cur,
+    'htol': htol_cur,
+    'ims': ims_cur,
+    'ims_search': ims_search_cur,
+    'ims_search_with_saoffset': ims_search_with_saoffset_cur,
+    'internal_biases': internal_biases_cur,
+    'ltdr': ltdr_cur,
+    'meas_deep_sleep': meas_deep_sleep_cur,
+    'meas_deep_sleep_Keithley': meas_deep_sleep_Keithley_cur,
+    'meas_power_leak': meas_power_leak_cur,
+    'meas_power_leak_Keithley': meas_power_leak_Keithley_cur,
+    'meas_read_curr': meas_read_curr_cur,
+    'meas_standby': meas_standby_cur,
+    'meas_standby_Keithley': meas_standby_Keithley_cur,
+    'meas_vbl_vwl_inst_osc': meas_vbl_vwl_inst_osc_cur,
+    'meas_write_curr': meas_write_curr_cur,
+    'otp': otp_cur,
+    'otp_load_test': otp_load_test_cur,
+    'otp_save_test': otp_save_test_cur,
+    'part_screening': part_screening_cur,
+    'print_sa_trim': print_sa_trim_cur,
+    'read_disturb': read_disturb_cur,
+    'read_shmoo': read_shmoo_cur,
+    'read_shmoo_pat': read_shmoo_pat_cur,
+    'ser': ser_cur,
+    'upump_char': upump_char_cur,
+    'vili_main_v2': vili_main_v2_cur,
+    'vili_main_v2_otp_bkdn': vili_main_v2_otp_bkdn_cur,
+    'write_endurance': write_endurance_cur,
+    'write_shmoo': write_shmoo_cur,
+}
 # ####################################################################################
 #                             INITIALIZING WINDOWS AND WIDGETS
 # ####################################################################################
@@ -278,14 +314,15 @@ def pressed_add_part(paths):
 
 
 def pressed_select_all():
-    
+
+    cursor_to_use = cursor_map.get(test_selected.get())
     paths = []
 
     #selected only test
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("test")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -310,10 +347,12 @@ def pressed_select_all():
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
+            JOIN 
+                test_file ON test_file."Test Id" = test."Test Id"
             WHERE test."Test" = %s;
             """, (test_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -334,8 +373,7 @@ def pressed_select_all():
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
-        
-        test_path = cur.fetchall()
+        test_path = cursor_to_use.fetchall()
         paths = [all_test[0] for all_test in test_path]
         check_enable_selection(paths)
            
@@ -353,7 +391,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -381,7 +419,7 @@ def pressed_select_all():
             WHERE test."Test" = %s;
             """, (test_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -403,7 +441,7 @@ def pressed_select_all():
                 test."Test" = %s;
             """, (test_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -426,7 +464,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and date")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
                 SELECT DISTINCT
                     '//DS220P/ds220_vol1/si_data/' ||
                     COALESCE(chip."Chip Type", '') ||
@@ -455,7 +493,7 @@ def pressed_select_all():
                     AND test."Date" = %s;
                 """, (test_selected.get(),date_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -477,7 +515,7 @@ def pressed_select_all():
                     AND test."Date" = %s;
                 """, (test_selected.get(),date_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -500,7 +538,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and temp")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -529,7 +567,7 @@ def pressed_select_all():
                 AND test."Temp" = %s;
             """, (test_selected.get(),temp_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -552,7 +590,7 @@ def pressed_select_all():
                 """, (test_selected.get(),date_selected.get(),))
 
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -575,7 +613,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("lbw and temp and date")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -605,7 +643,7 @@ def pressed_select_all():
                 AND test."Date" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -628,7 +666,7 @@ def pressed_select_all():
                 AND test."Date" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get()))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -650,7 +688,7 @@ def pressed_select_all():
     #selected temp and date
     if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -681,7 +719,7 @@ def pressed_select_all():
                 AND test."Temp" = %s
         """, (test_selected.get(), date_selected.get(), temp_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -705,7 +743,7 @@ def pressed_select_all():
                 AND test."Temp" = %s
         """, (test_selected.get(), date_selected.get(), temp_selected.get()))
        
-        date_temp_path = cur.fetchall()
+        date_temp_path = cursor_to_use.fetchall()
         paths = [all_temp_date[0] for all_temp_date in date_temp_path]
         check_enable_selection(paths)
 
@@ -723,7 +761,7 @@ def pressed_select_all():
     if(date_selected.get() != "" and lbw_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("date")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -753,7 +791,7 @@ def pressed_select_all():
                 AND test."Date" = %s;
         """, (test_selected.get(), date_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -776,7 +814,7 @@ def pressed_select_all():
                 AND test."Date" = %s;
         """, (test_selected.get(), date_selected.get()))
        
-        date_path = cur.fetchall()
+        date_path = cursor_to_use.fetchall()
         paths = [all_date[0] for all_date in date_path]
         check_enable_selection(paths)
 
@@ -795,7 +833,7 @@ def pressed_select_all():
     if(temp_selected.get() != "" and date_selected.get() == "" and lbw_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
         print("temp")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -825,7 +863,7 @@ def pressed_select_all():
                 AND test."Temp" = %s;
         """, (test_selected.get(), temp_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -847,7 +885,7 @@ def pressed_select_all():
                 test."Test" = %s
                 AND test."Temp" = %s;
         """, (test_selected.get(), temp_selected.get()))
-        temp_path = cur.fetchall()
+        temp_path = cursor_to_use.fetchall()
         paths = [all_temp[0] for all_temp in temp_path]
         check_enable_selection(paths)
 
@@ -865,7 +903,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -894,7 +932,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),part_no_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -916,7 +954,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),part_no_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -939,7 +977,7 @@ def pressed_select_all():
     if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("date and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -970,7 +1008,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
         """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -995,7 +1033,7 @@ def pressed_select_all():
         """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
 
        
-        date_part_no_path = cur.fetchall()
+        date_part_no_path = cursor_to_use.fetchall()
         paths = [all_date_part_no[0] for all_date_part_no in date_part_no_path]
         check_enable_selection(paths)
 
@@ -1013,7 +1051,7 @@ def pressed_select_all():
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("temp and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1044,7 +1082,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1068,7 +1106,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
        
-        temp_part_no_path = cur.fetchall()
+        temp_part_no_path = cursor_to_use.fetchall()
         paths = [all_temp_part_no[0] for all_temp_part_no in temp_part_no_path]
         check_enable_selection(paths)
 
@@ -1086,7 +1124,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and temp and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1116,7 +1154,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1139,7 +1177,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -1162,7 +1200,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and date and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1192,7 +1230,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),date_selected.get(),part_no_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1215,7 +1253,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),part_no_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -1238,7 +1276,7 @@ def pressed_select_all():
     if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("temp and date and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1270,7 +1308,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
         """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1295,7 +1333,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
         """, (test_selected.get(), temp_selected.get(), date_selected.get(),part_no_selected.get()))
        
-        temp_date_part_no_path = cur.fetchall()
+        temp_date_part_no_path = cursor_to_use.fetchall()
         paths = [all_temp_date_part_no[0] for all_temp_date_part_no in temp_date_part_no_path]
         check_enable_selection(paths)
 
@@ -1313,7 +1351,7 @@ def pressed_select_all():
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("lbw and date and temp and part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT DISTINCT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1344,7 +1382,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1368,7 +1406,7 @@ def pressed_select_all():
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
 
-        lbw_path = cur.fetchall()
+        lbw_path = cursor_to_use.fetchall()
         for row in lbw_path:
             # Assuming 'row' is a tuple with a single element (unique_id)
             full_path = row[0]
@@ -1393,7 +1431,7 @@ def pressed_select_all():
     if(lbw_selected.get() == "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         print("only part no.")
         if (test_selected.get() != 'otp'):
-            cur.execute("""
+            cursor_to_use.execute("""
                 SELECT DISTINCT
                     '//DS220P/ds220_vol1/si_data/' ||
                     COALESCE(chip."Chip Type", '') ||
@@ -1424,7 +1462,7 @@ def pressed_select_all():
                 ;
             """, (test_selected.get(), part_no_selected.get()))
         else:
-            cur.execute("""
+            cursor_to_use.execute("""
             SELECT
                 '//DS220P/ds220_vol1/si_data/' ||
                 COALESCE(chip."Chip Type", '') ||
@@ -1447,7 +1485,7 @@ def pressed_select_all():
                 AND test."Date" = %s
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),temp_selected.get(),date_selected.get(),part_no_selected.get(),))
-        part_num_path = cur.fetchall()
+        part_num_path = cursor_to_use.fetchall()
         paths = [all_part_num[0] for all_part_num in part_num_path]
         check_enable_selection(paths)
                         
@@ -1547,6 +1585,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
     lbw_parts = lbw_selected.get().split('_')
     # Use list unpacking with defaults
     lot, bin, wafer, proc_corner = (lbw_parts + [''] * 4)[:4]
+    cursor_to_use = cursor_map.get(test_selected.get())
 
     #selected only lbw
     if(lbw_selected.get() != "" and date_selected.get() == "" and temp_selected.get() == "" and part_no_selected.get() == "" and temp_date_selected.get() == ""):
@@ -1800,7 +1839,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         parts_combobox['values'] = window.parts
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -1811,7 +1850,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         WHERE test."Test" = %s AND "Temp" = %s
         """, (test_selected.get(), temp_selected.get()))
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -1853,7 +1892,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         parts_combobox['values'] = window.parts
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -1864,7 +1903,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         WHERE test."Test" = %s AND "Date" = %s
         """, (test_selected.get(), date_selected.get()))
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -1906,7 +1945,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         dates_combobox['values'] = window.dates
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -1917,7 +1956,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         WHERE test."Test" = %s AND "Part Number" = %s
         """, (test_selected.get(), part_no_selected.get()))
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -1944,7 +1983,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         parts_combobox['values'] = window.parts
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -1955,7 +1994,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
         """, (test_selected.get(), temp_selected.get(), date_selected.get()))
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -1982,7 +2021,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         temp_combobox['values'] = window.temp
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -1994,7 +2033,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
 
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -2021,7 +2060,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         # Update existing combobox values
         dates_combobox['values'] = window.dates
 
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -2033,7 +2072,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get()))
 
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)
@@ -2044,7 +2083,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
     #selected temp and date and part no.
     if(lbw_selected.get() == "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == ""):
         
-        cur.execute("""
+        cursor_to_use.execute("""
         SELECT DISTINCT 
             chip."Lot" || 
             CASE WHEN COALESCE(chip."Bin", '') <> '' THEN '_' || chip."Bin" ELSE '' END ||
@@ -2056,7 +2095,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox):
         """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get()))
 
         window.lbw.append("")
-        lbw = cur.fetchall()
+        lbw = cursor_to_use.fetchall()
         for row in lbw:
             combined_info = row[0] if row[0] is not None else ""
             window.lbw.append(combined_info)

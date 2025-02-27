@@ -30,7 +30,7 @@ def main():
 
     parts = part.split('_')
 
-    lot = bin = wafer = process_corner = None
+    lot = bin = wafer = process_corner = ''
     
     # Assign values based on the number of parts
     if len(parts) >= 1:
@@ -42,69 +42,39 @@ def main():
     if len(parts) == 4:
         process_corner = parts[3]
 
+    # Gets the data files from the database
     cur.execute("""
     SELECT 
-    tf."File Id"
+    tf."Test Data"
     FROM 
         test_file tf
     INNER JOIN 
-        test_file2 tf2 ON tf."File Id" = tf2."File Id"
-    INNER JOIN 
         test t ON tf."Test Id" = t."Test Id"
     INNER JOIN 
         chip c ON c."Chip Id" = t."Chip Id"
     WHERE 
         t."Test" = 'internal_biases'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-        AND tf2."Test Data" = %s
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num, file))
+        AND c."Lot" = %s 
+        AND c."Bin" = %s
+        AND c."Wafer" = %s
+        AND c."Process Corner" = %s 
+        AND t."Temp" = %s
+        AND t."Date" = %s 
+        AND c."Part Number" = %s
+        AND tf."File Name" = %s
+    """, (lot, bin, wafer, process_corner, temp, date, part_num, file))
     files = cur.fetchall()
-    raw_data_files = [file[0] for file in files]
+    raw_data_files = [data_files[0] for data_files in files]
 
-    cur.execute("""
-    SELECT 
-        tf2."Test Data"
-    FROM 
-        test_file2 tf2
-    INNER JOIN 
-        test_file tf ON tf."File Id" = tf2."File Id"
-    INNER JOIN 
-        test t ON tf."Test Id" = t."Test Id"
-    INNER JOIN 
-        chip c ON c."Chip Id" = t."Chip Id"
-    WHERE 
-        t."Test" = 'internal_biases'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-        AND tf2."Test Data" = %s
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num, file))
-    files_names = cur.fetchall()
-    file_names_data = [name[0] for name in files_names]
-
-    for data_files, file in zip(raw_data_files, file_names_data):
+    # Creates the files
+    for data in raw_data_files:
         # Construct a unique file name based on the test_id or other properties
-        save_name = f"{file}"  # You can customize the naming pattern here
+        save_name = f"{file}" 
 
         with open(f"./parsed_files/{CHIP}/{TEST}/{part}/{part_num}/{temp + "_" + date}/{save_name}.txt", "wb") as save_file:
-            # Retrieve bytea data
-            cur.execute('SELECT "Test Data" FROM test_file WHERE "File Id" = %s', (data_files,))
-            test_data = cur.fetchone()
-
-            if test_data:
-                # Convert memoryview to bytes and then decode it
-                byte_data = bytes(test_data[0])
-                save_file.write(byte_data)  
+            # Decodes the data and writes into the file
+            byte_data = bytes(data)
+            save_file.write(byte_data)   
 
 def run_script(chip, datapath, path_to_part, save, save_path, partNum):
     global CHIP, TEST, PATH_TO_DATA, path, save_name, save_directory, partNumber

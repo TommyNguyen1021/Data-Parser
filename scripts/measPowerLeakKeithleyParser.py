@@ -48,7 +48,7 @@ def main():
 
     parts = part.split('_')
 
-    lot = bin = wafer = process_corner = None
+    lot = bin = wafer = process_corner = ''
     
     # Assign values based on the number of parts
     if len(parts) >= 1:
@@ -60,7 +60,6 @@ def main():
     if len(parts) == 4:
         process_corner = parts[3]
 
-    # Gets the file data
     cur.execute("""
     SELECT 
     tf."Test Data"
@@ -72,14 +71,15 @@ def main():
         chip c ON c."Chip Id" = t."Chip Id"
     WHERE 
         t."Test" = 'meas_power_leak_Keithley'
-        AND (c."Lot" = %s OR (c."Lot" IS NULL AND %s IS NULL))
-        AND (c."Bin" = %s OR (c."Bin" IS NULL AND %s IS NULL))
-        AND (c."Wafer" = %s OR (c."Wafer" IS NULL AND %s IS NULL))
-        AND (c."Process Corner" = %s OR (c."Process Corner" IS NULL AND %s IS NULL))
-        AND (t."Temp" = %s OR (t."Temp" IS NULL AND %s IS NULL))
-        AND (t."Date" = %s OR (t."Date" IS NULL AND %s IS NULL))
-        AND (c."Part Number" = %s OR (c."Part Number" IS NULL AND %s IS NULL))
-    """, (lot, lot, bin, bin, wafer, wafer, process_corner, process_corner, temp, temp, date, date, part_num, part_num))
+        AND c."Lot" = %s 
+        AND c."Bin" = %s
+        AND c."Wafer" = %s
+        AND c."Process Corner" = %s 
+        AND t."Temp" = %s
+        AND t."Date" = %s 
+        AND c."Part Number" = %s
+        AND tf."File Name" Like '%%_0'
+    """, (lot, bin, wafer, process_corner, temp, date, part_num))
     files = cur.fetchall()
     raw_data_files = [file[0] for file in files]
 

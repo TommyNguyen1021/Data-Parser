@@ -368,13 +368,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -394,13 +394,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -443,13 +443,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -469,13 +469,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -523,14 +523,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Date" = %s;
                 """, (test_selected.get(),date_selected.get(),))
@@ -550,13 +550,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Date" = %s;
@@ -606,14 +606,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s;
             """, (test_selected.get(),temp_selected.get(),))
@@ -633,13 +633,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND test."Date" = %s;
@@ -690,13 +690,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -718,13 +718,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -773,14 +773,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Date" = %s
                 AND test."Temp" = %s
@@ -801,13 +801,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Date" = %s
@@ -852,13 +852,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Date" = %s;
@@ -879,13 +879,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Date" = %s;
@@ -930,13 +930,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s;
@@ -957,13 +957,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s;
@@ -1006,14 +1006,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND chip."Part Number" = %s;
             """, (test_selected.get(),part_no_selected.get(),))
@@ -1033,13 +1033,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND chip."Part Number" = %s;
@@ -1088,14 +1088,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Date" = %s
                 AND chip."Part Number" = %s;
@@ -1116,13 +1116,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Date" = %s
@@ -1168,13 +1168,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1196,13 +1196,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1247,14 +1247,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
                 AND chip."Part Number" = %s;
@@ -1275,13 +1275,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1331,14 +1331,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s
                 AND test."Date" = %s
                 AND chip."Part Number" = %s;
@@ -1359,13 +1359,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1415,13 +1415,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1444,13 +1444,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1496,13 +1496,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1525,13 +1525,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND test."Temp" = %s
@@ -1584,13 +1584,13 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s
                 AND chip."Part Number" = %s;
@@ -1611,13 +1611,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s
                 AND chip."Part Number" = %s;
@@ -1660,14 +1660,14 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE   
                 test."Test" = %s;
             """, (test_selected.get(),))
         else:
@@ -1686,13 +1686,13 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s;
             """, (test_selected.get(),))
@@ -1735,16 +1735,16 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE   
                 test."Test" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -1762,16 +1762,16 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), files_selected.get()))
         
         file_path = cursor_to_use.fetchall()
@@ -1812,16 +1812,16 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE 
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE  
                     test."Test" = %s AND
-                    test_file2."Test Data" = %s;
+                    test_file."File Name" = %s;
             """, (test_selected.get(), files_selected.get()))
         else:
            cursor_to_use.execute("""
@@ -1839,16 +1839,16 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE 
                 test."Test" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), files_selected.get()))
 
         lbw_file_path = cursor_to_use.fetchall()
@@ -1895,17 +1895,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -1923,17 +1923,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), files_selected.get()))
         
         date_file_path = cursor_to_use.fetchall()
@@ -1975,17 +1975,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 test."Temp" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2003,17 +2003,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         
         temp_file_path = cursor_to_use.fetchall()
@@ -2054,17 +2054,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2082,17 +2082,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
         
         part_no_file_path = cursor_to_use.fetchall()
@@ -2133,17 +2133,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE   
                 test."Test" = %s AND
                 test."Temp" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2161,18 +2161,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         
         temp_date_file_path = cursor_to_use.fetchall()
@@ -2213,18 +2213,18 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2242,18 +2242,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
         
         temp_part_no_file_path = cursor_to_use.fetchall()
@@ -2294,18 +2294,18 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2323,18 +2323,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         
         date_part_no_file_path = cursor_to_use.fetchall()
@@ -2375,17 +2375,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 test."Temp" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2403,17 +2403,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), files_selected.get()))
         
         lbw_temp_file_path = cursor_to_use.fetchall()
@@ -2459,17 +2459,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2487,17 +2487,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), files_selected.get()))
         
         lbw_date_file_path = cursor_to_use.fetchall()
@@ -2543,17 +2543,17 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2571,17 +2571,17 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), part_no_selected.get(), files_selected.get()))
         
         lbw_part_no_file_path = cursor_to_use.fetchall()
@@ -2627,18 +2627,18 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2656,18 +2656,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
         
         lbw_temp_part_no_file_path = cursor_to_use.fetchall()
@@ -2715,18 +2715,18 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
-            WHERE  
+                test_file ON test."Test Id" = test_file."Test Id"
+            WHERE 
                 test."Test" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2744,18 +2744,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         
         lbw_date_part_no_file_path = cursor_to_use.fetchall()
@@ -2801,18 +2801,18 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2830,18 +2830,18 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), date_selected.get(), temp_selected.get(), files_selected.get()))
 
         lbw_temp_date_file_path = cursor_to_use.fetchall()
@@ -2887,19 +2887,19 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -2917,19 +2917,19 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         
         temp_date_part_no_file_path = cursor_to_use.fetchall()
@@ -2971,19 +2971,19 @@ def pressed_select_all():
                 COALESCE(test."Date", '') ||
                 -- Remove underscore before the first slash
                 '/' ||  -- Match an underscore followed by a slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"  -- Assuming this join is necessary for test_file2
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         else:
             cursor_to_use.execute("""
@@ -3001,19 +3001,19 @@ def pressed_select_all():
                 COALESCE(chip."Part Number", '') ||
                 '/' || 
                 -- Remove underscore before the first slash
-                COALESCE(test_file2."Test Data", '') AS unique_id  -- Append the Test Data from test_file2
+                COALESCE(test_file."File Name", '') AS unique_id  -- Append the File Name from test_file
             FROM 
                 chip
             JOIN 
                 test ON chip."Chip Id" = test."Chip Id"
             JOIN 
-                test_file2 ON test."Test Id" = test_file2."Test Id"
+                test_file ON test."Test Id" = test_file."Test Id"
             WHERE  
                 test."Test" = %s AND
                 test."Temp" = %s AND
                 test."Date" = %s AND
                 chip."Part Number" = %s AND
-                test_file2."Test Data" = %s;
+                test_file."File Name" = %s;
             """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         
         lbw_temp_date_part_no_file_path = cursor_to_use.fetchall()
@@ -3194,16 +3194,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         parts_combobox['values'] = window.parts
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"       
+            WHERE "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
@@ -3261,16 +3259,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         parts_combobox['values'] = window.parts
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
@@ -3330,16 +3326,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         parts_combobox['values'] = window.parts
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
@@ -3399,16 +3393,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         dates_combobox['values'] = window.dates
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
@@ -3448,16 +3440,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         parts_combobox['values'] = window.parts
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
@@ -3495,7 +3485,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Part Number" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Temp" = %s
         """, (test_selected.get(), temp_selected.get(),))
         parts = cur.fetchall()
@@ -3514,7 +3504,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"        
         WHERE test."Test" = %s AND "Temp" = %s
         """, (test_selected.get(), temp_selected.get(),))
         window.lbw.append("")
@@ -3527,16 +3517,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
         AND "Temp" = %s
         """,(test_selected.get(), temp_selected.get(),))
         files = cursor_to_use.fetchall()
@@ -3569,7 +3557,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Part Number" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Date" = %s
         """, (test_selected.get(), date_selected.get(),))
         parts = cur.fetchall()
@@ -3588,7 +3576,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"        
         WHERE test."Test" = %s AND "Date" = %s
         """, (test_selected.get(), date_selected.get(),))
         window.lbw.append("")
@@ -3601,16 +3589,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
         AND "Date" = %s
         """,(test_selected.get(), date_selected.get(),))
         files = cursor_to_use.fetchall()
@@ -3627,7 +3613,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Temp" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Part Number" = %s
         """,(test_selected.get(), part_no_selected.get(),))
         temp = cur.fetchall()
@@ -3643,7 +3629,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Date" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Part Number" = %s
         """,(test_selected.get(), part_no_selected.get(),))
         date = cur.fetchall()
@@ -3662,7 +3648,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"        
         WHERE test."Test" = %s AND "Part Number" = %s
         """, (test_selected.get(), part_no_selected.get(),))
         window.lbw.append("")
@@ -3675,16 +3661,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"       
+            WHERE "Test" = %s
         AND "Part Number" = %s
         """,(test_selected.get(), part_no_selected.get(),))
         files = cursor_to_use.fetchall()
@@ -3702,7 +3686,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Part Number" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
         """, (test_selected.get(), temp_selected.get(), date_selected.get()))
         parts = cur.fetchall()
@@ -3721,7 +3705,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"        
         WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s
         """, (test_selected.get(), temp_selected.get(), date_selected.get(),))
         window.lbw.append("")
@@ -3734,16 +3718,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
         AND "Temp" = %s
         AND "Date" = %s
         """,(test_selected.get(), temp_selected.get(), date_selected.get(),))
@@ -3763,7 +3745,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Temp" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"        
         WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
         """, (test_selected.get(), date_selected.get(), part_no_selected.get()))
         temp = cur.fetchall()
@@ -3782,7 +3764,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"        
         WHERE "Test" = %s AND "Date" = %s AND "Part Number" = %s
         """, (test_selected.get(), date_selected.get(), part_no_selected.get(),))
 
@@ -3796,16 +3778,14 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
-        WHERE "Test" = %s
+	        chip c ON c."Chip Id" = t."Chip Id"        
+            WHERE "Test" = %s
         AND "Date" = %s
         AND "Part Number" = %s
         """,(test_selected.get(), date_selected.get(), part_no_selected.get(),))
@@ -3824,7 +3804,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         SELECT DISTINCT "Date" 
         FROM chip 
 		JOIN 
-        test ON chip."Chip Id" = test."Chip Id"
+        test ON chip."Chip Id" = test."Chip Id"       
         WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get(),))
         date = cur.fetchall()
@@ -3843,7 +3823,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Chip
-        JOIN Test ON test."Chip Id" = chip."Chip Id"
+        JOIN Test ON test."Chip Id" = chip."Chip Id"        
         WHERE "Test" = %s AND "Temp" = %s AND "Part Number" = %s
         """, (test_selected.get(), temp_selected.get(), part_no_selected.get(),))
 
@@ -3857,15 +3837,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"        
         WHERE "Test" = %s
         AND "Temp" = %s
         AND "Part Number" = %s
@@ -3888,8 +3866,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Chip
-        JOIN Test ON test."Chip Id" = chip."Chip Id"
-        WHERE "Test" = %s AND "Temp" = %s AND "Date" = %s AND "Part Number" = %s
+        JOIN Test ON test."Chip Id" = chip."Chip Id"        
+        WHERE "Test" = %s
+        AND "Temp" = %s 
+        AND "Date" = %s 
+        AND "Part Number" = %s
         """, (test_selected.get(), temp_selected.get(), date_selected.get(), part_no_selected.get()))
 
         window.lbw.append("")
@@ -3902,15 +3883,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         lbw_combobox['values'] = window.lbw
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"        
         WHERE "Test" = %s
         AND "Temp" = %s
         AND "Date" = %s
@@ -3948,22 +3927,20 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         dates_combobox['values'] = window.dates
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"      
         WHERE "Test" = %s
-            AND "Lot" = %s
-            AND ("Bin" = %s OR "Bin" IS NULL)
-            AND ("Wafer" = %s OR "Wafer" IS NULL)
-            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND "Temp" = %s
-            And "Part Number" = %s;
+        AND "Lot" = %s
+        AND ("Bin" = %s OR "Bin" IS NULL)
+        AND ("Wafer" = %s OR "Wafer" IS NULL)
+        AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+        AND "Temp" = %s
+        And "Part Number" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get()))
         files = cursor_to_use.fetchall()
 
@@ -3981,13 +3958,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         FROM chip 
 		JOIN 
         test ON chip."Chip Id" = test."Chip Id"
-            WHERE "Test" = %s
-            AND "Lot" = %s
-            AND ("Bin" = %s OR "Bin" IS NULL)
-            AND ("Wafer" = %s OR "Wafer" IS NULL)
-            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND "Date" = %s
-            And "Part Number" = %s;
+        WHERE "Test" = %s
+        AND "Lot" = %s
+        AND ("Bin" = %s OR "Bin" IS NULL)
+        AND ("Wafer" = %s OR "Wafer" IS NULL)
+        AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+        AND "Date" = %s
+        And "Part Number" = %s;
         """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(), part_no_selected.get()))
         temp = cur.fetchall()
 
@@ -3998,22 +3975,20 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         temp_combobox['values'] = window.temp
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"        
         WHERE "Test" = %s
-            AND "Lot" = %s
-            AND ("Bin" = %s OR "Bin" IS NULL)
-            AND ("Wafer" = %s OR "Wafer" IS NULL)
-            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND "Date" = %s
-            And "Part Number" = %s;
+        AND "Lot" = %s
+        AND ("Bin" = %s OR "Bin" IS NULL)
+        AND ("Wafer" = %s OR "Wafer" IS NULL)
+        AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+        AND "Date" = %s
+        And "Part Number" = %s;
         """,(test_selected.get(), lot,bin, wafer, proc_corner, date_selected.get(), part_no_selected.get()))
         files = cursor_to_use.fetchall()
 
@@ -4027,23 +4002,21 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
     if(lbw_selected.get() != "" and date_selected.get() != "" and temp_selected.get() != "" and part_no_selected.get() != "" and temp_date_selected.get() == "" and files_selected.get() == ""):
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"        
         WHERE "Test" = %s
-            AND "Lot" = %s
-            AND ("Bin" = %s OR "Bin" IS NULL)
-            AND ("Wafer" = %s OR "Wafer" IS NULL)
-            AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND "Temp" = %s
-            AND "Date" = %s
-            And "Part Number" = %s;
+        AND "Lot" = %s
+        AND ("Bin" = %s OR "Bin" IS NULL)
+        AND ("Wafer" = %s OR "Wafer" IS NULL)
+        AND ("Process Corner" = %s OR "Process Corner" IS NULL)
+        AND "Temp" = %s
+        AND "Date" = %s
+        And "Part Number" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), date_selected.get(), part_no_selected.get()))
         files = cursor_to_use.fetchall()
 
@@ -4064,11 +4037,9 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             t."Test" = %s 
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """, (test_selected.get(), files_selected.get(),))
 
         temp = cursor_to_use.fetchall()
@@ -4087,11 +4058,9 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             t."Test" = %s 
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), files_selected.get(),))
         date = cursor_to_use.fetchall()
 
@@ -4109,11 +4078,9 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             t."Test" = %s 
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), files_selected.get(),))
         parts = cursor_to_use.fetchall()
 
@@ -4136,11 +4103,9 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE             
             t."Test" = %s 
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """, (test_selected.get(), files_selected.get(),))
 
         window.lbw.append("")
@@ -4163,15 +4128,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
 
         temp = cursor_to_use.fetchall()
@@ -4190,15 +4153,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4216,15 +4177,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
             AND ("Bin" = %s OR "Bin" IS NULL)
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4246,12 +4205,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4269,12 +4226,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4297,12 +4252,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE             
             "Test" = %s
             AND "Temp" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4325,12 +4278,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), date_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4348,12 +4299,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), date_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4376,12 +4325,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), date_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4404,12 +4351,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4427,12 +4372,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4454,12 +4397,10 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), part_no_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4482,8 +4423,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4491,7 +4430,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Temp" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4509,8 +4448,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4518,7 +4455,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Temp" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4540,8 +4477,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4549,7 +4484,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4567,8 +4502,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4576,7 +4509,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4597,8 +4530,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4606,7 +4537,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, part_no_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4624,8 +4555,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4633,7 +4562,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Wafer" = %s OR "Wafer" IS NULL)
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, part_no_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4654,13 +4583,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4683,13 +4610,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), date_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4712,13 +4637,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4740,13 +4663,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get(), part_no_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4769,13 +4690,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Date" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4797,13 +4716,11 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Date" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), date_selected.get(), part_no_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -4826,8 +4743,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4836,7 +4751,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Temp" = %s
             AND "Date" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), date_selected.get(), files_selected.get()))
         parts = cursor_to_use.fetchall()
 
@@ -4858,8 +4773,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4868,7 +4781,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Temp" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, temp_selected.get(), part_no_selected.get(), files_selected.get()))
         date = cursor_to_use.fetchall()
 
@@ -4889,8 +4802,6 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Lot" = %s
@@ -4899,7 +4810,7 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
             AND ("Process Corner" = %s OR "Process Corner" IS NULL)
             AND "Date" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), lot, bin, wafer, proc_corner, date_selected.get(), part_no_selected.get(), files_selected.get()))
         temp = cursor_to_use.fetchall()
 
@@ -4924,14 +4835,12 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
 	        chip c ON t."Chip Id" = c."Chip Id"
 	    INNER JOIN 
 	        test_file tf ON tf."Test Id" = t."Test Id"
-	    INNER JOIN 
-            test_file2 tf2 ON tf2."File Id" = tf."File Id"
         WHERE
             "Test" = %s
             AND "Temp" = %s
             AND "Date" = %s
             AND "Part Number" = %s
-            AND tf2."Test Data" = %s;
+            AND tf."File Name" = %s;
         """,(test_selected.get(), temp_selected.get() , date_selected.get(), part_no_selected.get(), files_selected.get()))
 
         window.lbw.append("")
@@ -5006,15 +4915,13 @@ def update_filters(temp_combobox, dates_combobox, parts_combobox,lbw_combobox, f
         parts_combobox['values'] = window.parts
 
         cursor_to_use.execute("""
-        SELECT DISTINCT tf2."Test Data" 
+        SELECT DISTINCT tf."File Name" 
 	    FROM 
-	        test_file2 tf2
-	    INNER JOIN 
-	        test_file tf ON tf."File Id" = tf2."File Id"
+	        test_file tf
 	    INNER JOIN 
 	        test t ON tf."Test Id" = t."Test Id"
 	    INNER JOIN 
-	        chip c ON c."Chip Id" = t."Chip Id"
+	        chip c ON c."Chip Id" = t."Chip Id"        
         WHERE "Test" = %s
         """, (test_selected.get(),))
         files = cursor_to_use.fetchall()
@@ -5227,7 +5134,9 @@ def pressed(event):
 
     tests = cur.fetchall()
     window.tests = [test_type[0] for test_type in tests]
-    window.tests.append("")
+    if "" not in window.tests:
+        window.tests.append("")
+
     
     #if there are no tests in chip directory
     if not window.tests:
@@ -5236,7 +5145,7 @@ def pressed(event):
         test_label.grid(row=2,column=0)
         test_label = tk.Label(window,text="main has no tests")
         test_label.grid(row=2,column=1)
-        write_console("No test data can be found for that chip")
+        write_console("No File Name can be found for that chip")
         return
     #label for test select
     test_label = tk.Label(window,text="select test")
@@ -5288,14 +5197,15 @@ def pressed_test(event):
             CASE WHEN COALESCE(chip."Wafer", '') <> '' THEN '_' || chip."Wafer" ELSE '' END ||
             CASE WHEN COALESCE(chip."Process Corner", '') <> '' THEN '_' || chip."Process Corner" ELSE '' END
         FROM Test
-        JOIN Chip ON test."Chip Id" = chip."Chip Id"
+        JOIN Chip ON test."Chip Id" = chip."Chip Id"       
         WHERE test."Test" = %s;
     """, (item,))
     lbw = cur.fetchall()
     for row in lbw:
         combined_info = row[0] if row[0] is not None else ""
         window.lbw.append(combined_info)
-    window.lbw.append("")
+    if "" not in window.lbw:
+        window.lbw.append("")
 
     # Remove duplicates and sort the list
     window.lbw = list(set(window.lbw))  # Remove duplicates
@@ -5334,7 +5244,8 @@ def pressed_test(event):
     """, (test_selected.get(),))
     date = cur.fetchall()
     window.dates = [date_type[0] for date_type in date if date_type[0] is not None]
-    window.dates.append("")
+    if "" not in window.dates:
+        window.dates.append("")
 
     # If there are no dates
     if not window.dates:
@@ -5380,7 +5291,8 @@ def pressed_test(event):
     """, (test_selected.get(),))
     temp = cur.fetchall()
     window.temp = [temp_type[0] for temp_type in temp if temp_type[0] is not None]
-    window.temp.append("")
+    if "" not in window.temp:
+        window.temp.append("")
 
 
     # If there are no temp
@@ -5434,8 +5346,9 @@ def pressed_test(event):
     """, (test_selected.get(),))
     parts = cur.fetchall()
     window.parts = [part[0] for part in parts if part[0] is not None]
-    window.parts.append("")
-    
+    if "" not in window.parts:
+        window.parts.append("")
+
     #if no part numbers were found
     if not window.parts:
         remove_options(window, 3)
@@ -5463,12 +5376,12 @@ def pressed_test(event):
     cursor_to_use = cursor_map.get(test_selected.get())
 
     cursor_to_use.execute("""
-        SELECT DISTINCT "Test Data" FROM test_file2
+        SELECT DISTINCT "File Name" FROM test_file
     """, (test_selected.get(),))
     files = cursor_to_use.fetchall()
     window.files = [files_type[0] for files_type in files if files_type[0] is not None]
-    window.files.append("")
-
+    if "" not in window.files:
+        window.files.append("")
     #if no part numbers were found
     if not window.parts:
         remove_options(window, 4)

@@ -1,6 +1,7 @@
 import psycopg2
 import re
 import os
+import hashlib
 
 # Creates a connection to a database in postgres
 conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", password = "numem@184", port = 5432)
@@ -8,26 +9,34 @@ conn = psycopg2.connect(host="localhost", dbname="data",  user ="postgres", pass
 # Create cursor object
 cur = conn.cursor()
 
-# Create chip table
-cur.execute("""
-    CREATE TABLE IF NOT EXISTS Chip (
-        "Chip Id" SERIAL PRIMARY KEY,
-        "Chip Type" VARCHAR,
-        "Lot" VARCHAR,
-        "Bin" VARCHAR,
-        "Wafer" Varchar, 
-        "Part Number" VARCHAR,
-        "Process Corner" VARCHAR
-
-            )
-    """)
-
 dp = "//DS220P/ds220_vol1/si_data/"
 chip_types = ["loki2", "odin", "status", "thor", "unsorted", "vili"]
 
+# Create the Chip table
+cur.execute("""
+CREATE TABLE IF NOT EXISTS Chip (
+    "Chip Id" SERIAL PRIMARY KEY,
+    "Chip Type" VARCHAR,
+    "Lot" VARCHAR,
+    "Bin" VARCHAR,
+    "Wafer" VARCHAR,
+    "Part Number" VARCHAR,
+    "Process Corner" VARCHAR,
+    CONSTRAINT unique_chip UNIQUE (
+        "Chip Type", 
+        "Lot", 
+        "Bin", 
+        "Wafer", 
+        "Part Number", 
+        "Process Corner"
+    )
+);
+""")
+
+
 # Inputs data for Chip table
 for chip in chip_types:
-    if chip =='vili':
+    if chip == 'vili':
         chip_path = os.path.join(dp, chip)
         if os.path.exists(chip_path) and os.path.isdir(chip_path):
             for test in os.listdir(chip_path):
@@ -39,10 +48,9 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
-                            # Seperates parts in lbw to be put into columns in the table
-                            if lbw == 'P9NV42_0a_5_TT_WrongParameters':
-                                continue
-                            elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
+
+                            # Separate parts in lbw to be put into columns in the chip table
+                            if lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
                                 lot = lbw
                                 bin = None
                                 wafer = None
@@ -61,7 +69,7 @@ for chip in chip_types:
                                 lot = lbw_parts[0]
                                 bin = lbw_parts[1]
                                 wafer = lbw_parts[2]
-                                proc_corner = None
+                                proc_corner = lbw_parts[3]
                             elif test == 'read_shmoo' and len(lbw_parts) >= 4 and not lbw.startswith('P9'):
                                 lot = lbw_parts[-3]
                                 bin = lbw_parts[-2]
@@ -102,23 +110,28 @@ for chip in chip_types:
                             # Insert the values into the chip table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
+
+                                    # Insert the chips and ensures unique rows are inserted
                                     cur.execute("""
                                         INSERT INTO Chip ("Chip Type", "Lot", "Bin", "Wafer", "Part Number", "Process Corner")
                                         VALUES (%s, %s, %s, %s, %s, %s)
-                                    """, (chip, lot, bin, wafer, part_num, proc_corner))
-                                    conn.commit()
+                                        ON CONFLICT ("Chip Type", "Lot", "Bin", "Wafer", "Part Number", "Process Corner")
+                                        DO NOTHING
+                                    """, (chip, lot, bin if bin else '', wafer if wafer else '', part_num if part_num else '', proc_corner if proc_corner else ''))
 
-# Creates Test Table
+# Create the Test table
 cur.execute("""
 CREATE TABLE IF NOT EXISTS Test (
     "Test Id" SERIAL PRIMARY KEY,
     "Chip Id" INTEGER,
-    FOREIGN KEY ("Chip Id") REFERENCES Chip ("Chip Id"),
     "Test" VARCHAR,
     "Date" VARCHAR,
-    "Temp" VARCHAR
-)
-    """)
+    "Temp" VARCHAR,
+    FOREIGN KEY ("Chip Id") REFERENCES Chip ("Chip Id"),
+    CONSTRAINT unique_test UNIQUE ("Chip Id", "Test", "Date", "Temp")
+);
+""")
+
 
 for chip in chip_types:
     if chip =='vili':
@@ -133,10 +146,8 @@ for chip in chip_types:
                         for lbw in os.listdir(test_path):
                             lbw_path = os.path.join(test_path, lbw)
                             lbw_parts = lbw.split('_')
-                            # Seperates parts of lbw to be put into columns in the chip table
-                            if lbw == 'P9NV42_0a_5_TT_WrongParameters':
-                                continue
-                            elif lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
+                            # Seperates parts in lbw to be put into columns in the chip table
+                            if lbw == 'OPEN_SOCKET' or lbw == 'Test_1' or lbw == 'Write_Shmoo_Test' or lbw == 'Write_Shmoo_Test_new' or lbw == 'Write_Shmoo_Test_new2' or lbw == 'Write_Shmoo_Test_orig' or lbw == 'sif_sif_1':  
                                 lot = lbw
                                 bin = None
                                 wafer = None
@@ -155,7 +166,7 @@ for chip in chip_types:
                                 lot = lbw_parts[0]
                                 bin = lbw_parts[1]
                                 wafer = lbw_parts[2]
-                                proc_corner = None
+                                proc_corner = lbw_parts[3]
                             elif test == 'read_shmoo' and len(lbw_parts) >= 4 and not lbw.startswith('P9'):
                                 lot = lbw_parts[-3]
                                 bin = lbw_parts[-2]
@@ -193,31 +204,44 @@ for chip in chip_types:
                                     wafer = None
                                     proc_corner = None
 
-                            #Insert the values for the Test table
+                            # Insert the values into the test table
                             if os.path.exists(lbw_path) and os.path.isdir(lbw_path):
                                 for part_num in os.listdir(lbw_path):
                                     part_num_path = os.path.join(lbw_path, part_num)
-                                    if test == 'otp':
+                                    if test == 'otp' or test == 'otp_save_test':
                                         temp = None
                                         date = None
                                         for otp_data in os.listdir(part_num_path):
+
+                                            chip = chip.strip()
+                                            lot = lot.strip() if lot else ''
+                                            bin = bin.strip() if bin else ''
+                                            wafer = wafer.strip() if wafer else ''
+                                            part_num = part_num.strip() if part_num else ''
+                                            proc_corner = proc_corner.strip() if proc_corner else ''
+
+                                            # Checks for chip id that corresponds to the test
                                             query = """
                                                 SELECT "Chip Id" FROM Chip
                                                 WHERE "Chip Type" = %s
-                                                AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
+                                                AND "Lot" = %s 
+                                                AND "Bin" = %s 
+                                                AND "Wafer" = %s 
+                                                AND "Part Number" = %s 
+                                                AND "Process Corner" = %s 
                                             """
-                                            params = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
+                                            params = (chip, lot, bin, wafer, part_num, proc_corner)
 
                                             cur.execute(query, params)
                                             chip_id = cur.fetchone()
+
+                                            # Ensures unique rows are inserted
                                             cur.execute("""
                                                 INSERT INTO Test ("Test", "Date", "Temp", "Chip Id")
                                                 VALUES (%s, %s, %s, %s)
-                                            """, (test, date, temp, chip_id))
+                                                ON CONFLICT ("Test", "Date", "Temp", "Chip Id")
+                                                DO NOTHING
+                                            """, (test, date if date else '', temp if temp else '', chip_id))
                                             conn.commit()
                                     elif os.path.exists(part_num_path) and os.path.isdir(part_num_path):
                                         for temp_date in os.listdir(part_num_path):
@@ -237,24 +261,34 @@ for chip in chip_types:
                                                     temp = None
                                                     date = None
 
+                                            chip = chip.strip()
+                                            lot = lot.strip() if lot else ''
+                                            bin = bin.strip() if bin else ''
+                                            wafer = wafer.strip() if wafer else ''
+                                            part_num = part_num.strip() if part_num else ''
+                                            proc_corner = proc_corner.strip() if proc_corner else ''
+
+                                            # Checks for chip id that corresponds to the test
                                             query = """
                                                 SELECT "Chip Id" FROM Chip
                                                 WHERE "Chip Type" = %s
-                                                AND ("Lot" = %s OR ("Lot" IS NULL AND %s IS NULL))
-                                                AND ("Bin" = %s OR ("Bin" IS NULL AND %s IS NULL))
-                                                AND ("Wafer" = %s OR ("Wafer" IS NULL AND %s IS NULL))
-                                                AND ("Part Number" = %s OR ("Part Number" IS NULL AND %s IS NULL))
-                                                AND ("Process Corner" = %s OR ("Process Corner" IS NULL AND %s IS NULL))
+                                                AND "Lot" = %s 
+                                                AND "Bin" = %s 
+                                                AND "Wafer" = %s 
+                                                AND "Part Number" = %s 
+                                                AND "Process Corner" = %s 
                                             """
-                                            params = (chip, lot, lot, bin, bin, wafer, wafer, part_num, part_num, proc_corner, proc_corner)
+                                            params = (chip, lot, bin, wafer, part_num, proc_corner)
 
                                             cur.execute(query, params)
                                             chip_id = cur.fetchone()
+                                            # Insert the tests and ensures unique rows are inserted
                                             cur.execute("""
                                                 INSERT INTO Test ("Test", "Date", "Temp", "Chip Id")
                                                 VALUES (%s, %s, %s, %s)
-                                            """, (test, date, temp, chip_id))
-                                            conn.commit()
+                                                ON CONFLICT ("Test", "Date", "Temp", "Chip Id")
+                                                DO NOTHING
+                                            """, (test, date if date else '', temp if temp else '', chip_id))
                            
 # Commit changes to database
 conn.commit()
